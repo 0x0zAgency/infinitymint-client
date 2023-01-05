@@ -1,8 +1,8 @@
 {
   "name": "infinitymint-client",
-  "description": "InfinityMint Client - Powered by Hardhat and Ganache",
+  "description": "InfinityMint Client - Browser tools for building web3",
   "homepage": "https://github.com/0x0zAgency/infinitymint-client#readme",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "directories": {
     "test": "tests"
   },
@@ -24,8 +24,7 @@
     "start": "node react/start.js",
     "build": "node react/build.js",
     "console": "npx tsc && npx hardhat compile && npx ts-node console.ts",
-    "doc": "npx typedoc --options ./typedoc.json",
-    "postinstall": "npx tsc"
+    "doc": "npx typedoc --options ./typedoc.json"
   },
   "eslintConfig": {
     "extends": [

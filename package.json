@@ -1,8 +1,20 @@
 {
   "name": "infinitymint-client",
-  "version": "0.1.0",
-  "author": "",
+  "description": "InfinityMint Client - Powered by Hardhat and Ganache",
+  "homepage": "https://github.com/0x0zAgency/infinitymint-client#readme",
+  "version": "1.1.1",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0x0zAgency/infinitymint-client.git"
+  },
+  "author": "Llydia Cross",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/0x0zAgency/infinitymint-client/issues"
+  },
   "main": "dist/index.js",
   "_moduleAliases": {
     "@app": "./node_modules/infinitymint/dist/app/"

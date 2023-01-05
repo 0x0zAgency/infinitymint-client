@@ -2,7 +2,7 @@
   "name": "infinitymint-client",
   "description": "InfinityMint Client - Browser tools for building web3!",
   "homepage": "https://github.com/0x0zAgency/infinitymint-client#readme",
-  "version": "1.1.1",
+  "version": "1.1.0",
   "directories": {
     "test": "tests"
   },

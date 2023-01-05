@@ -1,0 +1,8 @@
+{
+  "viewbox": "0 0 1920 190",
+  "padding": "5%",
+  "outerPadding": "10%",
+  "background": {
+    "image": "./backgrounds/example-background.jpg"
+  }
+}

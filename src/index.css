@@ -1,0 +1,9 @@
+/* TODO: Link these manually & dont rely on font servers. */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap');
+@import url("https://use.typekit.net/ttg4ufb.css");
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+

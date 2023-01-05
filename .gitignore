@@ -1,0 +1,40 @@
+node_modules
+.env
+coverage
+coverage.json
+/typechain
+/typechain-types
+package-lock.json
+
+# Hardhat files
+cache/
+artifacts/
+
+# Deployments
+/deployments/hardhat/
+/deployments/ganache/
+
+# Temp folder
+/temp
+
+# InfinityMint files
+alpha/
+beta/
+infinitymint.config.ts
+infinitymint.config.js
+.session
+/gems/__*
+/gems/@*
+/alpha/__gems/
+/beta/__gems/
+/*/__gems/
+
+.DS_Store
+dist/
+
+# Docs
+_www/
+docs/
+
+# Nix
+nix/result

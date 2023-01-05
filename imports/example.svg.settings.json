@@ -1,0 +1,11 @@
+{
+  "viewbox": "0 0 1920 190",
+  "padding": "10%",
+  "outerPadding": "10%",
+  "css": [
+    "./css/example.red.css",
+    "./css/example.blue.css",
+    "./css/example.green.css"
+  ],
+  "unique": true
+}

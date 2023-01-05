@@ -1,0 +1,6 @@
+{
+  "viewbox": "0 0 1920 190",
+  "padding": "25%",
+  "outerPadding": "25%",
+  "css": ["./css/example.asset.css"]
+}

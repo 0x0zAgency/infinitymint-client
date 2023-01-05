@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/0x0zAgency/infinitymint-client/issues"
   },
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "_moduleAliases": {
     "@app": "./node_modules/infinitymint/dist/app/"
   },

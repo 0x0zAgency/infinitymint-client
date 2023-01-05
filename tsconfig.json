@@ -13,7 +13,7 @@
     "rootDirs": ["./src"],
     "paths": {
       "@app/*": ["./node_modules/infinitymint/dist/app/*"],
-      "@client/*": ["./node_modules/infinitymint/dist/client/*"],
+      "@client/*": ["./client/*"],
       "@react/*": ["./src/*"]
     },
     "skipLibCheck": true,
@@ -27,6 +27,7 @@
   },
   "exclude": ["dist", "node_modules", "gems/__", "gems/__cache", "gems/@"],
   "include": [
+    "./client",
     "./projects",
     "./src",
     "./gems",
@@ -34,5 +35,5 @@
     "./deploy",
     "./imports"
   ],
-  "files": ["./hardhat.config.ts", "./index.ts"]
+  "files": ["./hardhat.config.ts", "index.ts"]
 }

@@ -1,20 +1,20 @@
 {
-  "name": "infinitymint-react-typescript",
+  "name": "infinitymint-client",
   "version": "0.1.0",
   "author": "",
   "license": "ISC",
+  "main": "dist/index.js",
   "_moduleAliases": {
     "@app": "./node_modules/infinitymint/dist/app/",
-    "@client": "./node_modules/infinitymint/dist/client/",
-    "@react": "./dist/src/"
+    "@client": "./dist/client/"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "node react/test.js",
     "start": "node react/start.js",
     "build": "node react/build.js",
-    "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",
+    "console": "npx tsc && npx hardhat compile && npx ts-node console.ts",
     "doc": "npx typedoc --options ./typedoc.json",
-    "postinstall": "npx tsc && npx hardhat compile"
+    "postinstall": "npx tsc"
   },
   "eslintConfig": {
     "extends": [

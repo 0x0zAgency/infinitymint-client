@@ -1,6 +1,6 @@
 {
   "name": "infinitymint-client",
-  "description": "InfinityMint Client - Powered by Hardhat and Ganache",
+  "description": "InfinityMint Client - Browser tools for building web3",
   "homepage": "https://github.com/0x0zAgency/infinitymint-client#readme",
   "version": "1.1.2",
   "directories": {

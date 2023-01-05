@@ -1,0 +1,21 @@
+{
+  "cname": "docs.infinitymint.app",
+  "$schema": "https://typedoc.org/schema.json",
+  "readme": "./ReadMe.markdown",
+  "entryPoints": ["src/*"],
+  "theme": "hierarchy",
+  "name": "InfinityMint Client",
+  "entryPointStrategy": "expand",
+  "gitRemote": "origin",
+  "exclude": [
+    "node_modules",
+    "imports",
+    "gems",
+    "scripts",
+    "deploy",
+    "config",
+    "projects",
+    "react"
+  ],
+  "out": "docs"
+}

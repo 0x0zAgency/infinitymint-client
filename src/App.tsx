@@ -1,9 +1,9 @@
 import React from 'react';
-
+import TestComponent from './components/TestComponent';
 function App() {
 	return (
 		<h1>
-			InfinityMint
+			<TestComponent/>
 		</h1>
 	);
 }

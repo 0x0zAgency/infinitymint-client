@@ -17,7 +17,8 @@
     "start": "node react/start.js",
     "build": "node react/build.js",
     "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",
-    "postinstall": "npx tsc && npx hardhat compile"
+    "postinstall": "npx tsc && npx hardhat compile",
+    "doc": "npx typedoc --options ./typedoc.json"
   },
   "eslintConfig": {
     "extends": [

@@ -1,30 +1,23 @@
 {
   "name": "infinitymint-client",
-  "description": "InfinityMint Client - Browser tools for building web3!",
-  "homepage": "https://github.com/0x0zAgency/infinitymint-client#readme",
-  "version": "1.1.4",
-  "directories": {
-    "test": "tests"
-  },
+  "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/0x0zAgency/infinitymint-client.git"
   },
-  "author": "Llydia Cross",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/0x0zAgency/infinitymint-client/issues"
-  },
-  "main": "dist/index.js",
   "_moduleAliases": {
-    "@app": "./node_modules/infinitymint/dist/app/"
+    "@app": "./node_modules/infinitymint/dist/app/",
+    "@client": "./node_modules/infinitymint-client/dist/src/"
   },
+  "main": "dist/main.js",
   "scripts": {
-    "test": "node react/test.js",
+    "test": "mocha",
     "start": "node react/start.js",
     "build": "node react/build.js",
-    "console": "npx tsc && npx hardhat compile && npx ts-node console.ts",
-    "doc": "npx typedoc --options ./typedoc.json"
+    "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",
+    "postinstall": "npx tsc && npx hardhat compile"
   },
   "eslintConfig": {
     "extends": [
@@ -129,13 +122,14 @@
     "eslint": "^8.3.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-webpack-plugin": "^3.1.1",
+    "ethers": "^5.7.2",
     "file-loader": "^6.2.0",
     "fs-extra": "^10.0.0",
     "html-webpack-plugin": "^5.5.0",
     "http-browserify": "^1.7.0",
     "https-browserify": "^1.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "infinitymint": "^1.0.23",
+    "infinitymint": "latest",
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
@@ -148,6 +142,7 @@
     "prompts": "^2.4.2",
     "react": "^18.2.0",
     "react-app-polyfill": "^3.0.0",
+    "react-bootstrap": "^2.7.2",
     "react-dev-utils": "^12.0.1",
     "react-dom": "^18.2.0",
     "react-refresh": "^0.11.0",
@@ -163,6 +158,8 @@
     "typescript": "^4.9.4",
     "util": "^0.12.5",
     "web-vitals": "^2.1.4",
+    "web3": "^1.8.2",
+    "web3.storage": "^4.4.0",
     "webpack": "^5.64.4",
     "webpack-dev-server": "^4.6.0",
     "webpack-manifest-plugin": "^4.0.2",
@@ -187,8 +184,6 @@
     "postcss-preset-env": "^7.8.3",
     "tailwindcss": "^3.2.4",
     "ts-node": "^10.9.1",
-    "typedoc": "^0.23.23",
-    "typedoc-theme-hierarchy": "^3.0.2",
     "xo": "^0.52.4"
   }
 }

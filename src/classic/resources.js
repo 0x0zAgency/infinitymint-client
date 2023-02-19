@@ -16,7 +16,7 @@ export const replaceInObject = (object) => {
                 !index.includes('Plural') &&
                 object[index + '_Plural'] === undefined
             ) {
-                object[index + '_Plural'] = Resources.replaceInString(
+                object[index + '_Plural'] = resources.replaceInString(
                     object[index]
                         .replace(/%token%/g, '%tokens%')
                         .replace(/%tokenCapitalized%/g, '%tokensCapitalized%'),
@@ -40,7 +40,7 @@ export const replaceInObject = (object) => {
                 object[index + 'es'] = object[index + '_Plural'];
             }
 
-            object[index] = Resources.replaceInString(
+            object[index] = resources.replaceInString(
                 object[index],
                 index.includes('Plural')
             );

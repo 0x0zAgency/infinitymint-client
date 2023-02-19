@@ -1,6 +1,6 @@
 import tinySVG from 'tinysvg-js';
 import { Button } from 'react-bootstrap';
-import Config from '/config.js';
+import Config from '/src/config.js';
 import Controller from './controller.js';
 import StorageController from './storageController.js';
 

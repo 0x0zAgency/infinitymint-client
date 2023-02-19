@@ -4,7 +4,7 @@ import CryptoJS from 'crypto-js';
 import StorageController from './storageController.js';
 import StickerController from './stickerController.js';
 import Controller from './controller.js';
-import Config from '/config.js';
+import Config from '/src/config.js';
 import { Component } from 'react'; // eslint-disable-line
 
 /**

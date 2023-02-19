@@ -1,10 +1,7 @@
 const { parse } = require('svg-parser');
 const LZString = require('lz-string');
 
-/**
- * Written by Llydia
- */
-const tinySVG = new (class {
+export class TinySVG {
     stack = []; // Used with groups (tags with children)
     stackPosition = 0;
     conversionData = [];
@@ -1064,6 +1061,10 @@ const tinySVG = new (class {
 
         return count;
     }
-})();
+}
 
+/**
+ * Written by Llydia
+ */
+const tinySVG = new TinySVG();
 export default tinySVG;

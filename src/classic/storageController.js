@@ -1,6 +1,6 @@
 import Controller from './controller.js';
-// Works with local storage to save and load data we will use in the react application
-const StorageController = new (class {
+
+export class StorageController {
     values = {};
     // Private
     #fields;
@@ -313,6 +313,7 @@ const StorageController = new (class {
             localStorage.setItem(key, item);
         }
     }
-})();
-
-export default StorageController;
+}
+// Works with local storage to save and load data we will use in the react application
+const storageController = new StorageController();
+export default storageController;

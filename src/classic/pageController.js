@@ -1,6 +1,9 @@
 import Controller from './controller.js';
 
-const PageController = new (class {
+/**
+ *
+ */
+export class PageController {
     pages = [];
     developerPages = [];
     fakePages = [];
@@ -102,6 +105,7 @@ const PageController = new (class {
 
         return [...this.pages, ...this.developerPages];
     }
-})();
+}
 
-export default PageController;
+const pageController = new PageController();
+export default pageController;

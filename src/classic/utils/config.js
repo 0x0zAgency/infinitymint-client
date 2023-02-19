@@ -7,7 +7,7 @@ export let deployInfo;
 /**
  * Holds all of the configuation for the DAPP
  */
-const Config = {
+export const Config = {
     /**
      * Tweak application settings here
      * ============================================================∂========================

@@ -1,6 +1,6 @@
 {
   "name": "infinitymint-client",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/0x0zAgency/infinitymint-client.git"
@@ -17,7 +17,6 @@
     "start": "node react/start.js",
     "build": "node react/build.js",
     "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",
-    "postinstall": "npx tsc && npx hardhat compile",
     "doc": "npx typedoc --options ./typedoc.json"
   },
   "eslintConfig": {
@@ -185,6 +184,7 @@
     "postcss-preset-env": "^7.8.3",
     "tailwindcss": "^3.2.4",
     "ts-node": "^10.9.1",
+    "typedoc-theme-hierarchy": "^3.0.2",
     "xo": "^0.52.4"
   }
 }

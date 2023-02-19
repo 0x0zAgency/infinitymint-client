@@ -1,7 +1,7 @@
 import tinySVG from 'tinysvg-js';
 import Controller from './controller.js';
 import { md5 } from './helpers.js';
-import Config from '/src/config.js';
+import Config from '../../../../../src/config.js';
 import StorageController from './storageController.js';
 
 /**

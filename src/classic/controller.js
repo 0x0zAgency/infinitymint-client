@@ -1,7 +1,7 @@
 import web3 from 'web3';
 import Onboard from 'bnc-onboard';
 import tinySVG from './tinysvg.js';
-import Config from '/src/config.js';
+import Config from '../../../../../src/config.js';
 import StorageController from './storageController.js';
 import { getStickers, tryDecodeURI, unpackColours } from './helpers.js';
 import tokenMethods from './tokenMethods.js';
@@ -498,11 +498,6 @@ export class Controller {
                 return paths;
             }
         }
-    }
-
-    async getComponent(component) {
-        const result = await require('/src/Components/' + component);
-        return result;
     }
 
     /**
@@ -1743,7 +1738,7 @@ export class Controller {
      */
     async getProjectURI(fileName = 'default', isJson = false) {
         let result;
-        result = await require('/src/Deployments/projects/' +
+        result = await require('../../../../../src/Deployments/projects/' +
             (isJson ? fileName + '.json' : fileName));
 
         result = result?.default || result;

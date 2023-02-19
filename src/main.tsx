@@ -1,3 +1,2 @@
-import * as Classic from './classic';
-
-export { Classic };
+import * as _classic from './classic';
+export const Classic = _classic.default;

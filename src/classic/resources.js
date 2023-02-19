@@ -1,5 +1,5 @@
 import Controller from './controller.js';
-import Config from '/src/config.js';
+import Config from '../../../../../src/config.js';
 
 // Loaded through await import
 let ResStrings = {};
@@ -154,7 +154,9 @@ export class Resources {
 
     async initialize() {
         ResStrings = await import(
-            '/src/Resources/' + Config.resources.replace(/.js/g, '') + '.js'
+            '../../../../../src/Resources/' +
+                Config.resources.replace(/.js/g, '') +
+                '.js'
         );
 
         // This.#map has to be defined here due to getDescription needing to be loaded

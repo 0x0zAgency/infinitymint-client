@@ -244,22 +244,23 @@ export class Controller {
             // Everything here is loaded instantly
             // these can be invoked through createCntract and just supplying InfnityMintWallet,
             contracts: {
-                Fake_InfinityMintWallet: this.Config.getDeployment(
+                Fake_InfinityMintWallet: this.Config.default.getDeployment(
                     'Fake_InfinityMintWallet'
                 ),
-                InfinityMint: this.Config.getDeployment('InfinityMint'),
-                [this.Config.deployInfo.modules.svg ||
-                this.Config.deployInfo.modules.controller]:
-                    this.Config.getDeployment(
-                        this.Config.deployInfo.modules.svg ||
-                            this.Config.deployInfo.modules.controller
+                InfinityMint: this.Config.default.getDeployment('InfinityMint'),
+                [this.Config.default.deployInfo.modules.svg ||
+                this.Config.default.deployInfo.modules.controller]:
+                    this.Config.default.getDeployment(
+                        this.Config.default.deployInfo.modules.svg ||
+                            this.Config.default.deployInfo.modules.controller
                     ),
-                InfinityMintApi: this.Config.getDeployment('InfinityMintApi'),
-                InfinityMintProject: this.Config.getDeployment(
+                InfinityMintApi:
+                    this.Config.default.getDeployment('InfinityMintApi'),
+                InfinityMintProject: this.Config.default.getDeployment(
                     'InfinityMintProject'
                 ),
                 InfinityMintLinker:
-                    this.Config.getDeployment('InfinityMintLinker'),
+                    this.Config.default.getDeployment('InfinityMintLinker'),
             },
         };
     }
@@ -298,7 +299,7 @@ export class Controller {
         }
 
         if (args.loadGasPrice) {
-            await this.Config.loadGasPrices().catch((error) => {
+            await this.Config.default.loadGasPrices().catch((error) => {
                 this.log('could not get updated gas prices');
                 this.log(error, 'error');
             });
@@ -312,7 +313,7 @@ export class Controller {
         const gasPrice =
             args.gasPrice ||
             (type === 'send'
-                ? this.Config.getGasPrice(
+                ? this.Config.default.getGasPrice(
                       StorageController.getGlobalPreference('gasSetting') ||
                           'medium'
                   )
@@ -771,7 +772,7 @@ export class Controller {
                 Date.now(),
             validTill:
                 Date.now() +
-                this.Config.settings.cacheLength +
+                this.Config.default.settings.cacheLength +
                 (Math.random() * 6 + 1) * 1000 * 60, // So they all don't hit at once
             token: {
                 tokenId,
@@ -987,7 +988,7 @@ export class Controller {
 
     getCollectionURL(tokenId) {
         return (
-            this.Config.getNetwork().openseaAssets +
+            this.Config.default.getNetwork().openseaAssets +
             this.#abis.contracts.InfinityMint.address +
             '/' +
             tokenId
@@ -1049,7 +1050,7 @@ export class Controller {
                 result.colours
             )[0];
 
-            if (!this.Config.settings.useOldColours) {
+            if (!this.Config.default.settings.useOldColours) {
                 colours = unpackColours([...result.colours]);
             }
         }
@@ -1167,13 +1168,13 @@ export class Controller {
         return object;
     }
 
-    // Want to add new events? check src/this.Config.js => events array
+    // Want to add new events? check src/this.Config.default.js => events array
     setupEvents(contract = 'InfinityMint') {
         for (const event of Object.values(
-            this.Config.events[contract.replace('Fake_', '')]
+            this.Config.default.events[contract.replace('Fake_', '')]
         )) {
             this.#instances[contract].events[event]((error, events) => {
-                if (!this.Config.getNetwork().useAllEvents) {
+                if (!this.Config.default.getNetwork().useAllEvents) {
                     this.pushToEvent(event, error, events);
                 }
             });
@@ -1208,8 +1209,8 @@ export class Controller {
      */
     initializeOnboardJs(chainId = undefined) {
         this.onboard = Onboard({
-            dappId: this.Config.onboardApiKey,
-            networkId: chainId || this.Config.requiredChainId,
+            dappId: this.Config.default.onboardApiKey,
+            networkId: chainId || this.Config.default.requiredChainId,
             subscriptions: {
                 wallet: async (wallet) => {
                     // Instantiate web3 when the user has selected a wallet
@@ -1236,7 +1237,7 @@ export class Controller {
         // If we have an invalid wallet then we need to "onboard" then aka show the onboard js pop up
         if (
             !this.isWalletValid &&
-            !this.Config.settings.requireWallet &&
+            !this.Config.default.settings.requireWallet &&
             StorageController.getGlobalPreference('web3Check') !== true
         ) {
             this.log('[⚠️] Wallet needs onboarding', 'warning');
@@ -1283,12 +1284,14 @@ export class Controller {
             .then(() => {
                 // If we are on polygon we cant just listen for events on the contract so
                 // we need to historically pull stuff
-                if (this.Config.getNetwork().useAllEvents) {
+                if (this.Config.default.getNetwork().useAllEvents) {
                     this.#instances[contract].events.allEvents(
                         {
                             filter: args.filter || {},
                             fromBlock: blockNumber,
-                            to: blockNumber + this.Config.settings.blockRange,
+                            to:
+                                blockNumber +
+                                this.Config.default.settings.blockRange,
                         },
                         (error, events) => {
                             if (error !== null && error.code !== undefined) {
@@ -1567,9 +1570,12 @@ export class Controller {
                 delete objs[tokenId];
             } else if (
                 Object.values(StorageController.values.tokens).length >
-                (this.Config.settings.saveTokenRange || 16)
+                (this.Config.default.settings.saveTokenRange || 16)
             ) {
-                if (tokenId > (this.Config.settings.saveTokenRange || 16)) {
+                if (
+                    tokenId >
+                    (this.Config.default.settings.saveTokenRange || 16)
+                ) {
                     delete StorageController.values.tokens[
                         Object.keys(StorageController.values.tokens).shift()
                     ];
@@ -1760,10 +1766,10 @@ export class Controller {
 
         if (
             fileName !== 'default' &&
-            this.Config.settings.overwriteModules &&
+            this.Config.default.settings.overwriteModules &&
             result.modules !== undefined
         ) {
-            this.Config.deployInfo.modules = { ...result.modules };
+            this.Config.default.deployInfo.modules = { ...result.modules };
         }
 
         tokenMethods.load();
@@ -1788,11 +1794,11 @@ export class Controller {
 
         if (
             !this.isWalletValid &&
-            this.Config.settings.useLocalProjectAsDefault
+            this.Config.default.settings.useLocalProjectAsDefault
         ) {
             settings = this.localProjectURI;
         } else if (
-            !this.Config.settings.useLocalProjectURI &&
+            !this.Config.default.settings.useLocalProjectURI &&
             this.isWalletValid
         ) {
             settings = this.getContractValue('objectURI');
@@ -1801,11 +1807,11 @@ export class Controller {
                 settings === null ||
                 settings === undefined
             ) {
-                settings = this.Config.settings.useLocalProjectAsBackup
+                settings = this.Config.default.settings.useLocalProjectAsBackup
                     ? this.localProjectURI
                     : this.defaultProjectURI;
             }
-        } else if (this.Config.settings.useLocalProjectURI) {
+        } else if (this.Config.default.settings.useLocalProjectURI) {
             settings = this.localProjectURI;
         }
 
@@ -2038,12 +2044,14 @@ export class Controller {
         const chainId = await this.web3.eth.getChainId();
 
         if (
-            this.Config.requiredChainId !== chainId ||
-            this.Config.networks[chainId] === undefined
+            this.Config.default.requiredChainId !== chainId ||
+            this.Config.default.networks[chainId] === undefined
         ) {
             throw new Error(
                 'Invalid network, please make sure the network you are connected to is ' +
-                    this.Config.networks[this.Config.requiredChainId].name
+                    this.Config.default.networks[
+                        this.Config.default.requiredChainId
+                    ].name
             );
         }
 
@@ -2058,11 +2066,11 @@ export class Controller {
 
         try {
             if (
-                this.Config.settings.useLocalProjectAsDefault ||
-                this.Config.settings.useLocalProjectURI
+                this.Config.default.settings.useLocalProjectAsDefault ||
+                this.Config.default.settings.useLocalProjectURI
             ) {
                 this.localProjectURI = await this.getProjectURI(
-                    this.Config.settings.localProject,
+                    this.Config.default.settings.localProject,
                     true
                 );
             }
@@ -2135,7 +2143,7 @@ export class Controller {
             let parsedResult;
 
             if (
-                this.Config.settings.localContentOnLocalhost &&
+                this.Config.default.settings.localContentOnLocalhost &&
                 window.location.href.includes('localhost') &&
                 path.paths.localStorage
             ) {
@@ -2160,7 +2168,7 @@ export class Controller {
             if (
                 (path.paths.ipfs && !path.paths.projectStorage) ||
                 (path.paths.localStorage === true &&
-                    !this.Config.settings.forceLocalContent &&
+                    !this.Config.default.settings.forceLocalContent &&
                     path.paths.ipfs)
             ) {
                 this.log('fetching ipfs: ' + path.paths.ipfsURL, 'ipfs');
@@ -2196,7 +2204,7 @@ export class Controller {
                 }
             } else if (
                 !path.paths.projectStorage &&
-                this.Config.settings.forceLocalContent &&
+                this.Config.default.settings.forceLocalContent &&
                 !path.paths.localStorage
             ) {
                 this.log(
@@ -2210,7 +2218,7 @@ export class Controller {
                 path.paths.localStorage &&
                 (path.paths.ipfs !== true ||
                     (window.location.href.includes('localhost') &&
-                        this.Config.settings.localContentOnLocalhost))
+                        this.Config.default.settings.localContentOnLocalhost))
             ) {
                 const response = await fetch(path.paths.data);
                 this.log('fetching from current websites storage', 'ipfs');
@@ -2287,7 +2295,8 @@ export class Controller {
     ) {
         if (libraries === null) {
             libraries = {
-                InfinityMintUtil: this.Config.getDeployment('InfinityMintUtil'),
+                InfinityMintUtil:
+                    this.Config.default.getDeployment('InfinityMintUtil'),
             };
         }
 
@@ -2298,7 +2307,7 @@ export class Controller {
             forceAbi === undefined
         ) {
             try {
-                abi = this.Config.getDeployment(contract);
+                abi = this.Config.default.getDeployment(contract);
             } catch (error) {
                 this.log(error);
                 throw new Error('bad contract: ' + contract);
@@ -2315,7 +2324,7 @@ export class Controller {
         });
         instance = await instance.send({
             from: this.accounts[0],
-            gasPrice: this.Config.getGasPrice(
+            gasPrice: this.Config.default.getGasPrice(
                 StorageController.getGlobalPreference('gasSetting') || 'medium'
             ),
         });
@@ -2343,7 +2352,7 @@ export class Controller {
             forceAbi === undefined
         ) {
             try {
-                abi = this.Config.getDeployment(contract).abi;
+                abi = this.Config.default.getDeployment(contract).abi;
             } catch (error) {
                 this.log(error);
                 throw new Error('bad contract: ' + contract);
@@ -2421,7 +2430,8 @@ export class Controller {
                                 value = JSON.parse(value);
                                 if (
                                     value.local === true &&
-                                    !this.Config.settings.useLocalProjectURI
+                                    !this.Config.default.settings
+                                        .useLocalProjectURI
                                 ) {
                                     this.log(
                                         'not using local project URI but one is set on chain, forcing to use local',
@@ -2436,7 +2446,7 @@ export class Controller {
                                 console.log(value);
                                 console.log('bad parse');
                                 console.log(error);
-                                value = this.Config.settings
+                                value = this.Config.default.settings
                                     .useLocalProjectAsBackup
                                     ? this.localProjectURI
                                     : this.defaultProjectURI;
@@ -2462,7 +2472,7 @@ export class Controller {
                                     'failed to get object uri: ' + value,
                                     'warning'
                                 );
-                                value = this.Config.settings
+                                value = this.Config.default.settings
                                     .useLocalProjectAsBackup
                                     ? this.localProjectURI
                                     : this.defaultProjectURI;
@@ -2470,7 +2480,9 @@ export class Controller {
                         }
 
                         // Add initial tag if tag is missing
-                        if (this.Config.settings.useLocalProjectAsBackup) {
+                        if (
+                            this.Config.default.settings.useLocalProjectAsBackup
+                        ) {
                             if (value.tag === undefined) {
                                 value.tag =
                                     this.localProjectURI.tag || 'initial';

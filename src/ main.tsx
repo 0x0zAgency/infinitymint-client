@@ -1,1 +1,3 @@
-//export something
+import * as Classic from './classic';
+
+export { Classic };

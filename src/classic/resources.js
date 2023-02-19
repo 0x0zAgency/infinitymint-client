@@ -9,7 +9,7 @@ let ResStrings = {};
  * @param {object} obj
  * @returns
  */
-const replaceInObject = (object) => {
+export const replaceInObject = (object) => {
     for (const index of Object.keys(object)) {
         if (typeof object[index] === 'string') {
             if (
@@ -55,8 +55,7 @@ const replaceInObject = (object) => {
 /**
  * Controller class to work with the strings
  */
-
-const Resources = new (class {
+export class Resources {
     $;
     #map; // Set in load
     #savedDescription = {
@@ -251,6 +250,7 @@ const Resources = new (class {
             return type + '.' + key;
         }
     }
-})();
+}
 
-export default Resources;
+const resources = new Resources();
+export default resources;

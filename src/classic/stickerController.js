@@ -11,7 +11,7 @@ import StorageController from './storageController.js';
  * Like the Web3 Controller class but only for stickers
  */
 
-const parseBlockchainSticker = async (value, tokenId) => {
+export const parseBlockchainSticker = async (value, tokenId) => {
     const unpacked = Controller.decodeRequest(value, true, false);
     unpacked.request = Controller.decodeSticker(unpacked.request, false, false);
 
@@ -74,7 +74,7 @@ const parseBlockchainSticker = async (value, tokenId) => {
     return { ...unpacked };
 };
 
-const StickerController = new (class {
+export class StickerController {
     instance;
     #token;
     #tokenId;
@@ -537,6 +537,7 @@ const StickerController = new (class {
 
         return returns;
     }
-})();
+}
 
-export default StickerController;
+const stickerController = new StickerController();
+export default stickerController;

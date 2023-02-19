@@ -1,6 +1,6 @@
 import { Web3Storage, File } from 'web3.storage/dist/bundle.esm.min.js';
 
-const ipfsController = new (class {
+export class IPFSController {
     #instance;
 
     createInstance(apikey) {
@@ -81,6 +81,6 @@ const ipfsController = new (class {
     destroyInstance() {
         this.#instance = null;
     }
-})();
-
+}
+const ipfsController = new IPFSController();
 export default ipfsController;

@@ -1,7 +1,7 @@
 import Controller from './controller.js';
 import Resources from './resources.js';
 
-const ModController = new (class {
+export class ModController {
     modManifest = {};
     mods = {}; // Loaded by config.js
     modMains = {};
@@ -116,6 +116,7 @@ const ModController = new (class {
             this.mods[modName].enabled === true
         );
     }
-})();
+}
 
-export default ModController;
+const modController = new ModController();
+export default modController;

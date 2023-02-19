@@ -2,8 +2,8 @@ import ModController from './modController.js';
 import PageController from './pageController.js';
 import tokenMethods from './tokenMethods.js';
 
-let chainId;
-let deployInfo;
+export let chainId;
+export let deployInfo;
 /**
  * Holds all of the configuation for the DAPP
  */
@@ -855,5 +855,4 @@ const Config = {
         }
     },
 };
-
 export default Config;

@@ -12,7 +12,7 @@ import tokenMethods from './tokenMethods.js';
  *  http://www.webtoolkit.info
  *
  **/
-const Base64 = {
+export const Base64 = {
     // Private property
     _keyStr:
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
@@ -159,7 +159,7 @@ const Base64 = {
  *      Llydia Cross 2022
  */
 
-const Controller = new (class {
+export class Controller {
     Base64; // For accessing in tokenMethod scripts
     StorageController; // For accesing in tokenMethod scripts
     Config;
@@ -2544,6 +2544,7 @@ const Controller = new (class {
             );
         }
     }
-})();
+}
 
-export default Controller;
+const controller = new Controller();
+export default controller;

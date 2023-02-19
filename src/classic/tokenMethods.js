@@ -16,7 +16,7 @@ import StorageController from './storageController.js';
  * @returns
  */
 
-const tokenToSVG = (token, stickers = [], options = {}) => {
+export const tokenToSVG = (token, stickers = [], options = {}) => {
     if (typeof token !== 'object') {
         throw new TypeError('token must be an object');
     }
@@ -275,7 +275,7 @@ const tokenToSVG = (token, stickers = [], options = {}) => {
  * @param {*} token
  * @returns
  */
-const renderTokenSVGText = (map, pathSettings, token) => {
+export const renderTokenSVGText = (map, pathSettings, token) => {
     const text = [{ ...tinySVG.createElement('t'), startTag: true }];
 
     // First we check if we are doing paths but only do them if custom is not defined
@@ -322,11 +322,7 @@ const renderTokenSVGText = (map, pathSettings, token) => {
  * ===============================================================================
  */
 
-/**
- * tokenMethods class to execute render/createTokenURI methods based on what module we have loaded. So we can render SVG and Audiocover and
- * what ever and have it in a nice maintainable way.
- */
-const tokenMethods = new (class {
+export class TokenMethods {
     manifest = {};
     interface = {
         type: 'image',
@@ -693,6 +689,11 @@ const tokenMethods = new (class {
             Controller.log(error);
         }
     }
-})();
+}
 
+/**
+ * tokenMethods class to execute render/createTokenURI methods based on what module we have loaded. So we can render SVG and Audiocover and
+ * what ever and have it in a nice maintainable way.
+ */
+const tokenMethods = new TokenMethods();
 export default tokenMethods;

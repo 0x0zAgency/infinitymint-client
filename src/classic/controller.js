@@ -227,17 +227,6 @@ export class Controller {
 
     /**
      *
-     * @param {*} importPromise
-     * @returns
-     */
-    loadConfig(importPromise) {
-        return importPromise.then((config) => {
-            this.setConfig(config);
-        });
-    }
-
-    /**
-     *
      * @param {*} config
      */
     setConfig(config) {

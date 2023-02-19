@@ -7,14 +7,6 @@ import Controller from './controller.js';
 import { Component } from 'react'; // eslint-disable-line
 
 /**
- *
- * @returns
- */
-export const getConfig = () => {
-    return Controller.getConfig().default;
-};
-
-/**
  * A helper function to storage data, this is used with stickers. Key refers to one of the fields inside
  * the storage controller, id is the index of that field and the values are what it will equal. It also
  * saves after it is done.

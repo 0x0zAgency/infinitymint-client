@@ -614,7 +614,8 @@ export class TokenMethods {
 
     async loadScripts() {
         try {
-            this.manifest = await require('/Deployments/scripts/manifest.json');
+            this.manifest =
+                await require('/src/Deployments/scripts/manifest.json');
 
             if (
                 this.manifest !== null &&
@@ -623,7 +624,7 @@ export class TokenMethods {
             ) {
                 for (let i = 0; i < this.manifest.scripts.length; i++) {
                     this.scripts[this.manifest.scripts[i].split('.')[0]] = (
-                        await require('/Deployments/scripts/' +
+                        await require('/src/Deployments/scripts/' +
                             this.manifest.scripts[i])
                     ).default;
                 }

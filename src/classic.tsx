@@ -1,4 +1,3 @@
-import * as Config from './classic/utils/config';
 import * as Controller from './classic/controller';
 import * as ModController from './classic/modController';
 import * as StorageController from './classic/storageController';
@@ -11,7 +10,6 @@ import * as IPFSController from './classic/ipfsController';
 import * as TokenMethods from './classic/tokenMethods';
 
 export {
-    Config,
     Controller,
     ModController,
     StorageController,

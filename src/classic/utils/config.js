@@ -428,7 +428,7 @@ const Config = {
             path += 'production/';
         }
 
-        return require('/Deployments/' + path + contract + '.json');
+        return require('/src/Deployments/' + path + contract + '.json');
     },
     getDeploymentDestination(contract) {
         return (
@@ -511,7 +511,7 @@ const Config = {
         let result = {};
         try {
             console.log('[👓] Reading manifest.json');
-            result = await require('/Deployments/static/manifest.json');
+            result = await require('/src/Deployments/static/manifest.json');
 
             if (
                 result === null ||
@@ -526,7 +526,8 @@ const Config = {
             Config.isBadStaticManifest = true;
             console.log(error);
 
-            result = await require('/Deployments/static/default_manifest.json');
+            result =
+                await require('/src/Deployments/static/default_manifest.json');
 
             // Just use emergency
             if (result === null || result === undefined) {
@@ -617,7 +618,8 @@ const Config = {
     },
     async loadMods() {
         try {
-            const result = await require('/Deployments/mods/modManifest.json');
+            const result =
+                await require('/src/Deployments/mods/modManifest.json');
 
             for (const modname of Object.keys(result.mods)) {
                 ModController.mods[modname] = result.mods[modname];
@@ -627,7 +629,7 @@ const Config = {
                     console.log(
                         '[💎gems] reading mod manifest: ' + modname + '.json'
                     );
-                    const manifest = require('/Deployments/mods/' +
+                    const manifest = require('/src/Deployments/mods/' +
                         modname +
                         '/' +
                         modname +
@@ -645,7 +647,7 @@ const Config = {
                 if (result.mods[modname].main) {
                     console.log('[💎gems] loading ' + modname + "'s main.js");
                     const promise = async () =>
-                        require('/Deployments/mods/' +
+                        require('/src/Deployments/mods/' +
                             (result.mods[modname].mainSrc ||
                                 modname + '/main.js'));
 
@@ -685,7 +687,7 @@ const Config = {
             for (const page of pages) {
                 try {
                     console.log('[💎gems] requiring page: ' + page.page);
-                    let requirePage = await require('/Deployments/mods/' +
+                    let requirePage = await require('/src/Deployments/mods/' +
                         page.page.replace('.js', ''));
 
                     requirePage = requirePage.default || requirePage;
@@ -755,9 +757,10 @@ const Config = {
                 try {
                     if (Config.settings.production) {
                         deployInfo =
-                            await require('/Deployments/production/.deployInfo');
+                            await require('/src/Deployments/production/.deployInfo');
                     } else {
-                        deployInfo = await require('/Deployments/.deployInfo');
+                        deployInfo =
+                            await require('/src/Deployments/.deployInfo');
                     }
                 } catch (error) {
                     console.log('[😞] could not load .deployInfo');
@@ -787,7 +790,7 @@ const Config = {
                 }
             } else {
                 try {
-                    deployInfo = await require('/Deployments/.deployInfo' +
+                    deployInfo = await require('/src/Deployments/.deployInfo' +
                         (Config.settings.projectSpecificMode ? '_bundle' : ''));
                 } catch (error) {
                     console.log('[😞] could not load .deployInfo_bundle');
@@ -824,9 +827,9 @@ const Config = {
                 try {
                     if (Config.settings.production) {
                         chainId =
-                            await require('/Deployments/production/.chainId');
+                            await require('/src/Deployments/production/.chainId');
                     } else {
-                        chainId = await require('/Deployments/.chainId');
+                        chainId = await require('/src/Deployments/.chainId');
                     }
                 } catch (error) {
                     console.log('[😞] could not load chainId');

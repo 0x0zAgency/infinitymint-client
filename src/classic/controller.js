@@ -227,9 +227,23 @@ export class Controller {
 
     /**
      *
+     * @param {*} importPromise
+     * @returns
+     */
+    loadConfig(importPromise) {
+        return importPromise.then((config) => {
+            this.setConfig(config);
+        });
+    }
+
+    /**
+     *
      * @param {*} config
      */
     setConfig(config) {
+        if (config.default === undefined)
+            throw new Error('please provide the full module');
+
         this.Config = config;
     }
 
@@ -1768,8 +1782,12 @@ export class Controller {
         return result;
     }
 
+    /**
+     *
+     * @returns
+     */
     getConfig() {
-        return this.Config;
+        return this.Config.default;
     }
 
     /**

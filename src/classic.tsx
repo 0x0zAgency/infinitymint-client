@@ -1,4 +1,4 @@
-import * as Config from './classic/config';
+import * as Config from './classic/utils/config';
 import * as Controller from './classic/controller';
 import * as ModController from './classic/modController';
 import * as StorageController from './classic/storageController';

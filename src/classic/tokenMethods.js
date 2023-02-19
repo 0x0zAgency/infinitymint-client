@@ -1,6 +1,5 @@
 import tinySVG from 'tinysvg-js';
 import { Button } from 'react-bootstrap';
-import Config from '../../../../../src/config.js';
 import Controller from './controller.js';
 import StorageController from './storageController.js';
 
@@ -524,6 +523,7 @@ export class TokenMethods {
                 stickers = [],
                 settings = {}
             ) {
+                let Config = Controller.getConfig();
                 const svg = Controller.Base64.encode(renderedToken);
                 const object = {
                     name: encodeURIComponent(token.name),
@@ -646,7 +646,7 @@ export class TokenMethods {
     load() {
         this.renderToken = this.getScript('default').renderToken;
         this.createTokenURI = this.getScript('default').createTokenURI;
-
+        let Config = Controller.getConfig();
         let renderScript =
             Config.deployInfo?.modules?.renderScript ||
             Config.deployInfo?.modules?.controller;

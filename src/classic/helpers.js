@@ -4,7 +4,6 @@ import CryptoJS from 'crypto-js';
 import StorageController from './storageController.js';
 import StickerController from './stickerController.js';
 import Controller from './controller.js';
-import Config from '../../../../../src/config.js';
 import { Component } from 'react'; // eslint-disable-line
 
 /**
@@ -153,6 +152,7 @@ export const unpackColours = (colours) => {
 };
 
 export const getDeploymentAddress = (token, link) => {
+    let Config = Controller.getConfig();
     if (StorageController.values.deployments[token.tokenId] === undefined) {
         return Config.nullAddress;
     }
@@ -188,6 +188,7 @@ export const hasLink = (token, key) => {
 };
 
 export const hasDeployment = (token, index) => {
+    let Config = Controller.getConfig();
     const links = Controller.getProjectSettings().links || {};
     const keys = Object.keys(links);
     let link;
@@ -234,6 +235,7 @@ export const getHost = () => {
 
 export const connectWallet = async () => {
     const result = await Controller.onboardWallet();
+    let Config = Controller.getConfig();
 
     if (result) {
         StorageController.setGlobalPreference('forceWallet', true);
@@ -455,6 +457,7 @@ export const getStickers = async (tokenId) => {
 
 // TODO: needs rewriting, pulls image paths twice right now
 export const loadPath = async (projectURI, pathId) => {
+    let Config = Controller.getConfig();
     // If don't load
     try {
         if (
@@ -689,6 +692,7 @@ export const loadToken = async (
     checkFlags = true,
     returnFlags = false
 ) => {
+    let Config = Controller.getConfig();
     try {
         reactComponent.setState({
             loading: true,

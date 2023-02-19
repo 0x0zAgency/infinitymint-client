@@ -1,7 +1,6 @@
 import web3 from 'web3';
 import Onboard from 'bnc-onboard';
 import tinySVG from './tinysvg.js';
-import Config from '../../../../../src/config.js';
 import StorageController from './storageController.js';
 import { getStickers, tryDecodeURI, unpackColours } from './helpers.js';
 import tokenMethods from './tokenMethods.js';
@@ -162,6 +161,9 @@ export const Base64 = {
 export class Controller {
     Base64; // For accessing in tokenMethod scripts
     StorageController; // For accesing in tokenMethod scripts
+    /**
+     * @type {import('./utils/config')}
+     */
     Config;
 
     // Public
@@ -224,6 +226,14 @@ export class Controller {
     }
 
     /**
+     *
+     * @param {*} config
+     */
+    setConfig(config) {
+        this.Config = config;
+    }
+
+    /**
      * This is called after we've loaded the .chainId and the .deployInfo file
      */
     loadAbis() {
@@ -231,20 +241,22 @@ export class Controller {
             // Everything here is loaded instantly
             // these can be invoked through createCntract and just supplying InfnityMintWallet,
             contracts: {
-                Fake_InfinityMintWallet: Config.getDeployment(
+                Fake_InfinityMintWallet: this.Config.getDeployment(
                     'Fake_InfinityMintWallet'
                 ),
-                InfinityMint: Config.getDeployment('InfinityMint'),
-                [Config.deployInfo.modules.svg ||
-                Config.deployInfo.modules.controller]: Config.getDeployment(
-                    Config.deployInfo.modules.svg ||
-                        Config.deployInfo.modules.controller
-                ),
-                InfinityMintApi: Config.getDeployment('InfinityMintApi'),
-                InfinityMintProject: Config.getDeployment(
+                InfinityMint: this.Config.getDeployment('InfinityMint'),
+                [this.Config.deployInfo.modules.svg ||
+                this.Config.deployInfo.modules.controller]:
+                    this.Config.getDeployment(
+                        this.Config.deployInfo.modules.svg ||
+                            this.Config.deployInfo.modules.controller
+                    ),
+                InfinityMintApi: this.Config.getDeployment('InfinityMintApi'),
+                InfinityMintProject: this.Config.getDeployment(
                     'InfinityMintProject'
                 ),
-                InfinityMintLinker: Config.getDeployment('InfinityMintLinker'),
+                InfinityMintLinker:
+                    this.Config.getDeployment('InfinityMintLinker'),
             },
         };
     }
@@ -283,7 +295,7 @@ export class Controller {
         }
 
         if (args.loadGasPrice) {
-            await Config.loadGasPrices().catch((error) => {
+            await this.Config.loadGasPrices().catch((error) => {
                 this.log('could not get updated gas prices');
                 this.log(error, 'error');
             });
@@ -297,7 +309,7 @@ export class Controller {
         const gasPrice =
             args.gasPrice ||
             (type === 'send'
-                ? Config.getGasPrice(
+                ? this.Config.getGasPrice(
                       StorageController.getGlobalPreference('gasSetting') ||
                           'medium'
                   )
@@ -756,7 +768,7 @@ export class Controller {
                 Date.now(),
             validTill:
                 Date.now() +
-                Config.settings.cacheLength +
+                this.Config.settings.cacheLength +
                 (Math.random() * 6 + 1) * 1000 * 60, // So they all don't hit at once
             token: {
                 tokenId,
@@ -972,7 +984,7 @@ export class Controller {
 
     getCollectionURL(tokenId) {
         return (
-            Config.getNetwork().openseaAssets +
+            this.Config.getNetwork().openseaAssets +
             this.#abis.contracts.InfinityMint.address +
             '/' +
             tokenId
@@ -1034,7 +1046,7 @@ export class Controller {
                 result.colours
             )[0];
 
-            if (!Config.settings.useOldColours) {
+            if (!this.Config.settings.useOldColours) {
                 colours = unpackColours([...result.colours]);
             }
         }
@@ -1152,13 +1164,13 @@ export class Controller {
         return object;
     }
 
-    // Want to add new events? check src/config.js => events array
+    // Want to add new events? check src/this.Config.js => events array
     setupEvents(contract = 'InfinityMint') {
         for (const event of Object.values(
-            Config.events[contract.replace('Fake_', '')]
+            this.Config.events[contract.replace('Fake_', '')]
         )) {
             this.#instances[contract].events[event]((error, events) => {
-                if (!Config.getNetwork().useAllEvents) {
+                if (!this.Config.getNetwork().useAllEvents) {
                     this.pushToEvent(event, error, events);
                 }
             });
@@ -1193,8 +1205,8 @@ export class Controller {
      */
     initializeOnboardJs(chainId = undefined) {
         this.onboard = Onboard({
-            dappId: Config.onboardApiKey,
-            networkId: chainId || Config.requiredChainId,
+            dappId: this.Config.onboardApiKey,
+            networkId: chainId || this.Config.requiredChainId,
             subscriptions: {
                 wallet: async (wallet) => {
                     // Instantiate web3 when the user has selected a wallet
@@ -1220,13 +1232,13 @@ export class Controller {
 
         // If we have an invalid wallet then we need to "onboard" then aka show the onboard js pop up
         if (
-            !Controller.isWalletValid &&
-            !Config.settings.requireWallet &&
+            !this.isWalletValid &&
+            !this.Config.settings.requireWallet &&
             StorageController.getGlobalPreference('web3Check') !== true
         ) {
-            Controller.log('[⚠️] Wallet needs onboarding', 'warning');
+            this.log('[⚠️] Wallet needs onboarding', 'warning');
 
-            if (!(await Controller.onboardWallet())) {
+            if (!(await this.onboardWallet())) {
                 return false;
             }
 
@@ -1268,12 +1280,12 @@ export class Controller {
             .then(() => {
                 // If we are on polygon we cant just listen for events on the contract so
                 // we need to historically pull stuff
-                if (Config.getNetwork().useAllEvents) {
+                if (this.Config.getNetwork().useAllEvents) {
                     this.#instances[contract].events.allEvents(
                         {
                             filter: args.filter || {},
                             fromBlock: blockNumber,
-                            to: blockNumber + Config.settings.blockRange,
+                            to: blockNumber + this.Config.settings.blockRange,
                         },
                         (error, events) => {
                             if (error !== null && error.code !== undefined) {
@@ -1414,15 +1426,15 @@ export class Controller {
             tokenId: Math.floor(Math.random() * 10_000),
             colours: [],
             mintData: {},
-            name: name || Controller.getDescription().token,
+            name: name || this.getDescription().token,
             pathId,
             pathSize: 0,
             assets: [1, 4],
-            owner: Controller.accounts[0],
+            owner: this.accounts[0],
         };
 
-        const projectFile = Controller.getProjectSettings();
-        const pathSize = Controller?.paths[fakeToken.pathId]?.pathSize || 1;
+        const projectFile = this.getProjectSettings();
+        const pathSize = this?.paths[fakeToken.pathId]?.pathSize || 1;
         const extraColours = projectFile.deployment.extraColours || 6;
         const div = projectFile.deployment?.colourChunkSize;
         let objects = [];
@@ -1468,9 +1480,9 @@ export class Controller {
             compressedColours: objects,
             colours: [...unpackColours(objects)],
             pathSize:
-                Controller?.paths[fakeToken.pathId]?.pathSize === undefined
+                this?.paths[fakeToken.pathId]?.pathSize === undefined
                     ? 0
-                    : Controller.paths[fakeToken.pathId].pathSize,
+                    : this.paths[fakeToken.pathId].pathSize,
         };
     }
 
@@ -1552,9 +1564,9 @@ export class Controller {
                 delete objs[tokenId];
             } else if (
                 Object.values(StorageController.values.tokens).length >
-                (Config.settings.saveTokenRange || 16)
+                (this.Config.settings.saveTokenRange || 16)
             ) {
-                if (tokenId > (Config.settings.saveTokenRange || 16)) {
+                if (tokenId > (this.Config.settings.saveTokenRange || 16)) {
                     delete StorageController.values.tokens[
                         Object.keys(StorageController.values.tokens).shift()
                     ];
@@ -1745,10 +1757,10 @@ export class Controller {
 
         if (
             fileName !== 'default' &&
-            Config.settings.overwriteModules &&
+            this.Config.settings.overwriteModules &&
             result.modules !== undefined
         ) {
-            Config.deployInfo.modules = { ...result.modules };
+            this.Config.deployInfo.modules = { ...result.modules };
         }
 
         tokenMethods.load();
@@ -1757,7 +1769,7 @@ export class Controller {
     }
 
     getConfig() {
-        return Config;
+        return this.Config;
     }
 
     /**
@@ -1767,20 +1779,26 @@ export class Controller {
     getProjectSettings() {
         let settings = this.defaultProjectURI;
 
-        if (!this.isWalletValid && Config.settings.useLocalProjectAsDefault) {
+        if (
+            !this.isWalletValid &&
+            this.Config.settings.useLocalProjectAsDefault
+        ) {
             settings = this.localProjectURI;
-        } else if (!Config.settings.useLocalProjectURI && this.isWalletValid) {
+        } else if (
+            !this.Config.settings.useLocalProjectURI &&
+            this.isWalletValid
+        ) {
             settings = this.getContractValue('objectURI');
             if (
                 Object.values(settings).length === 0 ||
                 settings === null ||
                 settings === undefined
             ) {
-                settings = Config.settings.useLocalProjectAsBackup
+                settings = this.Config.settings.useLocalProjectAsBackup
                     ? this.localProjectURI
                     : this.defaultProjectURI;
             }
-        } else if (Config.settings.useLocalProjectURI) {
+        } else if (this.Config.settings.useLocalProjectURI) {
             settings = this.localProjectURI;
         }
 
@@ -2013,12 +2031,12 @@ export class Controller {
         const chainId = await this.web3.eth.getChainId();
 
         if (
-            Config.requiredChainId !== chainId ||
-            Config.networks[chainId] === undefined
+            this.Config.requiredChainId !== chainId ||
+            this.Config.networks[chainId] === undefined
         ) {
             throw new Error(
                 'Invalid network, please make sure the network you are connected to is ' +
-                    Config.networks[Config.requiredChainId].name
+                    this.Config.networks[this.Config.requiredChainId].name
             );
         }
 
@@ -2033,11 +2051,11 @@ export class Controller {
 
         try {
             if (
-                Config.settings.useLocalProjectAsDefault ||
-                Config.settings.useLocalProjectURI
+                this.Config.settings.useLocalProjectAsDefault ||
+                this.Config.settings.useLocalProjectURI
             ) {
                 this.localProjectURI = await this.getProjectURI(
-                    Config.settings.localProject,
+                    this.Config.settings.localProject,
                     true
                 );
             }
@@ -2110,7 +2128,7 @@ export class Controller {
             let parsedResult;
 
             if (
-                Config.settings.localContentOnLocalhost &&
+                this.Config.settings.localContentOnLocalhost &&
                 window.location.href.includes('localhost') &&
                 path.paths.localStorage
             ) {
@@ -2135,7 +2153,7 @@ export class Controller {
             if (
                 (path.paths.ipfs && !path.paths.projectStorage) ||
                 (path.paths.localStorage === true &&
-                    !Config.settings.forceLocalContent &&
+                    !this.Config.settings.forceLocalContent &&
                     path.paths.ipfs)
             ) {
                 this.log('fetching ipfs: ' + path.paths.ipfsURL, 'ipfs');
@@ -2171,7 +2189,7 @@ export class Controller {
                 }
             } else if (
                 !path.paths.projectStorage &&
-                Config.settings.forceLocalContent &&
+                this.Config.settings.forceLocalContent &&
                 !path.paths.localStorage
             ) {
                 this.log(
@@ -2185,7 +2203,7 @@ export class Controller {
                 path.paths.localStorage &&
                 (path.paths.ipfs !== true ||
                     (window.location.href.includes('localhost') &&
-                        Config.settings.localContentOnLocalhost))
+                        this.Config.settings.localContentOnLocalhost))
             ) {
                 const response = await fetch(path.paths.data);
                 this.log('fetching from current websites storage', 'ipfs');
@@ -2262,7 +2280,7 @@ export class Controller {
     ) {
         if (libraries === null) {
             libraries = {
-                InfinityMintUtil: Config.getDeployment('InfinityMintUtil'),
+                InfinityMintUtil: this.Config.getDeployment('InfinityMintUtil'),
             };
         }
 
@@ -2273,9 +2291,9 @@ export class Controller {
             forceAbi === undefined
         ) {
             try {
-                abi = Config.getDeployment(contract);
+                abi = this.Config.getDeployment(contract);
             } catch (error) {
-                Controller.log(error);
+                this.log(error);
                 throw new Error('bad contract: ' + contract);
             }
         } else {
@@ -2284,13 +2302,13 @@ export class Controller {
 
         instance = new this.web3.eth.Contract(abi.abi);
         instance = await instance.deploy({
-            from: Controller.accounts[0],
+            from: this.accounts[0],
             data: abi.bytecode,
             arguments: args,
         });
         instance = await instance.send({
-            from: Controller.accounts[0],
-            gasPrice: Config.getGasPrice(
+            from: this.accounts[0],
+            gasPrice: this.Config.getGasPrice(
                 StorageController.getGlobalPreference('gasSetting') || 'medium'
             ),
         });
@@ -2318,9 +2336,9 @@ export class Controller {
             forceAbi === undefined
         ) {
             try {
-                abi = Config.getDeployment(contract).abi;
+                abi = this.Config.getDeployment(contract).abi;
             } catch (error) {
-                Controller.log(error);
+                this.log(error);
                 throw new Error('bad contract: ' + contract);
             }
         } else {
@@ -2376,7 +2394,7 @@ export class Controller {
                     contract: 'InfinityMint',
                     method: 'balanceOf',
                     key: 'balanceOf',
-                    parameters: [Controller.accounts[0]],
+                    parameters: [this.accounts[0]],
                     lifetime: 1000 * 60 * 1, // 1 minute
                     default: 0,
                     parse: (value) => Number.parseInt(value),
@@ -2396,7 +2414,7 @@ export class Controller {
                                 value = JSON.parse(value);
                                 if (
                                     value.local === true &&
-                                    !Config.settings.useLocalProjectURI
+                                    !this.Config.settings.useLocalProjectURI
                                 ) {
                                     this.log(
                                         'not using local project URI but one is set on chain, forcing to use local',
@@ -2411,7 +2429,8 @@ export class Controller {
                                 console.log(value);
                                 console.log('bad parse');
                                 console.log(error);
-                                value = Config.settings.useLocalProjectAsBackup
+                                value = this.Config.settings
+                                    .useLocalProjectAsBackup
                                     ? this.localProjectURI
                                     : this.defaultProjectURI;
                             }
@@ -2436,14 +2455,15 @@ export class Controller {
                                     'failed to get object uri: ' + value,
                                     'warning'
                                 );
-                                value = Config.settings.useLocalProjectAsBackup
+                                value = this.Config.settings
+                                    .useLocalProjectAsBackup
                                     ? this.localProjectURI
                                     : this.defaultProjectURI;
                             }
                         }
 
                         // Add initial tag if tag is missing
-                        if (Config.settings.useLocalProjectAsBackup) {
+                        if (this.Config.settings.useLocalProjectAsBackup) {
                             if (value.tag === undefined) {
                                 value.tag =
                                     this.localProjectURI.tag || 'initial';

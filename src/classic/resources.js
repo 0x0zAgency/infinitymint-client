@@ -1,5 +1,4 @@
 import Controller from './controller.js';
-import Config from '../../../../../src/config.js';
 
 // Loaded through await import
 let ResStrings = {};
@@ -153,6 +152,7 @@ export class Resources {
     }
 
     async initialize() {
+        let Config = Controller.getConfig();
         ResStrings = await import(
             '../../../../../src/Resources/' +
                 Config.resources.replace(/.js/g, '') +

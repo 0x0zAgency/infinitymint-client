@@ -1,6 +1,6 @@
 import tinySVG from 'tinysvg-js';
 import { Button } from 'react-bootstrap';
-import Config from '/src/config.js';
+import Config from '../../../../../src/config.js';
 import Controller from './controller.js';
 import StorageController from './storageController.js';
 
@@ -385,7 +385,7 @@ export class TokenMethods {
         // TODO: Version2 needs to accept options object so we can render differently depending on what page we are on ETC: Gallery, thumbnail etc
         // lower res versions need to be rendered for the thumbnails specifically
         SimpleSVG: {
-            // Controller | class (is the site wide instance of https://github.com/0x0zAgency/InfinityMint/blob/master/src/controller.js_
+            // Controller | class (is the site wide instance of https://github.com/0x0zAgency/InfinityMint/blob/master../../../../../src/controller.js_
             // renderedToken | string (the token in HTML form)
             // token | object (the token from the blockchain)
             // stickers | Array (list of InfinityMint stickers as objects)
@@ -506,7 +506,7 @@ export class TokenMethods {
             // Called when the window is resized
             onWindowResize(controller) {},
 
-            // Controller | class (is the site wide instance of https://github.com/0x0zAgency/InfinityMint/blob/master/src/controller.js_
+            // Controller | class (is the site wide instance of https://github.com/0x0zAgency/InfinityMint/blob/master../../../../../src/controller.js_
             // renderedToken | string (the token in HTML form)
             // token | object (the token from the blockchain)
             // stickers | Array (list of InfinityMint stickers as objects)
@@ -615,7 +615,7 @@ export class TokenMethods {
     async loadScripts() {
         try {
             this.manifest =
-                await require('/src/Deployments/scripts/manifest.json');
+                await require('../../../../../src/Deployments/scripts/manifest.json');
 
             if (
                 this.manifest !== null &&
@@ -624,7 +624,7 @@ export class TokenMethods {
             ) {
                 for (let i = 0; i < this.manifest.scripts.length; i++) {
                     this.scripts[this.manifest.scripts[i].split('.')[0]] = (
-                        await require('/src/Deployments/scripts/' +
+                        await require('../../../../../src/Deployments/scripts/' +
                             this.manifest.scripts[i])
                     ).default;
                 }

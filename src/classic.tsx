@@ -9,15 +9,27 @@ import * as TinySVG from './classic/tinysvg';
 import * as IPFSController from './classic/ipfsController';
 import * as TokenMethods from './classic/tokenMethods';
 
-export {
-    Controller,
-    ModController,
-    StorageController,
-    Helpers,
-    PageController,
-    StickerController,
-    Resources,
-    TinySVG,
-    IPFSController,
-    TokenMethods,
+const _controller = Controller.default;
+const _modController = ModController.default;
+const _storageController = StorageController.default;
+const _helpers = Helpers;
+const _pageController = PageController.default;
+const _stickerController = StickerController.default;
+const _resources = Resources.default;
+const _tinySVG = TinySVG.default;
+const _ipfsController = IPFSController.default;
+const _tokenMethods = TokenMethods.default;
+
+const exportDefaultExports = {
+    Controller: _controller,
+    ModController: _modController,
+    StorageController: _storageController,
+    Helpers: _helpers,
+    PageController: _pageController,
+    StickerController: _stickerController,
+    Resources: _resources,
+    TinySVG: _tinySVG,
+    IPFSController: _ipfsController,
+    TokenMethods: _tokenMethods,
 };
+export default exportDefaultExports;

@@ -501,7 +501,7 @@ export class Controller {
     }
 
     async getComponent(component) {
-        const result = await require('/Components/' + component);
+        const result = await require('/src/Components/' + component);
         return result;
     }
 
@@ -1743,7 +1743,7 @@ export class Controller {
      */
     async getProjectURI(fileName = 'default', isJson = false) {
         let result;
-        result = await require('/Deployments/projects/' +
+        result = await require('/src/Deployments/projects/' +
             (isJson ? fileName + '.json' : fileName));
 
         result = result?.default || result;

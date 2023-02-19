@@ -1,6 +1,6 @@
-import ModController from './modController.js';
-import PageController from './pageController.js';
-import tokenMethods from './tokenMethods.js';
+import ModController from '../modController';
+import PageController from '../pageController';
+import tokenMethods from '../tokenMethods';
 
 export let chainId;
 export let deployInfo;

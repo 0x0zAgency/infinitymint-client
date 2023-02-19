@@ -23,7 +23,7 @@ export const parseBlockchainSticker = async (value, tokenId) => {
     }
 
     unpacked.verified = false;
-    if (StickerController.verifyStickerChecksum(unpacked.request.sticker)) {
+    if (stickerController.verifyStickerChecksum(unpacked.request.sticker)) {
         unpacked.verified = true;
     }
 

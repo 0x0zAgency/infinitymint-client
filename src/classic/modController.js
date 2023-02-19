@@ -99,8 +99,8 @@ export class ModController {
                             key +
                             ' mod has been disabled'
                     );
-                    ModController.disableMod(key);
-                    ModController.pushModError(error, key);
+                    this.disableMod(key);
+                    this.pushModError(error, key);
                 }
             }
         }

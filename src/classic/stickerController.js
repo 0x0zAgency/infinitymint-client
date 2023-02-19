@@ -1,7 +1,6 @@
 import tinySVG from 'tinysvg-js';
 import Controller from './controller.js';
 import { md5 } from './helpers.js';
-import Config from '../../../../../src/config.js';
 import StorageController from './storageController.js';
 
 /**
@@ -12,6 +11,7 @@ import StorageController from './storageController.js';
  */
 
 export const parseBlockchainSticker = async (value, tokenId) => {
+    let Config = Controller.getConfig();
     const unpacked = Controller.decodeRequest(value, true, false);
     unpacked.request = Controller.decodeSticker(unpacked.request, false, false);
 
@@ -91,6 +91,7 @@ export class StickerController {
      * @throws
      */
     async createContract(tokenId, contractName = 'Fake_EADStickers') {
+        let Config = Controller.getConfig();
         const abi = Config.getDeployment(contractName).abi;
         this.#token = await Controller.getTokenObject(tokenId);
         this.#tokenId = tokenId;
@@ -166,6 +167,7 @@ export class StickerController {
 
     checkSticker(potentialSticker, final = false, throwAll = false) {
         let sticker;
+        let Config = Controller.getConfig();
 
         if (
             typeof potentialSticker !== 'object' &&
@@ -282,6 +284,7 @@ export class StickerController {
     }
 
     async sendRequest(localStickerId, stickerPrice = null) {
+        let Config = Controller.getConfig();
         this.checkSticker(localStickerId, true, true); // Will throw
 
         if (!this.verifyStickerChecksum(localStickerId)) {
@@ -348,6 +351,7 @@ export class StickerController {
     }
 
     async acceptRequest(address, index) {
+        let Config = Controller.getConfig();
         const result = await Controller.sendAndWaitForEvent(
             Controller.accounts[0],
             this.#contractName,
@@ -366,6 +370,7 @@ export class StickerController {
     }
 
     async withdrawRequest(index) {
+        let Config = Controller.getConfig();
         return await Controller.sendAndWaitForEvent(
             Controller.accounts[0],
             this.#contractName,
@@ -396,6 +401,7 @@ export class StickerController {
     }
 
     async denyRequest(address, index) {
+        let Config = Controller.getConfig();
         return await Controller.sendAndWaitForEvent(
             Controller.accounts[0],
             this.#contractName,

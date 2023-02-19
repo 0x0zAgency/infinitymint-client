@@ -1,7 +1,7 @@
 import web3 from 'web3';
 import Onboard from 'bnc-onboard';
 import tinySVG from './tinysvg.js';
-import Config from '/config.js';
+import Config from '/src/config.js';
 import StorageController from './storageController.js';
 import { getStickers, tryDecodeURI, unpackColours } from './helpers.js';
 import tokenMethods from './tokenMethods.js';

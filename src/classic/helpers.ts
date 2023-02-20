@@ -1,21 +1,85 @@
 import validator from 'validator';
-import tinySVG from 'tinysvg-js';
+import tinySVG from './tinysvg';
 import CryptoJS from 'crypto-js';
-import StorageController from './storageController.js';
-import StickerController from './stickerController.js';
-import Controller from './controller.js';
-import { Component } from 'react'; // eslint-disable-line
+import StorageController from './storageController';
+import StickerController from './stickerController';
+import Controller from './controller';
+import { Component } from 'react';
 
+/**
+ *
+ * @returns
+ */
+export const getGasPrice = () => {
+    let config = Controller.getConfig();
+    return config.getGasPrice(
+        StorageController.getGlobalPreference('gasSetting') || 'medium'
+    );
+};
+
+/**
+ *
+ * @param {string} contractName
+ * @param {string} method
+ * @param {*} args
+ * @param {*} options
+ * @returns
+ */
+export const send = async (
+    contractName: string,
+    method: string,
+    args: any = [],
+    options: any = {}
+) => {
+    let statement = prepareCall(contractName, method, args);
+    if (statement === null) {
+        return null;
+    }
+
+    if (options.gasPrice === undefined) options.gasPrice = getGasPrice();
+
+    return await statement.send(options);
+};
+
+/**
+ *
+ * @param {*} contractName
+ * @param {*} method
+ * @param {*} args
+ * @returns
+ */
+export const call = async (contractName: any, method: any, args: any = []) => {
+    let statement = prepareCall(contractName, method, args);
+    if (statement === null) {
+        return null;
+    }
+    return await statement.call();
+};
+
+export const prepareCall = (contractName, method, args = []) => {
+    let contract = Controller.getContract(contractName);
+    try {
+        return contract.methods[method](...args);
+    } catch (error) {
+        Controller.log(error);
+        return null;
+    }
+};
 /**
  * A helper function to storage data, this is used with stickers. Key refers to one of the fields inside
  * the storage controller, id is the index of that field and the values are what it will equal. It also
  * saves after it is done.
  * @param {string} key
  * @param {string|number} id
- * @param {object|Array} values
- * @param {bool} encode
+ * @param {any} values
+ * @param {boolean} encode
  */
-export const saveObject = (key, id, values, encode = true) => {
+export const saveObject = (
+    key: string,
+    id: string | number,
+    values: any,
+    encode: boolean = true
+) => {
     if (StorageController.values[key] === undefined) {
         StorageController.values[key][id] = {};
     }
@@ -24,7 +88,7 @@ export const saveObject = (key, id, values, encode = true) => {
         StorageController.values[key][id] = {};
     }
 
-    for (let [index, value] of Object.entries(values)) {
+    for (let [index, value] of Object.entries<any>(values)) {
         if (value === undefined) {
             continue;
         }
@@ -49,7 +113,7 @@ export const saveObject = (key, id, values, encode = true) => {
  * @param {string} value
  * @returns
  */
-export const tryDecodeURI = (value) => {
+export const tryDecodeURI = (value: string) => {
     try {
         return decodeURI(value);
     } catch {
@@ -62,7 +126,7 @@ export const tryDecodeURI = (value) => {
  * @param {string} type
  * @returns
  */
-export const toRealFormType = (type) => {
+export const toRealFormType = (type: string) => {
     switch (type) {
         case 'address':
         case 'string':
@@ -86,7 +150,7 @@ export const toRealFormType = (type) => {
  * @param {object} obj
  * @returns
  */
-export const mapArrayToObject = (array, object) => {
+export const mapArrayToObject = (array: Array<any>, object) => {
     let count = 0;
     const result = {};
     // eslint-disable-next-line
@@ -125,8 +189,11 @@ export const unpackColours = (colours) => {
         const seedNumberB = seedNumber >> 24;
         const seedNumberN = (seedNumber >> 32) ^ i;
 
-        const combination = Number.parseInt(
-            (r * seedNumberR + g * seedNumberG + b * seedNumberB) * seedNumberN
+        const combination = parseInt(
+            (
+                (r * seedNumberR + g * seedNumberG + b * seedNumberB) *
+                seedNumberN
+            ).toString()
         );
         return combination % 0xff_ff_ff;
     };
@@ -248,7 +315,7 @@ export const connectWallet = async () => {
     window.location.reload();
 };
 
-export const getCodes = (phraseCount, options = {}) => {
+export const getCodes = (phraseCount, options: any = {}) => {
     const characterRange = 'QWERTYUIOPASDFGHJKLZXCVBNM1234567890';
     const codes = [];
 
@@ -327,23 +394,25 @@ export const decideRowClass = (results = [], maxColWidth = 'row-cols-3') => {
  *
  * @param {Component} reactComponent
  */
-export const loadStickers = async (reactComponent) => {
+export const loadStickers = async (reactComponent: Component) => {
     reactComponent.setState({
         loading: true,
     });
 
     try {
-        if (reactComponent.state?.tokenId === undefined) {
+        if ((reactComponent.state as any)?.tokenId === undefined) {
             throw new Error('tokenId is not defined');
         }
 
         // Must be called before any use of sticker controller method
         if (
             StickerController.instance === undefined ||
-            StickerController.isDifferentTokenId(reactComponent.state.tokenId)
+            StickerController.isDifferentTokenId(
+                (reactComponent.state as any).tokenId
+            )
         ) {
             await StickerController.createContract(
-                reactComponent.state.tokenId
+                (reactComponent.state as any).tokenId
             );
         }
 
@@ -418,13 +487,13 @@ export const loadStickers = async (reactComponent) => {
  * @param {*} tokenId
  * @returns
  */
-export const getStickers = async (tokenId) => {
+export const getStickers = async (tokenId: any) => {
     try {
         // Must be called before any use of sticker controller method
         await StickerController.createContract(tokenId);
         let stickers = await StickerController.getStickers();
 
-        stickers = stickers.map((value) => {
+        stickers = stickers.map((value: any) => {
             let sticker = value;
             if (typeof sticker !== 'object') {
                 sticker = Controller.decodeSticker(value, true, false);
@@ -664,7 +733,7 @@ const imageToOutput = (src, outputFormat) =>
         const img = new Image();
         img.crossOrigin = 'Anonymous';
         img.addEventListener('load', function () {
-            const canvas = document.createElement('CANVAS');
+            const canvas = document.createElement('CANVAS') as any;
             const ctx = canvas.getContext('2d');
             let dataURL;
             canvas.height = this.naturalHeight;
@@ -685,11 +754,11 @@ const imageToOutput = (src, outputFormat) =>
 /**
  *
  * @param {Component} reactComponent
- * @param {bool} checkFlags
+ * @param {boolean} checkFlags
  */
 export const loadToken = async (
-    reactComponent,
-    checkFlags = true,
+    reactComponent: Component,
+    checkFlags: boolean = true,
     returnFlags = false
 ) => {
     let Config = Controller.getConfig();
@@ -698,12 +767,12 @@ export const loadToken = async (
             loading: true,
         });
 
-        if (reactComponent.state?.tokenId === undefined) {
+        if ((reactComponent?.state as any).tokenId === undefined) {
             throw new Error('tokenId is not defined');
         }
 
         const result = await Controller.getTokenObject(
-            reactComponent.state.tokenId
+            (reactComponent.state as any).tokenId
         );
         const projectURI = Controller.getProjectSettings();
 
@@ -719,17 +788,17 @@ export const loadToken = async (
             if (
                 checkFlags &&
                 ((!Controller.hasFlag(
-                    reactComponent.state.tokenId,
+                    (reactComponent.state as any).tokenId,
                     'checkedTokenURI'
                 ) &&
                     !Controller.hasFlag(
-                        reactComponent.state.tokenId,
+                        (reactComponent.state as any).tokenId,
                         'tokenURI'
                     ) &&
                     result.owner === Controller.accounts[0]) ||
                     (result.owner === Controller.accounts[0] &&
                         StorageController.values.tokenURI[
-                            reactComponent.state.tokenId
+                            (reactComponent.state as any).tokenId
                         ] === undefined))
             ) {
                 const tokenURI = await Controller.callMethod(
@@ -737,7 +806,7 @@ export const loadToken = async (
                     'InfinityMint',
                     'tokenURI',
                     {
-                        parameters: [reactComponent.state.tokenId],
+                        parameters: [(reactComponent.state as any).tokenId],
                         gasPrice: Config.getGasPrices().fast,
                     }
                 );
@@ -749,30 +818,30 @@ export const loadToken = async (
                  */
 
                 Controller.setFlag(
-                    reactComponent.state.tokenId,
+                    (reactComponent.state as any).tokenId,
                     'checkedTokenURI',
                     true
                 );
 
                 if (tokenURI === undefined || tokenURI === '') {
                     Controller.setFlag(
-                        reactComponent.state.tokenId,
+                        (reactComponent.state as any).tokenId,
                         'emptyTokenURI',
                         true
                     );
                     if (returnFlags || !Config.settings.forceTokenURIRefresh) {
                         Controller.setFlag(
-                            reactComponent.state.tokenId,
+                            (reactComponent.state as any).tokenId,
                             'tokenURI',
                             true
                         );
                     } else {
                         try {
                             await Controller.updateTokenURI(
-                                reactComponent.state.tokenId
+                                (reactComponent.state as any).tokenId
                             );
                             Controller.setFlag(
-                                reactComponent.state.tokenId,
+                                (reactComponent.state as any).tokenId,
                                 'tokenURI',
                                 false
                             );
@@ -786,13 +855,13 @@ export const loadToken = async (
                         const finish = (uri) => {
                             if (uri.default === true) {
                                 Controller.setFlag(
-                                    reactComponent.state.tokenId,
+                                    (reactComponent.state as any).tokenId,
                                     'tokenURI',
                                     false
                                 );
                             } else {
                                 Controller.setFlag(
-                                    reactComponent.state.tokenId,
+                                    (reactComponent.state as any).tokenId,
                                     'tokenURI',
                                     true
                                 );
@@ -800,11 +869,11 @@ export const loadToken = async (
 
                             if (
                                 StorageController.values.tokenURI[
-                                    reactComponent.state.tokenId
+                                    (reactComponent.state as any).tokenId
                                 ] === undefined
                             ) {
                                 StorageController.values.tokenURI[
-                                    reactComponent.state.tokenId
+                                    (reactComponent.state as any).tokenId
                                 ] = uri;
                             }
 
@@ -812,11 +881,11 @@ export const loadToken = async (
                             if (
                                 uri.updated >
                                 (StorageController.values.tokenURI[
-                                    reactComponent.state.tokenId
+                                    (reactComponent.state as any).tokenId
                                 ].updated || 0)
                             ) {
                                 StorageController.values.tokenURI[
-                                    reactComponent.state.tokenId
+                                    (reactComponent.state as any).tokenId
                                 ] = uri;
                             }
                         };
@@ -848,17 +917,22 @@ export const loadToken = async (
                 !returnFlags &&
                 checkFlags &&
                 Config.settings.forceTokenURIRefresh &&
-                Controller.hasFlag(reactComponent.state.tokenId, 'tokenURI') &&
+                Controller.hasFlag(
+                    (reactComponent.state as any).tokenId,
+                    'tokenURI'
+                ) &&
                 result.owner === Controller.accounts[0]
             ) {
-                await Controller.updateTokenURI(reactComponent.state.tokenId)
+                await Controller.updateTokenURI(
+                    (reactComponent.state as any).tokenId
+                )
                     .then(() => {
                         Controller.toggleFlag(
-                            reactComponent.state.tokenId,
+                            (reactComponent.state as any).tokenId,
                             'tokenURI'
                         );
                         Controller.setFlag(
-                            reactComponent.state.tokenId,
+                            (reactComponent.state as any).tokenId,
                             'checkedTokenURI',
                             true
                         );
@@ -872,7 +946,7 @@ export const loadToken = async (
                         });
                     });
                 Controller.setFlag(
-                    reactComponent.state.tokenId,
+                    (reactComponent.state as any).tokenId,
                     'emptyTokenURI',
                     false
                 );
@@ -887,12 +961,13 @@ export const loadToken = async (
             });
         }
 
-        if (reactComponent.state.isValid && returnFlags) {
-            return StorageController.values.tokens[reactComponent.state.tokenId]
-                .flags;
+        if ((reactComponent.state as any).isValid && returnFlags) {
+            return StorageController.values.tokens[
+                (reactComponent.state as any).tokenId
+            ].flags;
         }
 
-        if (reactComponent.state.token.tokenId === undefined) {
+        if ((reactComponent.state as any).token.tokenId === undefined) {
             throw new Error('bad token');
         }
     } catch (error) {
@@ -924,7 +999,7 @@ export const hasLinkKey = (token, key) => {
         return false;
     }
 
-    return hasDestination(token, project.links[key].index);
+    return hasDestination(token, (project.links[key] as any).index);
 };
 
 export const hasDestination = (token, index) =>
@@ -1000,7 +1075,7 @@ export const md5 = (inputString) => {
     function sb(x) {
         let i;
         const nblk = ((x.length + 8) >> 6) + 1;
-        const blks = Array.from({ length: nblk * 16 });
+        const blks = Array.from({ length: nblk * 16 }) as any;
         for (i = 0; i < nblk * 16; i++) {
             blks[i] = 0;
         }
@@ -1110,10 +1185,14 @@ export const md5 = (inputString) => {
  *
  * @param {object|Array} form
  * @param {object} keys
- * @param {bool} allowUndefined
+ * @param {boolean} allowUndefined
  * @returns
  */
-export const validateForm = (form, keys, allowUndefined = true) => {
+export const validateForm = (
+    form: object | Array<any>,
+    keys: object,
+    allowUndefined: boolean = true
+) => {
     let count = 0;
     for (const [index, type] of Object.entries(keys)) {
         const value = form[count++];
@@ -1241,7 +1320,7 @@ export const waitSetState = (reactComponent, values) =>
  * @param {number} length
  * @returns
  */
-export const cutLongString = (string_, length = 18) =>
+export const cutLongString = (string_, length: number = 18) =>
     tryDecodeURI(string_).length > length
         ? tryDecodeURI(
               tryDecodeURI(string_).slice(0, Math.max(0, length - 1)) + '...'
@@ -1253,7 +1332,7 @@ export const cutLongString = (string_, length = 18) =>
  * @param {string} s
  * @returns
  */
-export const isEmpty = (s) => {
+export const isEmpty = (s: string) => {
     if (typeof s !== 'string' || s === null || s === undefined) {
         return true;
     }
@@ -1270,7 +1349,7 @@ export const isEmpty = (s) => {
  * @param {*} seconds
  * @param {*} exec
  */
-export const delay = async (seconds, miliseconds = false) =>
+export const delay = async (seconds: any, miliseconds = false) =>
     new Promise((resolve, reject) => {
         setTimeout(() => resolve(true), seconds * (miliseconds ? 1 : 1000));
     });
@@ -1280,14 +1359,14 @@ export const delay = async (seconds, miliseconds = false) =>
  * @param {*} array
  * @returns
  */
-export const cleanStrings = (array) =>
+export const cleanStrings = (array: any) =>
     array.map((value) => {
         if (typeof value === 'object') {
             throw new TypeError(`${value} is cannot be a string`);
         }
 
         if (typeof value !== 'string') {
-            value = toString(value);
+            value = value.toString();
         }
 
         return value.replace(/["'/\\`]/g, '');

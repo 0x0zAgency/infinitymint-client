@@ -1,9 +1,21 @@
 import web3 from 'web3';
-import Onboard from 'bnc-onboard';
-import tinySVG from './tinysvg.js';
-import StorageController from './storageController.js';
-import { getStickers, tryDecodeURI, unpackColours } from './helpers.js';
-import tokenMethods from './tokenMethods.js';
+import tinySVG from './tinysvg';
+import storageController from './storageController';
+import {
+    call,
+    getStickers,
+    send,
+    tryDecodeURI,
+    unpackColours,
+} from './helpers';
+import tokenMethods from './tokenMethods';
+import {
+    InfinityMintProjectJavascript,
+    InfinityMintProjectPath,
+} from 'infinitymint/dist/app/interfaces';
+import { Dictionary } from 'infinitymint/dist/app/helpers';
+import { Contract } from './utils/interfaces';
+import glue from 'jsglue';
 
 /**
  *
@@ -159,18 +171,16 @@ export const Base64 = {
  */
 
 export class Controller {
-    Base64; // For accessing in tokenMethod scripts
-    StorageController; // For accesing in tokenMethod scripts
-    /**
-     * @type {import('./utils/config')}
-     */
-    Config;
-
-    // Public
-    /**
-     * @var web3
-     */
-    web3 = null;
+    Base64: {
+        decode: any;
+        encode: any;
+        _keyStr?: string;
+        _utf8_encode?: (string: any) => string;
+        _utf8_decode?: (utftext: any) => string;
+    }; // For accessing in tokenMethod scripts
+    StorageController: typeof storageController; // For accesing in tokenMethod scripts
+    Config: typeof import('./utils/config');
+    web3: import('web3').default = null;
     walletError = null;
     isLoading = false;
     isAdmin = false;
@@ -179,14 +189,60 @@ export class Controller {
     accounts = [];
     onboard = null;
     lastAction = {};
-    defaultProjectURI = {};
-    localProjectURI = {};
+    defaultProjectURI: InfinityMintProjectJavascript = {
+        javascript: true,
+        name: 'Infinity Mint',
+        description: {},
+        mods: {},
+        contracts: {},
+        deployment: {},
+        royalties: {},
+        assetConfig: {},
+        modules: {
+            assets: '',
+            minter: '',
+            royalty: '',
+            random: '',
+        },
+        approved: {},
+        names: [],
+        information: {
+            tokenSymbol: '',
+            tokenSingular: '',
+        },
+        paths: [],
+        price: '',
+    };
+    localProjectURI: InfinityMintProjectJavascript = {
+        javascript: true,
+        name: 'Infinity Mint',
+        description: {},
+        mods: {},
+        contracts: {},
+        deployment: {},
+        royalties: {},
+        assetConfig: {},
+        modules: {
+            assets: '',
+            minter: '',
+            royalty: '',
+            random: '',
+        },
+        approved: {},
+        names: [],
+        information: {
+            tokenSymbol: '',
+            tokenSingular: '',
+        },
+        paths: [],
+        price: '',
+    };
     paths = {};
     nullAddress = '0x0000000000000000000000000000000000000000';
 
     // Private
     #events = {};
-    #instances = {};
+    #instances: Dictionary<Contract> = {};
     // Set in initializeControllerData
     #abis;
     // Set in initializeControllerData
@@ -195,7 +251,7 @@ export class Controller {
 
     constructor() {
         this.Base64 = Base64;
-        this.StorageController = StorageController;
+        this.StorageController = storageController;
 
         try {
             // Registers a conversion/parse method for SVG style tag with tinySVG
@@ -212,7 +268,9 @@ export class Controller {
                     (properties) => [
                         'style',
                         tinySVG.collapseProperties(properties),
-                        `/** Generated ${new Date(Date.now).toDateString()} */`,
+                        `/** Generated ${new Date(
+                            Date.now()
+                        ).toDateString()} */`,
                     ],
                 ]
             );
@@ -221,6 +279,10 @@ export class Controller {
         }
     }
 
+    /**
+     * Sets this controller to be admin mode
+     * @param value
+     */
     setAdmin(value) {
         this.isAdmin = value === true;
     }
@@ -229,7 +291,7 @@ export class Controller {
      *
      * @param {*} config
      */
-    setConfig(config) {
+    setConfig(config: any) {
         if (config.default === undefined)
             throw new Error('please provide the full module');
 
@@ -266,28 +328,22 @@ export class Controller {
     }
 
     /**
-     * NOTE: Please cold somebody enlighten me on how to unpack an array as arguments into a method?
-     * I tried using .call() but it needs this passed as the first argument which in this case is a web3.js class and it didn't
-     * work so I just did this because its faster but it feels very, very dumb. - Lyds
      * @param {string} type
      * @param {string} contract
      * @param {string} method
-     * @param {object|string} account
-     * @param {Array} args
+     * @param {any} args
      * @param {number} value
      * @returns
-     * @private
+     *
      */
     async executeTransaction(
-        type = 'send',
-        contract,
-        method,
-        account,
-        args,
-        value
+        type: string = 'send',
+        contract: string,
+        method: string,
+        args: any,
+        value: number = 0
     ) {
-        let parameters;
-
+        let parameters: any[];
         if (Array.isArray(args)) {
             parameters = [...args].filter(
                 (value) => value !== undefined && value !== null
@@ -310,154 +366,9 @@ export class Controller {
             'transaction'
         );
 
-        const gasPrice =
-            args.gasPrice ||
-            (type === 'send'
-                ? this.Config.default.getGasPrice(
-                      StorageController.getGlobalPreference('gasSetting') ||
-                          'medium'
-                  )
-                : undefined);
-
-        if (args.gasLimit !== undefined) {
-            args.gasLimit = Math.round(args.gasLimit);
-        }
-
-        // If no parameters
-        if (parameters.length === 0) {
-            console.log(this.#instances);
-            return await this.#instances[contract].methods[method]()[type]({
-                from: account.address || account,
-                value,
-                gas: args.gas || undefined,
-                gasPrice,
-                gasLimit: args.gasLimit || 1_256_024,
-            });
-        }
-
-        // If 1
-        if (parameters.length === 1) {
-            return await this.#instances[contract].methods[method](
-                parameters[0]
-            )[type]({
-                from: account.address || account,
-                value,
-                gas: args.gas || undefined,
-                gasPrice,
-            });
-        }
-
-        // If 2
-        if (parameters.length === 2) {
-            return await this.#instances[contract].methods[method](
-                parameters[0],
-                parameters[1]
-            )[type]({
-                from: account.address || account,
-                value,
-                gas: args.gas || undefined,
-                gasPrice,
-            });
-        }
-
-        // If 3 - inspired by YandereDev
-        if (parameters.length === 3) {
-            return await this.#instances[contract].methods[method](
-                parameters[0],
-                parameters[1],
-                parameters[2]
-            )[type]({
-                from: account.address || account,
-                value,
-                gas: args.gas || undefined,
-                gasPrice,
-            });
-        }
-
-        // If 4 - inspired by YandereDev
-        if (parameters.length === 4) {
-            return await this.#instances[contract].methods[method](
-                parameters[0],
-                parameters[1],
-                parameters[2],
-                parameters[3]
-            )[type]({
-                from: account.address || account,
-                value,
-                gas: args.gas || undefined,
-                gasPrice,
-            });
-        }
-
-        // If 5 - inspired by YandereDev
-        if (parameters.length === 5) {
-            return await this.#instances[contract].methods[method](
-                parameters[0],
-                parameters[1],
-                parameters[2],
-                parameters[3],
-                parameters[4]
-            )[type]({
-                from: account.address || account,
-                value,
-                gas: args.gas || undefined,
-                gasPrice,
-            });
-        }
-
-        // If 5 - inspired by YandereDev
-        if (parameters.length === 6) {
-            return await this.#instances[contract].methods[method](
-                parameters[0],
-                parameters[1],
-                parameters[2],
-                parameters[3],
-                parameters[4],
-                parameters[5]
-            )[type]({
-                from: account.address || account,
-                value,
-                gas: args.gas || undefined,
-                gasPrice,
-            });
-        }
-
-        // If 5 - inspired by YandereDev
-        if (parameters.length === 7) {
-            return await this.#instances[contract].methods[method](
-                parameters[0],
-                parameters[1],
-                parameters[2],
-                parameters[3],
-                parameters[4],
-                parameters[5],
-                parameters[6]
-            )[type]({
-                from: account.address || account,
-                value,
-                gas: args.gas || undefined,
-                gasPrice,
-            });
-        }
-
-        // If 5 - inspired by YandereDev
-        if (parameters.length === 8) {
-            return await this.#instances[contract].methods[method](
-                parameters[0],
-                parameters[1],
-                parameters[2],
-                parameters[3],
-                parameters[4],
-                parameters[5],
-                parameters[6],
-                parameters[7]
-            )[type]({
-                from: account.address || account,
-                value,
-                gas: args.gas || undefined,
-                gasPrice,
-            });
-        }
+        if (args.value !== undefined) args.value = value;
+        if (type === 'send') await send(contract, method, parameters, args);
+        else await call(contract, method, args);
 
         throw new Error('Unsupported parameter length');
     }
@@ -467,8 +378,7 @@ export class Controller {
      * @param {*} pathId
      * @returns
      */
-
-    getPaths(pathId) {
+    getPaths(pathId: any) {
         const objectURI = this.getProjectSettings();
 
         if (this.paths[pathId] !== undefined) {
@@ -476,12 +386,19 @@ export class Controller {
         }
 
         if (objectURI.paths[pathId] === undefined) {
-            return this.getTinySVGFromPath(objectURI.paths.default.paths);
+            return this.getTinySVGFromPath(
+                (objectURI.paths as any)?.default.paths
+            );
         }
 
         return this.getTinySVGFromPath(objectURI.paths[pathId].paths);
     }
 
+    /**
+     * Gets the rarity of a path if possible
+     * @param pathId
+     * @returns
+     */
     getPathRarity(pathId) {
         const objectURI = this.getProjectSettings();
         const values = Object.values(objectURI.paths);
@@ -497,10 +414,10 @@ export class Controller {
 
     /**
      * Attempts to get tinySVG from a path object in the project settings. Since it can be either a string of tinySVG or an object
-     * @param {string|object} paths
+     * @param {string|any} paths
      * @returns
      */
-    getTinySVGFromPath(paths) {
+    getTinySVGFromPath(paths: string | any) {
         if (typeof paths === 'object') {
             return paths.data;
         }
@@ -520,7 +437,7 @@ export class Controller {
      * Updates the tokenURI of a token (will start a wallet transaction)
      * @param {*} tokenId
      */
-    async updateTokenURI(tokenId) {
+    async updateTokenURI(tokenId: any) {
         const token = this.getStoredToken(tokenId).token.token;
         const encodedResult = this.createTokenURI(token);
 
@@ -530,10 +447,27 @@ export class Controller {
         });
     }
 
+    /**
+     *
+     * @param {*} contractName
+     * @returns {Contract}
+     */
+    getContract(contractName: any): Contract {
+        return this.#instances[contractName];
+    }
+
+    /**
+     *
+     * @returns
+     */
     getTokenMethodInterface() {
         return tokenMethods.interface;
     }
 
+    /**
+     *
+     * @returns
+     */
     getTokenMethodType() {
         return (tokenMethods.interface.type || 'unknown').toLowerCase();
     }
@@ -547,10 +481,10 @@ export class Controller {
      * @returns
      */
     async createTokenURI(
-        token,
-        renderedToken,
-        returnEncoded = true,
-        settings = {}
+        token: any,
+        renderedToken?: any,
+        returnEncoded: any = true,
+        settings: any = {}
     ) {
         const stickers = await getStickers(token.tokenId);
         const object = tokenMethods.createTokenURI(
@@ -575,7 +509,7 @@ export class Controller {
      * @param {number} tokenId
      * @returns
      */
-    async getTokenFromContract(tokenId) {
+    async getTokenFromContract(tokenId: number) {
         try {
             const result = await this.callMethod(
                 this.accounts[0],
@@ -604,7 +538,7 @@ export class Controller {
      * @param {number} tokenId
      * @returns
      */
-    async tryGetToken(tokenId) {
+    async tryGetToken(tokenId: number) {
         const result = await this.getTokenFromContract(tokenId);
 
         if (result !== null) {
@@ -620,25 +554,25 @@ export class Controller {
      * @param {number} tokenId
      * @returns
      */
-    getStoredToken(tokenId) {
-        if (StorageController.values.tokens[tokenId] === undefined) {
+    getStoredToken(tokenId: number) {
+        if (storageController.values.tokens[tokenId] === undefined) {
             throw new Error('Bad token');
         }
 
-        const token = StorageController.values.tokens[tokenId];
+        const token = storageController.values.tokens[tokenId];
         return token;
     }
 
     /**
      * NOTE: maybe this need to be in StorageController class?
-     * @param {object} result
+     * @param {any} result
      */
-    storePreview(result) {
+    storePreview(result: any) {
         if (result.returnValues !== undefined) {
             result = result.returnValues[1];
         }
 
-        StorageController.values.previews = {
+        storageController.values.previews = {
             source: 'event',
             address: this.accounts[0],
             date: Date.now(),
@@ -647,7 +581,7 @@ export class Controller {
             previews: result,
         };
 
-        StorageController.saveData();
+        storageController.saveData();
     }
 
     /**
@@ -656,50 +590,50 @@ export class Controller {
      * @param {*} key
      * @returns
      */
-    toggleFlag(tokenId, key) {
+    toggleFlag(tokenId: number, key: any) {
         if (
-            StorageController.values.tokens === undefined ||
-            StorageController.values.tokens[tokenId] === undefined
+            storageController.values.tokens === undefined ||
+            storageController.values.tokens[tokenId] === undefined
         ) {
             return;
         }
 
-        if (StorageController.values.tokens[tokenId].flags === undefined) {
-            StorageController.values.tokens[tokenId].flags = {};
+        if (storageController.values.tokens[tokenId].flags === undefined) {
+            storageController.values.tokens[tokenId].flags = {};
         }
 
-        StorageController.values.tokens[tokenId].flags[key] =
-            StorageController.values.tokens[tokenId].flags[key] === undefined
+        storageController.values.tokens[tokenId].flags[key] =
+            storageController.values.tokens[tokenId].flags[key] === undefined
                 ? true
-                : !StorageController.values.tokens[tokenId].flags[key];
-        StorageController.saveData();
+                : !storageController.values.tokens[tokenId].flags[key];
+        storageController.saveData();
     }
 
     /**
      * NOTE: maybe this need to be in StorageController class?
      * @param {number} tokenId
      * @param {*} key
-     * @paral {bool} value
+     * @paral {boolean} value
      * @returns
      */
-    setFlag(tokenId, key, value) {
+    setFlag(tokenId: number, key: any, value) {
         if (value !== true && value !== false) {
             throw new Error('invalid value');
         }
 
         if (
-            StorageController.values.tokens === undefined ||
-            StorageController.values.tokens[tokenId] === undefined
+            storageController.values.tokens === undefined ||
+            storageController.values.tokens[tokenId] === undefined
         ) {
             return;
         }
 
-        if (StorageController.values.tokens[tokenId].flags === undefined) {
-            StorageController.values.tokens[tokenId].flags = {};
+        if (storageController.values.tokens[tokenId].flags === undefined) {
+            storageController.values.tokens[tokenId].flags = {};
         }
 
-        StorageController.values.tokens[tokenId].flags[key] = value;
-        StorageController.saveData();
+        storageController.values.tokens[tokenId].flags[key] = value;
+        storageController.saveData();
     }
 
     /**
@@ -709,35 +643,35 @@ export class Controller {
      * @param {*} key
      * @returns
      */
-    hasFlag(tokenId, key) {
+    hasFlag(tokenId: number, key: any) {
         if (
-            StorageController.values.tokens === undefined ||
-            StorageController.values.tokens[tokenId] === undefined ||
-            StorageController.values.tokens[tokenId].flags === undefined
+            storageController.values.tokens === undefined ||
+            storageController.values.tokens[tokenId] === undefined ||
+            storageController.values.tokens[tokenId].flags === undefined
         ) {
             return false;
         }
 
-        return StorageController.values.tokens[tokenId].flags[key] === true;
+        return storageController.values.tokens[tokenId].flags[key] === true;
     }
 
     /**
      * NOTE: maybe this need to be in StorageController class?
      * @param {number} tokenId
      * @param {*} key
-     * @param {bool} condition
+     * @param {boolean} condition
      * @returns
      */
-    hasFlagToggle(tokenId, key, condition = true) {
+    hasFlagToggle(tokenId: number, key: any, condition: boolean = true) {
         if (
-            StorageController.values.tokens === undefined ||
-            StorageController.values.tokens[tokenId] === undefined ||
-            StorageController.values.tokens[tokenId].flags === undefined
+            storageController.values.tokens === undefined ||
+            storageController.values.tokens[tokenId] === undefined ||
+            storageController.values.tokens[tokenId].flags === undefined
         ) {
             return false;
         }
 
-        if (StorageController.values.tokens[tokenId].flags[key] === condition) {
+        if (storageController.values.tokens[tokenId].flags[key] === condition) {
             this.toggleFlag(tokenId, key);
             return true;
         }
@@ -756,19 +690,24 @@ export class Controller {
      * @returns {number|object}
      */
 
-    storeToken(result, source = 'event', from = 'mint', flags = undefined) {
+    storeToken(
+        result: any,
+        source: any = 'event',
+        from: any = 'mint',
+        flags = undefined
+    ): number {
         // Index 0 is error, index 1 is the token
         // save the token under its token ID
-        const tokenId = Number.parseInt(result.returnValues[0]);
+        const tokenId = parseInt(result.returnValues[0]);
         const object = {
-            ...StorageController.values?.tokens[tokenId],
+            ...storageController.values?.tokens[tokenId],
             source,
             from,
             flags:
-                flags || StorageController.values?.tokens[tokenId]?.flags || {},
+                flags || storageController.values?.tokens[tokenId]?.flags || {},
             date: Date.now(),
             originalDate:
-                StorageController.values?.tokens[tokenId]?.originalDate ||
+                storageController.values?.tokens[tokenId]?.originalDate ||
                 Date.now(),
             validTill:
                 Date.now() +
@@ -779,29 +718,31 @@ export class Controller {
                 token: { ...this.decodeToken(result.returnValues[1]) },
                 // Keep stickers intact
                 stickers: {
-                    ...StorageController.values.tokens[tokenId]?.token
+                    ...storageController.values.tokens[tokenId]?.token
                         ?.stickers,
                 },
             },
         };
 
-        console.log(object);
-
-        StorageController.values.tokens[tokenId] = object;
-        StorageController.saveData();
+        storageController.values.tokens[tokenId] = object;
+        storageController.saveData();
 
         return tokenId;
     }
 
     /**
      *
-     * @param {object} token
+     * @param {any} token
      * @param {string} type
      * @returns
      */
-    getTokenExtraColour(token, type = 'background', preverseAlpha = false) {
+    getTokenExtraColour(
+        token: any,
+        type: string = 'background',
+        preverseAlpha = false
+    ) {
         const pathSize = Number.parseInt(token.pathSize || 0);
-        let result;
+        let result: string;
 
         if (token.colours === undefined || token.colours.length === 0) {
             return tinySVG.toHexFromDecimal(0);
@@ -865,7 +806,7 @@ export class Controller {
      * @returns
      */
 
-    getEventErrorKey(event) {
+    getEventErrorKey(event: string) {
         return event + '_Error';
     }
 
@@ -874,7 +815,7 @@ export class Controller {
      * @param {object} token
      * @returns
      */
-    renderToken(token, stickers = [], settings) {
+    renderToken(token: object, stickers = [], settings) {
         return tokenMethods.getRenderedToken(token, stickers, settings);
     }
 
@@ -885,7 +826,12 @@ export class Controller {
      * @param {*} stickers
      * @returns
      */
-    async callPostRenderToken(renderedToken, token, stickers, settings = {}) {
+    async callPostRenderToken(
+        renderedToken: any,
+        token: any,
+        stickers: any,
+        settings = {}
+    ) {
         return tokenMethods.postRenderToken(
             this,
             renderedToken,
@@ -902,7 +848,12 @@ export class Controller {
      * @param {*} stickers
      * @returns
      */
-    async callUpdateToken(renderedToken, token, stickers, settings = {}) {
+    async callUpdateToken(
+        renderedToken: any,
+        token: any,
+        stickers: any,
+        settings = {}
+    ) {
         return tokenMethods.updateToken(
             this,
             renderedToken,
@@ -919,7 +870,12 @@ export class Controller {
      * @param {*} stickers
      * @returns
      */
-    callTokenUnmount(renderedToken, token, stickers, settings = {}) {
+    callTokenUnmount(
+        renderedToken: any,
+        token: any,
+        stickers: any,
+        settings = {}
+    ) {
         return tokenMethods.tokenUnmount(
             this,
             renderedToken,
@@ -931,23 +887,21 @@ export class Controller {
 
     /**
      * Gets the value of the viewbox from the token
-     * @param {string|object} token
+     * @param {any} token
      * @returns
      */
-    getTokenViewbox(token) {
-        let map;
-        if (typeof token.token === 'object') {
-            token = token.token;
-        }
+    getTokenViewbox(token: any) {
+        token = token || {};
 
         const settings = this.getPathSettings(token.pathId);
-        map = tinySVG.readTinySVG(this.getPaths(token.pathId));
+        let map = tinySVG.readTinySVG(this.getPaths(token.pathId));
 
         if (map[0] === undefined || map[0].tag !== 'h') {
-            return settings.viewbox || '0 0 800 600';
+            return (settings as any).viewbox || '0 0 800 600';
         }
 
-        return settings.viewbox || map[0]?.properties?.viewbox !== undefined
+        return (settings as any).viewbox ||
+            map[0]?.properties?.viewbox !== undefined
             ? tryDecodeURI(map[0]?.properties?.viewbox)
             : '0 0 800 600';
     }
@@ -957,7 +911,7 @@ export class Controller {
      * @param {string} pathSettings
      * @returns
      */
-    getCSSProperties(pathSettings) {
+    getCSSProperties(pathSettings: string) {
         let string_ = '';
         for (const value of Object.keys(pathSettings)) {
             string_ += `${value}: ${pathSettings[value].replace('"', "'")};`;
@@ -986,7 +940,7 @@ export class Controller {
      * @returns
      */
 
-    getCollectionURL(tokenId) {
+    getCollectionURL(tokenId: string) {
         return (
             this.Config.default.getNetwork().openseaAssets +
             this.#abis.contracts.InfinityMint.address +
@@ -998,14 +952,14 @@ export class Controller {
     /**
      *
      * @param {string} encodedData
-     * @param {bool} convertToUFT8
-     * @param {bool} implodeNames
+     * @param {boolean} convertToUFT8
+     * @param {boolean} implodeNames
      * @returns
      */
     decodeToken(
-        encodedData,
-        convertToUFT8 = true,
-        implodeNames = true,
+        encodedData: string,
+        convertToUFT8: boolean = true,
+        implodeNames: boolean = true,
         preview = false
     ) {
         const result = this.decodeAbi(
@@ -1070,11 +1024,15 @@ export class Controller {
     /**
      *
      * @param {string} encodedData
-     * @param {bool} convertToUFT8
-     * @param {bool} implodeNames
+     * @param {boolean} convertToUFT8
+     * @param {boolean} implodeNames
      * @returns
      */
-    decodeRequest(encodedData, convertToUFT8 = true, implodeNames = true) {
+    decodeRequest(
+        encodedData: string,
+        convertToUFT8: boolean = true,
+        implodeNames: boolean = true
+    ) {
         return this.decodeAbi(
             encodedData,
             [
@@ -1091,11 +1049,15 @@ export class Controller {
     /**
      *
      * @param {string} encodedData
-     * @param {bool} convertToUFT8
-     * @param {bool} implodeNames
+     * @param {boolean} convertToUFT8
+     * @param {boolean} implodeNames
      * @returns
      */
-    decodeSticker(encodedData, convertToUFT8 = true, implodeNames = true) {
+    decodeSticker(
+        encodedData: string,
+        convertToUFT8: boolean = true,
+        implodeNames: boolean = true
+    ) {
         return this.decodeAbi(
             encodedData,
             [
@@ -1111,38 +1073,38 @@ export class Controller {
     }
 
     /**
-     *
      * @param {string} encodedData
-     * @param {Array} params
-     * @param {bool} convertToAscii
-     * @param {bool} implodeNames
+     * @param {boolean} convertToAscii
+     * @param {boolean} implodeNames
      * @param {Array} keyMap
      * @returns
      */
-
     decodeAbi(
-        encodedData,
+        encodedData: string | Dictionary<any>,
         parameters = [],
-        convertToAscii = true,
-        implodeNames = true,
-        keyMap = []
+        convertToAscii: boolean = true,
+        implodeNames: boolean = true,
+        keyMap: Array<any> = []
     ) {
-        let result;
+        let result: string | { [key: string]: any };
         result =
             Array.isArray(encodedData) !== true
-                ? this.web3.eth.abi.decodeParameters(parameters, encodedData)
+                ? this.web3.eth.abi.decodeParameters(
+                      parameters,
+                      encodedData as string
+                  )
                 : encodedData;
 
-        const object = { ...result };
+        const object = { ...(result as Dictionary<any>) };
         for (let [index, value] of Object.entries(result)) {
-            if (isNaN(index)) {
+            if (isNaN(parseInt(index))) {
                 continue;
             }
 
-            index = Number.parseInt(index);
+            let indexNum = parseInt(index);
 
-            if (keyMap[index] !== undefined) {
-                object[keyMap[index]] = value;
+            if (keyMap[indexNum] !== undefined) {
+                object[keyMap[indexNum]] = value;
             }
         }
 
@@ -1154,7 +1116,7 @@ export class Controller {
 
         if (object.names !== undefined) {
             let names;
-            names = path.addPathToName
+            names = (path as any)?.addPathToName
                 ? [...object.names, path.name]
                 : [...object.names];
 
@@ -1170,7 +1132,7 @@ export class Controller {
 
     // Want to add new events? check src/this.Config.default.js => events array
     setupEvents(contract = 'InfinityMint') {
-        for (const event of Object.values(
+        for (const event of Object.values<string>(
             this.Config.default.events[contract.replace('Fake_', '')]
         )) {
             this.#instances[contract].events[event]((error, events) => {
@@ -1181,6 +1143,12 @@ export class Controller {
         }
     }
 
+    /**
+     *
+     * @param event
+     * @param error
+     * @param events
+     */
     pushToEvent(event, error, events) {
         if (this.#events[event] === undefined) {
             this.#events[event] = {};
@@ -1196,7 +1164,7 @@ export class Controller {
      * @param {string} key
      * @returns
      */
-    getContractValue(key) {
+    getContractValue(key: string) {
         if (this.#preloadVariables?.values[key] === undefined) {
             return 0;
         }
@@ -1207,15 +1175,19 @@ export class Controller {
     /**
      * Loads onboard JS
      */
-    initializeOnboardJs(chainId = undefined) {
+    async initializeOnboardJs(chainId = undefined) {
+        /**
+         * @type {import('bnc-onboard')}
+         */
+        let Onboard = await glue.get('bnc-onboard');
         this.onboard = Onboard({
             dappId: this.Config.default.onboardApiKey,
             networkId: chainId || this.Config.default.requiredChainId,
             subscriptions: {
                 wallet: async (wallet) => {
                     // Instantiate web3 when the user has selected a wallet
-                    this.instance = new web3(wallet.provider);
-                    this.instance.eth.transactionConfirmationBlocks = 50;
+                    this.web3 = new web3(wallet.provider);
+                    this.web3.eth.transactionConfirmationBlocks = 50;
                 },
             },
         });
@@ -1238,7 +1210,7 @@ export class Controller {
         if (
             !this.isWalletValid &&
             !this.Config.default.settings.requireWallet &&
-            StorageController.getGlobalPreference('web3Check') !== true
+            storageController.getGlobalPreference('web3Check') !== true
         ) {
             this.log('[⚠️] Wallet needs onboarding', 'warning');
 
@@ -1265,12 +1237,12 @@ export class Controller {
      * @returns
      */
     async sendAndWaitForEvent(
-        account,
-        contract,
-        method,
-        event,
-        args = {},
-        value = 0,
+        account: object,
+        contract: string,
+        method: string,
+        event: string,
+        args: any = {},
+        value: number = 0,
         saveTx = true
     ) {
         const blockNumber = await this.web3.eth.getBlockNumber();
@@ -1311,7 +1283,7 @@ export class Controller {
         const result = await this.awaitEvent(event, args.timeout || 3000);
 
         if (saveTx) {
-            StorageController.saveTransactionResult(result, method, true);
+            storageController.saveTransactionResult(result, method, true);
         }
 
         return result;
@@ -1322,8 +1294,7 @@ export class Controller {
      * @returns
      * @private
      */
-
-    getLengthOfEvent(eventKey) {
+    getLengthOfEvent(eventKey: string) {
         return this.#events[eventKey] === undefined
             ? 0
             : Object.values(this.#events[eventKey]).length || 0;
@@ -1334,7 +1305,7 @@ export class Controller {
      * @param {*} timeout
      * @returns Promise
      */
-    awaitEvent(event, timeout = 3000) {
+    awaitEvent(event: any, timeout: any = 3000) {
         return new Promise((resolve, reject) => {
             const eventError = this.getEventErrorKey(event);
             const length = this.getLengthOfEvent(event);
@@ -1386,19 +1357,19 @@ export class Controller {
     /**
      *
      * @param {number} tokenId
-     * @param {bool} onlyObject
+     * @param {boolean} onlyObject
      * @returns
      */
-    async getTokenObject(tokenId, onlyObject = true) {
+    async getTokenObject(tokenId: number, onlyObject: boolean = true) {
         let result;
         // If we don't have any tokens or the current token is undefined, get token from the blockchain
         if (
-            StorageController.values?.tokens === undefined ||
-            StorageController.values.tokens[tokenId] === undefined
+            storageController.values?.tokens === undefined ||
+            storageController.values.tokens[tokenId] === undefined
         ) {
             result = await this.tryGetToken(tokenId);
         } else if (
-            StorageController.values.tokens[tokenId].validTill < Date.now() ||
+            storageController.values.tokens[tokenId].validTill < Date.now() ||
             this.hasFlagToggle(tokenId, 'reload')
         ) {
             // Else, if its out of date, get it
@@ -1421,11 +1392,19 @@ export class Controller {
         return null;
     }
 
+    /**
+     * Creates a fake token object
+     * @param {*} pathId
+     * @param {*} name
+     * @param {*} signature
+     * @param {*} colourSeeds
+     * @returns
+     */
     makeFakeToken(
-        pathId,
-        name = undefined,
-        signature = undefined,
-        colourSeeds = []
+        pathId: any,
+        name: any = undefined,
+        signature: any = undefined,
+        colourSeeds: any = []
     ) {
         const fakeToken = {
             names: [],
@@ -1502,12 +1481,12 @@ export class Controller {
             address = this.accounts[0];
         }
 
-        const objs = {};
+        const objs: any = {};
         let objectCount = 0;
-        if (StorageController.existsAndNotEmpty('tokens'))
+        if (storageController.existsAndNotEmpty('tokens'))
             // eslint-disable-next-line
-            for (let [key, value] of Object.entries(
-                StorageController.values.tokens
+            for (let [key, value] of Object.entries<any>(
+                storageController.values.tokens
             )) {
                 try {
                     // We want it to be equal to our current account and the valid time is still greater than now
@@ -1565,23 +1544,23 @@ export class Controller {
             }
 
             const tokenId = this.storeToken(token[1], 'result', 'result');
-            objs[tokenId] = StorageController.values.tokens[tokenId];
+            objs[tokenId] = storageController.values.tokens[tokenId];
             if (objs[tokenId].token?.token?.owner !== address) {
                 delete objs[tokenId];
             } else if (
-                Object.values(StorageController.values.tokens).length >
+                Object.values(storageController.values.tokens).length >
                 (this.Config.default.settings.saveTokenRange || 16)
             ) {
                 if (
                     tokenId >
                     (this.Config.default.settings.saveTokenRange || 16)
                 ) {
-                    delete StorageController.values.tokens[
-                        Object.keys(StorageController.values.tokens).shift()
+                    delete storageController.values.tokens[
+                        Object.keys(storageController.values.tokens).shift()
                     ];
                 } else {
-                    delete StorageController.values.tokens[
-                        Object.keys(StorageController.values.tokens).pop()
+                    delete storageController.values.tokens[
+                        Object.keys(storageController.values.tokens).pop()
                     ];
                 }
             }
@@ -1598,10 +1577,15 @@ export class Controller {
      * @param {string} method
      * @param {object} args
      * @param {number} value
-     * @param {bool} saveTx
+     * @param {boolean} saveTx
      * @returns
      */
-    async callMethod(account, contract, method, args = {}) {
+    async callMethod(
+        account: object,
+        contract: string,
+        method: string,
+        args: any = {}
+    ) {
         args.gas = null;
         args.gasPrice = null;
         return await this.executeMethod(
@@ -1622,7 +1606,13 @@ export class Controller {
      * @param {object} args
      * @param {number} value
      */
-    async sendMethod(account, contract, method, args, value = 0) {
+    async sendMethod(
+        account: any,
+        contract: string,
+        method: string,
+        args: object,
+        value: number = 0
+    ) {
         await this.executeMethod(
             account,
             contract,
@@ -1636,10 +1626,10 @@ export class Controller {
     /**
      *
      * @param {number} tokenId
-     * @param {bool} instance
+     * @param {boolean} instance
      * @returns
      */
-    async createWalletContract(tokenId, instance = true) {
+    async createWalletContract(tokenId: number, instance: boolean = true) {
         const token = await this.getTokenObject(tokenId);
         return this.initializeContract(
             token.stickers,
@@ -1656,14 +1646,14 @@ export class Controller {
      * @param {string} method
      * @param {object} args
      * @param {number} value
-     * @param {bool} saveTx
+     * @param {boolean} saveTx
      */
     async executeMethod(
-        account,
-        contract,
-        method,
-        args = {},
-        value = 0,
+        account: object,
+        contract: string,
+        method: string,
+        args: object = {},
+        value: number = 0,
         type = 'call'
     ) {
         if (type !== 'call' && type !== 'send') {
@@ -1688,7 +1678,6 @@ export class Controller {
                 type,
                 contract,
                 method,
-                account,
                 args,
                 value
             );
@@ -1708,9 +1697,9 @@ export class Controller {
 
     /**
      * Onboards a wallet
-     * @param {bool} reload
+     * @param {boolean} reload
      */
-    async onboardWallet(reload = false) {
+    async onboardWallet(reload: boolean = false) {
         try {
             await this.onboard.walletSelect();
             await this.onboard.walletCheck();
@@ -1742,11 +1731,10 @@ export class Controller {
     /**
      * Gets draw settings for the current path
      */
-
-    getPathSettings(pathId) {
+    getPathSettings(pathId): InfinityMintProjectPath {
         const settings = this.getProjectSettings();
         return {
-            ...settings.paths.default,
+            ...(settings.paths as any).default,
             ...settings.paths[pathId],
         };
     }
@@ -1757,7 +1745,10 @@ export class Controller {
      * @returns
      * @private
      */
-    async getProjectURI(fileName = 'default', isJson = false) {
+    async getProjectURI(
+        fileName: string = 'default',
+        isJson = false
+    ): Promise<InfinityMintProjectJavascript> {
         let result;
         result = await require('../../../../../src/Deployments/projects/' +
             (isJson ? fileName + '.json' : fileName));
@@ -1773,7 +1764,6 @@ export class Controller {
         }
 
         tokenMethods.load();
-
         return result;
     }
 
@@ -1787,9 +1777,9 @@ export class Controller {
 
     /**
      * Call this to get the current project settings.
-     * @returns
+     * @returns {InfinityMintProjectJavascript}
      */
-    getProjectSettings() {
+    getProjectSettings(): InfinityMintProjectJavascript {
         let settings = this.defaultProjectURI;
 
         if (
@@ -1801,7 +1791,9 @@ export class Controller {
             !this.Config.default.settings.useLocalProjectURI &&
             this.isWalletValid
         ) {
-            settings = this.getContractValue('objectURI');
+            settings = this.getContractValue(
+                'objectURI'
+            ) as InfinityMintProjectJavascript;
             if (
                 Object.values(settings).length === 0 ||
                 settings === null ||
@@ -1815,12 +1807,12 @@ export class Controller {
             settings = this.localProjectURI;
         }
 
-        if (settings.paths?.default?.paths === undefined) {
+        if ((settings.paths as any)?.default?.paths === undefined) {
             settings.paths = {
                 ...settings.paths,
                 default: {
-                    ...(settings.paths?.default ||
-                        this.defaultProjectURI?.paths?.default),
+                    ...((settings.paths as any)?.default ||
+                        (this.defaultProjectURI?.paths as any)?.default),
                     paths: '<PQCw2gbglgpg7gIwPYA8AkAGApAJg9vANgGYB2AOnyoI2IFYAOS6jAHwGcAXAQwCdOAugDIA5mE69uAO3YAzJLwC2aCdPYAbbpxgAKDM2oAaekxYYAlLgzsAxt3W79ARhaGAtM5bnWUACZoAKg4efmEABzB-AFkaJ1IAThp1Gjc4xKsAFkIaGiycq1iE-Lw0lLyCqzdyvGKMVKKAL1ZVGXklQOCATwdA8Mi0KLoMukL0vGTK0szsirxq-FmMKZqrZbr5spmV7brSppa5BWUgrm6YXqEI6OJ4oatiDLGMGzdSQknSSZwMyrfKnCcPzwbhwJEmGWI-3iDH+S0qhDo72BAKRu2IZC+lToTic9yBdXi8UhJRwxLRGHxxBSLk+eDo8Q+dFWj0qD3xpHxqRuq0IMOBTiJVm+DP5EKsdzw6KsDCZeA5q3oq1Isow8XxApwzJVEM1JXiutVcJKfKWpBNTnNGBwIoWJLwrNxkoevxN2WpGLl8uBDEdVoyvvqBrZ-x99wBDSsilRbmxqJsMt+BsBKpBDFiDFpdUILLwOANqUFuZTDGz4smGDoKYynP90ac9uBCIDeZThFulQymZBKQTyPLmZGHZo+sqGfuGDrLkyTzc3MledZNpcANWCq2VpNpJt8V9GVDJWIBuxNClubJ+6WS7ikyc+0krSOHVOPQCfWiLkHJSKVgm-IRJ9JRZD3xGhESsUhfToTNSANQoyUKTlvgNfNvjJeDxSnHZjyFJwVRVAE8MWOIVQQ1kVRtF4BTLfknFRet-lwnkf1SNMrFRXJhkWat8NPWghUPIUiK9W1TTJGNoOjRhwOjYh6JKB10J2VJ-zvNQ2mOLoXzfAYLXXNZf12JtxUzMkwMlTJ2VyMk20WQgwR2Oy0JtGgbCyRYGEQzMcQDBJMjE3tVS7ehUQI-sQpTXD8T3EMTWxKFM05Riv0mE1SDEi0f15IiVQg1YcvzM1phNF4SwwutnTlDJqUKvAGEVcYQRtezaDJUErBsD0NysNVVgXEoqL1E0bRwTM2pKCd7nNZUhViOSrSTZrALmEagNy-lYqcfybVIESuXuMTZOlfN-VWVVKmGmTfVLYFotqsSoLY1tXRNWdAXA311BBJaKUWZS6BwCM8EUR4rwevAbH+-5UT+floTYl7Oy7aMiH+fMqWjBFFzKfyUzS8tqTh-kRM+lwQK4p5cieTaTRchhnK1LEeQDTbVIfdoTk4M4LiuAYRqpJUngMv7QLJ8HIaw9U2KDA11RNE1g3G8Dvt9YhWNzNj4lRMkdta1Yl0-JY6N8m6-NZGgbKJ9UcQdfE+t2TbMhTUkj2bTG9RvA0LyqOnTpSbJLXhfC6ziyUIpHcZr2BaaiHp8HCEzc2lzY22Dt6jtfVJLsApGMpbeuuoxzpB3gU18VK3+Lz6oLtDDqJm1VZQsk3ORKKbTcVFy7mdV1R+8bYk6gUmrondpXluzR-Ao0RP9F66G1s7RTlu2qjwsTCYnA7eOaz7zJ2akVMjCFZs754dtZOjMN2Bgk0j9Yxom9a28Q0vgVVoc2+IOtl-F8l-jFfl+YNUBLHB+LViqyxypkUBCVBaxB-ptEi7VlxEX-usHkEU6Cs0OOzTS5xXyXH6FEYYc0HhWnaixWEHZZ6cnjr8fEn0q6zgTpMEYotdgjBVOPKOV1oxrQrCA+kiwaBpRVDYYR99hFVwbBgERQpEFED9pmBgL04ixDblww0HYqq9QDCQFUjCARy05CMA0M5Yz3HLNMDsmYX7Vx-D7RsqIso7A6swog8t4bgXcozOYPZKYqJEoQS+qQcwYDqohUBaouwrTpGJGJFYyQDRkfXX0GU8DthJF5FcuYZHinNHVd6Qp158LsrBPWkk8TpSbsE60Qpl41VoDDXY2i5i8RjDLNuhcKwplkgOFUO9L4BjaWQQGGBFCyWjFkTMNgmnt0SaAr6+JCRYiSlmf4c8K6slCW4Gc-ouxpLqNI2cKRvo7Lbt9T6DTaiPGuU8C2IkIYgOElUbq5zMHNHvNgjSz48HCDEDAKQvhhDgABUCoAA>',
                 },
             };
@@ -1831,6 +1823,14 @@ export class Controller {
         }
 
         return settings;
+    }
+
+    /**
+     * Returns the current project file
+     * @returns
+     */
+    getProject() {
+        return this.getProjectSettings();
     }
 
     /**
@@ -1854,7 +1854,7 @@ export class Controller {
      * @param {string|Error} msg
      * @param {string} context
      */
-    log(message, context = 'general') {
+    log(message: string | Error, context: string = 'general') {
         context = context.toLowerCase();
 
         if (message instanceof Error) {
@@ -1930,10 +1930,10 @@ export class Controller {
     /**
      * Gets data from the blockchain based on object defined inside of preload at the top of the class. Used to get
      * stuff like totalMints and mintPrice
-     * @param {object} variable
+     * @param {any} variable
      * @returns
      */
-    async preloadVariable(variable) {
+    async preloadVariable(variable: any) {
         try {
             // For loading modal purposes
             this.lastAction = {
@@ -1946,15 +1946,15 @@ export class Controller {
             };
 
             if (
-                StorageController.values.preload[variable.key] !== undefined &&
+                storageController.values.preload[variable.key] !== undefined &&
                 Date.now() <
-                    StorageController.values.preload[variable.key].validTill
+                    storageController.values.preload[variable.key].validTill
             ) {
                 this.#preloadVariables.values[variable.key] =
-                    StorageController.values.preload[variable.key].value;
+                    storageController.values.preload[variable.key].value;
                 this.#preloadVariables.validTill[variable.key] = {
                     loaded: Date.now(),
-                    date: StorageController.values.preload[variable.key]
+                    date: storageController.values.preload[variable.key]
                         .validTill,
                     variable,
                 };
@@ -1981,17 +1981,17 @@ export class Controller {
                 date: Date.now() + variable.lifetime,
                 variable,
             };
-            StorageController.values.preload[variable.key] = {
+            storageController.values.preload[variable.key] = {
                 value: result,
                 variable,
                 loaded: Date.now(),
                 validTill: this.#preloadVariables.validTill[variable.key].date,
             };
 
-            StorageController.saveData();
+            storageController.saveData();
         } catch (error) {
-            if (StorageController.values.preload[variable.key]) {
-                delete StorageController.values.preload[variable.key];
+            if (storageController.values.preload[variable.key]) {
+                delete storageController.values.preload[variable.key];
             }
 
             this.log(error, 'error');
@@ -2007,7 +2007,7 @@ export class Controller {
         this.#preloadVariables.loading = {};
         this.#preloadInterval = setInterval(() => {
             try {
-                for (const [key, value] of Object.entries(
+                for (const [key, value] of Object.entries<any>(
                     this.#preloadVariables.validTill
                 )) {
                     if (this.#preloadVariables.values[key] === undefined) {
@@ -2104,7 +2104,7 @@ export class Controller {
 
             if (
                 (path.dontStore !== true || path.paths.dontStore !== true) &&
-                StorageController.values.paths[pathId] !== undefined
+                storageController.values.paths[pathId] !== undefined
             ) {
                 if (
                     checksumCheck &&
@@ -2119,14 +2119,14 @@ export class Controller {
                             ' trashing stored value',
                         'paths'
                     );
-                    delete StorageController.values.paths[pathId];
-                    StorageController.saveData();
+                    delete storageController.values.paths[pathId];
+                    storageController.saveData();
                 } else {
                     this.log(
                         'using saved storage data for path ' + pathId,
                         'paths'
                     );
-                    this.paths[pathId] = StorageController.values.paths[pathId];
+                    this.paths[pathId] = storageController.values.paths[pathId];
                     continue;
                 }
             }
@@ -2222,11 +2222,7 @@ export class Controller {
             ) {
                 const response = await fetch(path.paths.data);
                 this.log('fetching from current websites storage', 'ipfs');
-                if (
-                    response === null ||
-                    response === undefined ||
-                    response.length === 0
-                ) {
+                if (response === null || response === undefined) {
                     this.log('probably invalid ipfs URL', 'ipfs');
                     parsedResult = '';
                 } else {
@@ -2253,13 +2249,13 @@ export class Controller {
                 path.paths.projectStorage !== true
             ) {
                 this.log('saving path to storage: ' + pathId, 'paths');
-                StorageController.values.paths[pathId] = this.paths[pathId];
+                storageController.values.paths[pathId] = this.paths[pathId];
             } else {
                 this.log('not storing path to object ' + pathId, 'paths');
             }
         }
 
-        StorageController.saveData();
+        storageController.saveData();
     }
 
     /**
@@ -2270,7 +2266,6 @@ export class Controller {
         this.web3 = new web3(web3.givenProvider || 'http://localhost:8545'); // Throws
         this.web3.eth.transactionConfirmationBlocks = 50;
         this.accounts = await this.web3.eth.getAccounts();
-        this.gasPrice = await this.web3.eth.getGasPrice();
 
         try {
             if (this.accounts.length === 0) {
@@ -2287,11 +2282,19 @@ export class Controller {
         }
     }
 
+    /**
+     * Deploys a contract
+     * @param {*} contract
+     * @param {*} args
+     * @param {*} libraries
+     * @param {*} forceAbi
+     * @returns
+     */
     async deployContract(
-        contract,
-        args = [],
-        libraries = null,
-        forceAbi = undefined
+        contract: any,
+        args: any = [],
+        libraries: any = null,
+        forceAbi: any = undefined
     ) {
         if (libraries === null) {
             libraries = {
@@ -2317,7 +2320,7 @@ export class Controller {
         }
 
         instance = new this.web3.eth.Contract(abi.abi);
-        instance = await instance.deploy({
+        instance = instance.deploy({
             from: this.accounts[0],
             data: abi.bytecode,
             arguments: args,
@@ -2325,7 +2328,7 @@ export class Controller {
         instance = await instance.send({
             from: this.accounts[0],
             gasPrice: this.Config.default.getGasPrice(
-                StorageController.getGlobalPreference('gasSetting') || 'medium'
+                storageController.getGlobalPreference('gasSetting') || 'medium'
             ),
         });
 
@@ -2337,15 +2340,15 @@ export class Controller {
      * instance inside the controller class so we can await events.
      * @param {string} address
      * @param {string} contract
-     * @param {bool} instance
-     * @returns
+     * @param {boolean} instance
+     * @returns {Contract}
      */
     initializeContract(
-        address,
-        contract,
-        instance = true,
+        address: string,
+        contract: string,
+        instance: boolean = true,
         forceAbi = undefined
-    ) {
+    ): Contract {
         let abi;
         if (
             this.#abis.contracts[contract] === undefined &&
@@ -2452,7 +2455,7 @@ export class Controller {
                                     : this.defaultProjectURI;
                             }
                         } else {
-                            let result = {};
+                            let result: Response;
 
                             // Probably IPFS
                             try {
@@ -2465,8 +2468,7 @@ export class Controller {
                                 });
                                 clearTimeout(timeout);
                                 result = await result.json();
-                                result.fetched = Date.now();
-                                value = { ...result };
+                                value = { ...result, fetched: Date.now() };
                             } catch {
                                 this.log(
                                     'failed to get object uri: ' + value,
@@ -2495,47 +2497,47 @@ export class Controller {
                         }
 
                         if (
-                            StorageController.getGlobalPreference('lastTag') !==
+                            storageController.getGlobalPreference('lastTag') !==
                                 undefined &&
                             value.tag !==
-                                StorageController.getGlobalPreference('lastTag')
+                                storageController.getGlobalPreference('lastTag')
                         ) {
-                            StorageController.setGlobalPreference(
+                            storageController.setGlobalPreference(
                                 'previousTag',
-                                StorageController.getGlobalPreference('lastTag')
+                                storageController.getGlobalPreference('lastTag')
                             );
-                            StorageController.setGlobalPreference(
+                            storageController.setGlobalPreference(
                                 'needsPathReset',
                                 true
                             );
                         }
 
                         if (
-                            StorageController.getGlobalPreference(
+                            storageController.getGlobalPreference(
                                 'lastVersion'
                             ) !== undefined &&
                             value.version !==
-                                StorageController.getGlobalPreference(
+                                storageController.getGlobalPreference(
                                     'lastVersion'
                                 )
                         ) {
-                            StorageController.setGlobalPreference(
+                            storageController.setGlobalPreference(
                                 'previousVersion',
-                                StorageController.getGlobalPreference(
+                                storageController.getGlobalPreference(
                                     'lastVersion'
                                 )
                             );
-                            StorageController.setGlobalPreference(
+                            storageController.setGlobalPreference(
                                 'needsPathReset',
                                 true
                             );
                         }
 
-                        StorageController.setGlobalPreference(
+                        storageController.setGlobalPreference(
                             'lastTag',
                             value.tag || 'unknown'
                         );
-                        StorageController.setGlobalPreference(
+                        storageController.setGlobalPreference(
                             'lastVersion',
                             value.version === undefined
                                 ? 'unknown'
@@ -2543,18 +2545,18 @@ export class Controller {
                         );
 
                         if (
-                            StorageController.getGlobalPreference('lastId') !==
+                            storageController.getGlobalPreference('lastId') !==
                                 undefined &&
                             value.id !==
-                                StorageController.getGlobalPreference('lastId')
+                                storageController.getGlobalPreference('lastId')
                         ) {
-                            StorageController.setGlobalPreference(
+                            storageController.setGlobalPreference(
                                 'needsFullReset',
                                 true
                             );
                         }
 
-                        StorageController.setGlobalPreference(
+                        storageController.setGlobalPreference(
                             'lastId',
                             value.id || 1
                         );
@@ -2570,7 +2572,7 @@ export class Controller {
      * Called when first loaded
      */
     initializeContracts() {
-        for (const [key, value] of Object.entries(this.#abis.contracts)) {
+        for (const [key, value] of Object.entries<any>(this.#abis.contracts)) {
             this.log('intiailizing contract: ' + key, 'web3');
             this.#instances[key] = new this.web3.eth.Contract(
                 value.abi,

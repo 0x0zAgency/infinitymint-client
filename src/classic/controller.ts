@@ -1152,7 +1152,9 @@ export class Controller {
          * @type {import('bnc-onboard')}
          */
         // @ts-ignore-start
-        this.onboard = await import('bnc-onboard')({
+        let onBoard = await import('bnc-onboard');
+        onBoard = onBoard.default;
+        this.onboard = (onBoard as any)({
             dappId: this.Config.default.onboardApiKey,
             networkId: chainId || this.Config.default.requiredChainId,
             subscriptions: {

@@ -40,12 +40,7 @@ export const send = async (
     options: TransactionOptions = {}
 ) => {
     let statement = prepareCall(contractName, method, args);
-    if (statement === null) {
-        return null;
-    }
-
     if (options.gasPrice === undefined) options.gasPrice = getGasPrice();
-
     return await statement.send(options);
 };
 
@@ -57,11 +52,13 @@ export const send = async (
  * @returns
  */
 export const call = async (contractName: any, method: any, args: any = []) => {
-    let statement = prepareCall(contractName, method, args);
-    if (statement === null) {
+    try {
+        let statement = prepareCall(contractName, method, args);
+        return await statement.call();
+    } catch (error) {
+        console.error(error);
         return null;
     }
-    return await statement.call();
 };
 
 /**
@@ -79,12 +76,39 @@ export const prepareCall = (contractName, method: string, args = []) => {
             `Contract ${contractName} does not have method ${method}`
         );
 
-    try {
-        return contract.methods[method](...args);
-    } catch (error) {
-        Controller.log(error);
-        return null;
-    }
+    let callable = contract.methods[method];
+
+    // invalid attempt to spread non-iterable instance in order to be iterable, non-array objects must have a [symbol.iterator]() method
+    //IM SO SORRY FOR THIS
+    if (args[0]) return callable(args[0]);
+    else if (args[1]) return callable(args[0], args[1]);
+    else if (args[2]) return callable(args[0], args[1], args[2]);
+    else if (args[3]) return callable(args[0], args[1], args[2], args[3]);
+    else if (args[4])
+        return callable(args[0], args[1], args[2], args[3], args[4]);
+    else if (args[5])
+        return callable(args[0], args[1], args[2], args[3], args[4], args[5]);
+    else if (args[6])
+        return callable(
+            args[0],
+            args[1],
+            args[2],
+            args[3],
+            args[4],
+            args[5],
+            args[6]
+        );
+    else if (args[7])
+        return callable(
+            args[0],
+            args[1],
+            args[2],
+            args[3],
+            args[4],
+            args[5],
+            args[6],
+            args[7]
+        );
 };
 /**
  * A helper function to storage data, this is used with stickers. Key refers to one of the fields inside

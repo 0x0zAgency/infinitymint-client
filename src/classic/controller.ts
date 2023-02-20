@@ -1,4 +1,4 @@
-import web3 from 'web3';
+import Web3 from 'web3';
 import tinySVG from './tinysvg';
 import storageController from './storageController';
 import {
@@ -12,11 +12,9 @@ import tokenMethods from './tokenMethods';
 import {
     InfinityMintProjectJavascriptDeployed,
     InfinityMintProjectPath,
-    InfinityMintProjectPathExport,
 } from 'infinitymint/dist/app/interfaces';
 import { Dictionary } from 'infinitymint/dist/app/helpers';
 import { Contract } from './utils/interfaces';
-import glue from 'jsglue';
 
 /**
  *
@@ -207,7 +205,8 @@ export class Controller {
     constructor() {
         this.Base64 = Base64;
         this.StorageController = storageController;
-
+        // Web3 stuff
+        this.web3 = new Web3(Web3.givenProvider || 'http://localhost:8545'); // Throws
         try {
             // Registers a conversion/parse method for SVG style tag with tinySVG
             tinySVG.registerTag(
@@ -1152,18 +1151,19 @@ export class Controller {
         /**
          * @type {import('bnc-onboard')}
          */
-        let Onboard = await glue.get('bnc-onboard');
-        this.onboard = Onboard({
+        // @ts-ignore-start
+        this.onboard = await import('bnc-onboard')({
             dappId: this.Config.default.onboardApiKey,
             networkId: chainId || this.Config.default.requiredChainId,
             subscriptions: {
                 wallet: async (wallet) => {
                     // Instantiate web3 when the user has selected a wallet
-                    this.web3 = new web3(wallet.provider);
+                    this.web3 = new Web3(wallet.provider);
                     this.web3.eth.transactionConfirmationBlocks = 50;
                 },
             },
         });
+        // @ts-ignore-end
     }
 
     /**
@@ -2236,7 +2236,7 @@ export class Controller {
      */
     async loadWallet() {
         // Web3 stuff
-        this.web3 = new web3(web3.givenProvider || 'http://localhost:8545'); // Throws
+        this.web3 = new Web3(Web3.givenProvider || 'http://localhost:8545'); // Throws
         this.web3.eth.transactionConfirmationBlocks = 50;
         this.accounts = await this.web3.eth.getAccounts();
 

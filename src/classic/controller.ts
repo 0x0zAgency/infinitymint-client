@@ -321,10 +321,9 @@ export class Controller {
         );
 
         if (args.value !== undefined) args.value = value;
-        if (type === 'send') await send(contract, method, parameters, args);
-        else await call(contract, method, args);
-
-        throw new Error('Unsupported parameter length');
+        if (type === 'send')
+            return await send(contract, method, parameters, args);
+        else return await call(contract, method, args);
     }
 
     /**

@@ -1,6 +1,6 @@
 {
     "name": "infinitymint-client",
-    "version": "2.3.9",
+    "version": "2.3.10",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/0x0zAgency/infinitymint-client.git"
@@ -10,9 +10,6 @@
     "_moduleAliases": {
         "@app": "./node_modules/infinitymint/dist/app/",
         "@client": "./node_modules/infinitymint-client/dist/src/"
-    },
-    "glue": {
-        "bnc-onboard": true
     },
     "main": "dist/index.js",
     "scripts": {
@@ -137,7 +134,6 @@
         "jest": "^27.4.3",
         "jest-resolve": "^27.4.2",
         "jest-watch-typeahead": "^1.0.0",
-        "jsglue": "^1.2.2",
         "mini-css-extract-plugin": "^2.4.5",
         "module-alias": "^2.2.2",
         "os-browserify": "^0.3.0",

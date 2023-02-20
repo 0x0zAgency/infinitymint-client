@@ -12,11 +12,9 @@ import tokenMethods from './tokenMethods';
 import {
     InfinityMintProjectJavascriptDeployed,
     InfinityMintProjectPath,
-    InfinityMintProjectPathExport,
 } from 'infinitymint/dist/app/interfaces';
 import { Dictionary } from 'infinitymint/dist/app/helpers';
 import { Contract } from './utils/interfaces';
-import glue from 'jsglue';
 
 /**
  *

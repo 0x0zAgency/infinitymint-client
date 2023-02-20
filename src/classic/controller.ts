@@ -10,8 +10,9 @@ import {
 } from './helpers';
 import tokenMethods from './tokenMethods';
 import {
-    InfinityMintProjectJavascript,
+    InfinityMintProjectJavascriptDeployed,
     InfinityMintProjectPath,
+    InfinityMintProjectPathExport,
 } from 'infinitymint/dist/app/interfaces';
 import { Dictionary } from 'infinitymint/dist/app/helpers';
 import { Contract } from './utils/interfaces';
@@ -189,54 +190,8 @@ export class Controller {
     accounts = [];
     onboard = null;
     lastAction = {};
-    defaultProjectURI: InfinityMintProjectJavascript = {
-        javascript: true,
-        name: 'Infinity Mint',
-        description: {},
-        mods: {},
-        contracts: {},
-        deployment: {},
-        royalties: {},
-        assetConfig: {},
-        modules: {
-            assets: '',
-            minter: '',
-            royalty: '',
-            random: '',
-        },
-        approved: {},
-        names: [],
-        information: {
-            tokenSymbol: '',
-            tokenSingular: '',
-        },
-        paths: [],
-        price: '',
-    };
-    localProjectURI: InfinityMintProjectJavascript = {
-        javascript: true,
-        name: 'Infinity Mint',
-        description: {},
-        mods: {},
-        contracts: {},
-        deployment: {},
-        royalties: {},
-        assetConfig: {},
-        modules: {
-            assets: '',
-            minter: '',
-            royalty: '',
-            random: '',
-        },
-        approved: {},
-        names: [],
-        information: {
-            tokenSymbol: '',
-            tokenSingular: '',
-        },
-        paths: [],
-        price: '',
-    };
+    defaultProjectURI: InfinityMintProjectJavascriptDeployed;
+    localProjectURI: InfinityMintProjectJavascriptDeployed;
     paths = {};
     nullAddress = '0x0000000000000000000000000000000000000000';
 
@@ -378,7 +333,7 @@ export class Controller {
      * @param {*} pathId
      * @returns
      */
-    getPaths(pathId: any) {
+    getPaths(pathId: any): string {
         const objectURI = this.getProjectSettings();
 
         if (this.paths[pathId] !== undefined) {
@@ -391,7 +346,7 @@ export class Controller {
             );
         }
 
-        return this.getTinySVGFromPath(objectURI.paths[pathId].paths);
+        return this.getTinySVGFromPath((objectURI.paths[pathId] as any).paths);
     }
 
     /**
@@ -401,7 +356,7 @@ export class Controller {
      */
     getPathRarity(pathId) {
         const objectURI = this.getProjectSettings();
-        const values = Object.values(objectURI.paths);
+        const values = Object.values<any>(objectURI.paths);
 
         for (const value of values) {
             if (value.pathId === Number.parseInt(pathId)) {
@@ -453,6 +408,24 @@ export class Controller {
      * @returns {Contract}
      */
     getContract(contractName: any): Contract {
+        let project = this.getProject();
+        if (!this.#instances[contractName] && project.contracts[contractName])
+            return this.initializeContract(
+                project.contracts[contractName],
+                contractName,
+                true
+            );
+        else if (
+            !this.#instances[contractName] &&
+            !project.contracts[contractName]
+        ) {
+            throw new Error(
+                'Contract ' +
+                    contractName +
+                    ' is not available in this project and has not been pre-initialized'
+            );
+        }
+
         return this.#instances[contractName];
     }
 
@@ -1748,7 +1721,7 @@ export class Controller {
     async getProjectURI(
         fileName: string = 'default',
         isJson = false
-    ): Promise<InfinityMintProjectJavascript> {
+    ): Promise<InfinityMintProjectJavascriptDeployed> {
         let result;
         result = await require('../../../../../src/Deployments/projects/' +
             (isJson ? fileName + '.json' : fileName));
@@ -1779,7 +1752,7 @@ export class Controller {
      * Call this to get the current project settings.
      * @returns {InfinityMintProjectJavascript}
      */
-    getProjectSettings(): InfinityMintProjectJavascript {
+    getProjectSettings(): InfinityMintProjectJavascriptDeployed {
         let settings = this.defaultProjectURI;
 
         if (
@@ -1793,7 +1766,7 @@ export class Controller {
         ) {
             settings = this.getContractValue(
                 'objectURI'
-            ) as InfinityMintProjectJavascript;
+            ) as InfinityMintProjectJavascriptDeployed;
             if (
                 Object.values(settings).length === 0 ||
                 settings === null ||
@@ -1808,7 +1781,7 @@ export class Controller {
         }
 
         if ((settings.paths as any)?.default?.paths === undefined) {
-            settings.paths = {
+            (settings.paths as any) = {
                 ...settings.paths,
                 default: {
                     ...((settings.paths as any)?.default ||
@@ -2087,7 +2060,7 @@ export class Controller {
     async loadPathGroups(checksumCheck = true) {
         const projectURI = this.getProjectSettings();
 
-        for (const [pathId, path] of Object.entries(projectURI.paths)) {
+        for (const [pathId, path] of Object.entries<any>(projectURI.paths)) {
             if (pathId === 'default' || path.useLocal === true) {
                 continue;
             }

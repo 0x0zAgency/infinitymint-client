@@ -17,8 +17,16 @@ export const getGasPrice = () => {
     );
 };
 
+interface TransactionOptions {
+    gasPrice?: number;
+    gasLimit?: number;
+    gas?: number;
+    from?: string;
+    value?: number;
+}
+
 /**
- *
+ * Will send a transaction to the blockchain. If you do not specif as gasPrice it will use the current gas price frm the config for the current network. Will return the transaction hash.
  * @param {string} contractName
  * @param {string} method
  * @param {*} args
@@ -29,7 +37,7 @@ export const send = async (
     contractName: string,
     method: string,
     args: any = [],
-    options: any = {}
+    options: TransactionOptions = {}
 ) => {
     let statement = prepareCall(contractName, method, args);
     if (statement === null) {
@@ -42,7 +50,7 @@ export const send = async (
 };
 
 /**
- *
+ * Will call a method on a contract and return the result
  * @param {*} contractName
  * @param {*} method
  * @param {*} args
@@ -56,8 +64,21 @@ export const call = async (contractName: any, method: any, args: any = []) => {
     return await statement.call();
 };
 
-export const prepareCall = (contractName, method, args = []) => {
+/**
+ *
+ * @param contractName
+ * @param method
+ * @param args
+ * @returns
+ */
+export const prepareCall = (contractName, method: string, args = []) => {
     let contract = Controller.getContract(contractName);
+
+    if (!contract?.methods?.[method])
+        throw new Error(
+            `Contract ${contractName} does not have method ${method}`
+        );
+
     try {
         return contract.methods[method](...args);
     } catch (error) {

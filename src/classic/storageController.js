@@ -95,7 +95,7 @@ export class StorageController {
      * @param {*} value
      * @param {string|number} id
      */
-    setPagePreference(key, value, id = null) {
+    setPagePreference(key, value, id = null, log = false) {
         if (id !== null && typeof id !== 'string') {
             id = id.id || id.name || 'default';
         } else if (
@@ -105,13 +105,14 @@ export class StorageController {
             id = this.getLocationHref();
         }
 
-        Controller.log(
-            "Saving page prefrence for page id '" +
-                (id === null ? 'global' : id) +
-                "' key of: " +
-                key,
-            'storage'
-        );
+        if (log)
+            Controller.log(
+                "Saving page prefrence for page id '" +
+                    (id === null ? 'global' : id) +
+                    "' key of: " +
+                    key,
+                'storage'
+            );
 
         if (this.values.pagePrefrences[id] === undefined) {
             this.values.pagePrefrences[id] = {};
@@ -127,7 +128,7 @@ export class StorageController {
      * @param {string} id
      * @returns
      */
-    getPagePreference(key, id = null, log = true) {
+    getPagePreference(key, id = null, log = false) {
         if (id !== null && typeof id !== 'string') {
             id = id.id || id.name || 'default';
         } else if (
@@ -208,11 +209,13 @@ export class StorageController {
      * @param {string} method
      * @param {bool} save
      */
-    saveTransactionResult(tx, method = 'mint', save = true) {
-        Controller.log(
-            'Saving transaction result from method: ' + method,
-            'storage'
-        );
+    saveTransactionResult(tx, method = 'mint', save = true, log = false) {
+        if (log)
+            Controller.log(
+                'Saving transaction result from method: ' + method,
+                'storage'
+            );
+
         const object = {
             address: Controller.accounts[0],
             date: Date.now(),
@@ -284,8 +287,8 @@ export class StorageController {
      * @param {string} key
      * @param {*} value
      */
-    set(key, value) {
-        Controller.log('Setting ' + key, 'storage');
+    set(key, value, log = false) {
+        if (log) Controller.log('Setting ' + key, 'storage');
         if (this.values[key] === undefined) {
             throw new Error('trying to set an undefined value');
         }
@@ -297,7 +300,7 @@ export class StorageController {
     /**
      * Saves all the data inside of fields to local storage and packs objects accordingly
      */
-    saveData() {
+    saveData(log) {
         Controller.log('Saving storage data', 'storage');
         for (const [key, value] of Object.entries(this.#fields)) {
             let item = this.values[key];

@@ -611,42 +611,16 @@ export class TokenMethods {
 
         return result;
     }
-
-    async loadScripts() {
-        try {
-            this.manifest =
-                await require('../../../../../src/Deployments/scripts/manifest.json');
-
-            if (
-                this.manifest !== null &&
-                this.manifest?.scripts !== undefined &&
-                this.manifest.scripts.length > 0
-            ) {
-                for (let i = 0; i < this.manifest.scripts.length; i++) {
-                    this.scripts[this.manifest.scripts[i].split('.')[0]] = (
-                        await require('../../../../../src/Deployments/scripts/' +
-                            this.manifest.scripts[i])
-                    ).default;
-                }
-            }
-        } catch (error) {
-            Controller.log(
-                '[😞] could not load token script manifest',
-                'error'
-            );
-            Controller.log(error);
-            this.manifest = null;
-        }
-    }
-
     /**
      *
      * @returns
      */
     load() {
+        let Config = Controller.getConfig();
+        this.scripts = Config.tokenMethodScripts;
         this.renderToken = this.getScript('default').renderToken;
         this.createTokenURI = this.getScript('default').createTokenURI;
-        let Config = Controller.getConfig();
+
         let renderScript =
             Config.deployInfo?.modules?.renderScript ||
             Config.deployInfo?.modules?.controller;

@@ -240,9 +240,12 @@ export class Controller {
     async start(_config: typeof import('./utils/config')) {
         storageController.loadSavedData();
         this.config = _config;
+
         try {
             await this.config.default.load();
             controller.log('[✔️] InfinityMint Loaded');
+            tokenMethods.load();
+            controller.log('[✔️] Token Methods Loaded');
         } catch (error) {
             controller.log('[❌] InfinityMint Loaded');
             controller.log(error);

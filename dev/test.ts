@@ -21,7 +21,11 @@ import Mocha from 'mocha';
                     return;
                 }
 
-                resolve(files.map((filePath) => mocha.addFile(filePath)));
+                resolve(
+                    files
+                        .filter((filePath) => filePath.indexOf('/_/') === -1)
+                        .map((filePath) => mocha.addFile(filePath))
+                );
             });
         });
 

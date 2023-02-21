@@ -30,8 +30,7 @@
         "./gems",
         "./scripts",
         "./deploy",
-        "./imports",
-        "tests/_ignored/classic_config.js"
+        "./imports"
     ],
     "files": ["./hardhat.config.ts", "index.ts"]
 }

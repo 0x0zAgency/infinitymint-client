@@ -1,15 +1,16 @@
-import controller from '../src/classic/controller';
-import * as ReactConfig from '../src/classic/utils/config';
+import { load } from 'infinitymint';
 import glob from 'glob';
 import Mocha from 'mocha';
 
 (async () => {
     try {
         const mocha = new Mocha();
-        // Load the default projectUI just for testing
-        controller.defaultProjectURI = await controller.getProjectURI(
-            'default'
-        );
+
+        // Load the environment.
+        await load({
+            dontDraw: true,
+            scriptMode: true,
+        });
 
         // Add all the files to mocha.
         await new Promise((resolve, reject) => {
@@ -24,9 +25,6 @@ import Mocha from 'mocha';
             });
         });
 
-        // After grabbing the files, start the server
-        await controller.start(ReactConfig);
-        console.log('React server has started!');
         // Now that the server is up, run our test suite!
         mocha.run();
     } catch (error) {

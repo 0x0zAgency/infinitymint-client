@@ -237,12 +237,14 @@ export class Controller {
      * Starts the InfinityMint classic controller
      * @param _config
      */
-    async start(_config: typeof import('./utils/config')) {
+    async start(_config: any) {
         storageController.loadSavedData();
         this.config = _config;
 
         try {
             await this.config.default.load();
+            await this.loadAbis();
+            controller.log('[✔️] InfinityMint Abis Loaded');
             controller.log('[✔️] InfinityMint Loaded');
             tokenMethods.load();
             controller.log('[✔️] Token Methods Loaded');

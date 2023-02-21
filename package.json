@@ -13,7 +13,7 @@
     },
     "main": "dist/index.js",
     "scripts": {
-        "test": "mocha -r ts-node/register tests/**/*.test.ts",
+        "test": "ts-node dev/test.ts",
         "start": "node react/start.js",
         "build": "node react/build.js",
         "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",

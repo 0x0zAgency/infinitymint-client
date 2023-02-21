@@ -407,6 +407,10 @@ export const Config = {
         );
     },
 
+    /**
+     * returns the current name of the project
+     * @returns
+     */
     getProjectName() {
         return Config?.deployInfo?.project || Config.settings.localProject;
     },
@@ -431,6 +435,12 @@ export const Config = {
 
         return require('./Deployments/' + path + contract + '.json');
     },
+
+    /**
+     * Easy way to return the address of a contract
+     * @param {*} contract
+     * @returns
+     */
     getDeploymentDestination(contract) {
         return (
             Config.deployInfo?.contracts[contract] ||
@@ -438,6 +448,11 @@ export const Config = {
             Config.nullAddress
         );
     },
+
+    /**
+     *
+     * @returns
+     */
     getNetwork() {
         return (
             Config.networks[Config.requiredChainId] || {
@@ -445,9 +460,18 @@ export const Config = {
             }
         );
     },
+
+    /**
+     *
+     * @returns
+     */
     getGasPrices() {
         return Config.networks[Config.requiredChainId].gasPrices || {};
     },
+
+    /**
+     * Loads gas prices from the network config
+     */
     async loadGasPrices() {
         const _ = Config.networks[Config.requiredChainId] || {};
 
@@ -532,6 +556,10 @@ export const Config = {
         return result;
     },
 
+    /**
+     * static manifest holds the images to use for what ever depending on the project
+     * @returns
+     */
     async loadStaticManifest() {
         // Init with default values so stuff isnt broken
         const object = {
@@ -630,6 +658,10 @@ export const Config = {
         Config.loadedContent = result;
         return result;
     },
+
+    /**
+     * Run dev/updateImports.js to gather new pages and update the pages.json file
+     */
     async loadPages() {
         const pages = await require('./Resources/pages.json');
 
@@ -654,6 +686,10 @@ export const Config = {
             }
         }
     },
+
+    /**
+     * Reads the modManifest file and loads all mods inside of the /Mods/ folder
+     */
     async loadMods() {
         try {
             const result = await require('./Deployments/mods/modManifest.json');
@@ -769,24 +805,43 @@ export const Config = {
             console.log(error);
         }
     },
+
+    /**
+     * Returns a background from the projects resources
+     */
     getBackground() {
         return (
             Config.loadedContent.background?.default ||
             Config.loadedContent.defaultImage?.default
         );
     },
+
+    /**
+     * Returns a header background from the projects resources
+     * @returns
+     */
     getHeaderBackground() {
         return (
             Config.loadedContent.headerBackground?.default ||
             Config.loadedContent.defaultImage?.default
         );
     },
+
+    /**
+     * Returns a base64 encoded image from the projects resources
+     * @param {string} image
+     * @returns
+     */
     getImage(image) {
         return (
             Config.loadedContent?.images[image.toLowerCase()]?.default ||
             Config.loadedContent.defaultImage?.default
         );
     },
+
+    /**
+     * Loads deployInfo, chainId and project as well as the project specific settings and resource files, must be called immediately before the app is started
+     */
     async load() {
         // Set up the chainId
         try {

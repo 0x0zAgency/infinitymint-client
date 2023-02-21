@@ -1,15 +1,44 @@
+/**
+ * InfinityMint DAPP Configuration File
+ */
+
 import modController from '../modController';
 import pageController from '../pageController';
-import tokenMethods from '../tokenMethods';
 
+/**
+ * Locations for the various required files
+ */
+const importRoot = '/';
+const resourcesRoot = './Resources/';
+const deploymentsRoot = './Deployments/';
+const pageRoot = './';
+const tokenMethodRoot = './Deployments/scripts/';
+const tokenMethodManifestFilePath = './Deployments/scripts/manifest.json';
+const deployInfoFilePath = './Deployments/deployInfo.json';
+const staticManifestFilePath = './Deployments/static/manifest.json';
+const defaultStaticManifestFilePath =
+    './Deployments/static/default_manifest.json';
+const chainIdFilePath = './Deployments/.chainId';
+const chainIdProductionFilePath = './Deployments/production/.chainId';
+const pagesFilePath = './Resources/pages.json';
+const modsRoot = './Deployments/mods/';
+const modManifestFilePath = './Deployments/mods/modManifest.json';
+const deployInfoProductionFilePath = './Deployments/production/deployInfo.json';
+const deploymentsProductionRoot = './Deployments/production/';
+const projectsRoot = './Deployments/projects/';
+
+/**
+ * DAPP ChainID and deployInfo
+ */
 export let chainId;
 export let deployInfo;
+
 /**
  * Holds all of the configuation for the DAPP
  */
 export const Config = {
     /**
-     * Tweak application settings here
+     * DAPP Settings
      * ============================================================∂========================
      */
     settings: {
@@ -112,48 +141,15 @@ export const Config = {
     },
 
     /**
-     * Hidden Pages
+     * Pages
      * ====================================================================================
      */
-
-    hiddenPages: [
-        'Team',
-        'Facts',
-        'Gallery',
-        'StickerCreator',
-        'EditToken',
-        'Launchpad',
-        //'SelectiveMint',
-    ],
+    hiddenPages: [],
 
     /**
-     * Resources + Language/Localization + Gas Limits
+     * Networks
      * ====================================================================================
      */
-
-    // references a resource file inside of the resources folder
-    // you can use this to change the language of the site or implement custom text with out editing react code
-    resources: 'default_awedacity', // You don't need to put the .js but you can.
-    useGasLimitEstimates: true, // Pull from receipt file
-    gasLimit: {
-        preview: 1_500_000,
-        mint: 1_250_000,
-        mintPreview: 750_000,
-    },
-    defaultSet: 'AwE',
-    sets: {
-        AwE: 'MTY3NDA2NDAzNzIzOC4xOTUz',
-    },
-    dataReader: {
-        readAsText: ['svg', 'tinysvg', 'xml', 'html', 'text'],
-        readAsDataURL: ['jpg', 'jpeg', 'gif', 'png'],
-    },
-
-    /**
-     * Tweak Gas Settings here
-     * ====================================================================================
-     */
-
     networks: {
         1337: {
             name: 'Ganache',
@@ -271,7 +267,7 @@ export const Config = {
             openseaAssets: 'https://testnets.opensea.io/assets/goerli/',
             useAllEvents: false,
         },
-        80_001: {
+        80001: {
             name: 'Polygon Mumbai',
             tokenscan: 'https://mumbai.polygonscan.com/',
             token: 'matic',
@@ -327,14 +323,70 @@ export const Config = {
     },
 
     /**
-     * Ignore and do not change these!
+     * Resources
      * ====================================================================================
      */
+    // references a resource file inside of the resources folder
+    // you can use this to change the language of the site or implement custom text with out editing react code
+    resources: 'default_awedacity', // You don't need to put the .js but you can.
+
+    /**
+     * Gas Limits
+     * ====================================================================================
+     */
+    useGasLimitEstimates: true, // Pull from receipt file
+    gasLimit: {
+        preview: 1_500_000,
+        mint: 1_250_000,
+        mintPreview: 750_000,
+    },
+
+    /**
+     * Misc
+     * ====================================================================================
+     */
+    loadReasons: [
+        'Preparing Bitcoin Ramen...',
+        'Abstracting Core Principles...',
+        'Injecting Mantas DNA Into People...',
+        'Resurrecting Christ And Minting Him To The Blockchain...',
+        'Rolling Up A Joint, Sec...',
+        'Assembling Battle Robots...',
+        'Generating Sad Panda Dalle-2 Outputs...',
+        'Checking For Splunge Buildups...',
+        'Crying...',
+    ],
     credits: {
         llydiaTwitter: '',
         joshTwitter: '',
         agencyTwitter: '',
     },
+    dataReader: {
+        readAsText: ['svg', 'tinysvg', 'xml', 'html', 'text'],
+        readAsDataURL: ['jpg', 'jpeg', 'gif', 'png'],
+    },
+
+    /**
+     * Gems
+     * ====================================================================================
+     */
+    defaultSet: 'AwE',
+    sets: {
+        AwE: 'MTY3NDA2NDAzNzIzOC4xOTUz',
+    },
+
+    /**
+     * Onboard Settings
+     * ====================================================================================
+     */
+    onboardApiKey: 'a67bbab8-49d6-4fb3-88d3-2446be6c37d7',
+
+    /**
+     * Do not edit below this line
+     * ====================================================================================
+     * Ignore and do not change these!
+     * ====================================================================================
+     */
     tokenMap: {
         pathId: 'pathId',
         pathSize: 'pathSize',
@@ -371,29 +423,13 @@ export const Config = {
         },
     },
     deployInfo: {},
+    tokenMethodScripts: {},
     // Only change these if you know what ya doin!
     requiredChainId: 1337, // If .chainId exists in deployments this will be overshadowed
-    onboardApiKey: 'a67bbab8-49d6-4fb3-88d3-2446be6c37d7',
-    loadReasons: [
-        'Preparing Bitcoin Ramen...',
-        'Abstracting Core Principles...',
-        'Injecting Mantas DNA Into People...',
-        'Resurrecting Christ And Minting Him To The Blockchain...',
-        'Rolling Up A Joint, Sec...',
-        'Assembling Battle Robots...',
-        'Generating Sad Panda Dalle-2 Outputs...',
-        'Checking For Splunge Buildups...',
-        'Crying...',
-    ],
     resourceFile: {},
     loadedContent: {},
     isBadStaticManifest: false,
     nullAddress: '0x0000000000000000000000000000000000000000',
-
-    /**
-     * Do not edit below this line
-     * ====================================================================================
-     */
 
     /**
      * Returns true if api is enabled in deployInfo and there is a public key defined
@@ -429,11 +465,15 @@ export const Config = {
         let path = Config.settings.projectSpecificMode
             ? Config.getProjectName() + '/'
             : '';
-        if (Config.settings.production) {
-            path += 'production/';
-        }
 
-        return require('./Deployments/' + path + contract + '.json');
+        return require(`${
+            (Config.settings.production
+                ? deploymentsRoot
+                : deploymentsProductionRoot) +
+            path +
+            contract +
+            '.json'
+        }`);
     },
 
     /**
@@ -503,6 +543,7 @@ export const Config = {
             };
         }
     },
+
     getGasPrice(type = undefined) {
         if (Config.getNetwork() === undefined) {
             return 22 * 1e9;
@@ -525,7 +566,7 @@ export const Config = {
      * Loads a resource file from the /Resources/ folder relative to the current file
      */
     async loadResourceStrings() {
-        let result = await require('./Resources/' +
+        let result = await require(resourcesRoot +
             Config.resources.replace(/.js/g, '') +
             '.js');
 
@@ -540,8 +581,9 @@ export const Config = {
      */
     async getProjectURI(fileName, isJson = false) {
         let result;
-        result = await require('./Deployments/projects/' +
-            (isJson ? fileName + '.json' : fileName));
+        result = await require(`${
+            projectsRoot + (isJson ? fileName + '.json' : fileName)
+        }`);
 
         result = result?.default || result;
 
@@ -576,7 +618,7 @@ export const Config = {
         let result = {};
         try {
             console.log('[👓] Reading manifest.json');
-            result = await require('./Deployments/static/manifest.json');
+            result = await require(`${staticManifestFilePath}`);
 
             if (
                 result === null ||
@@ -591,8 +633,7 @@ export const Config = {
             Config.isBadStaticManifest = true;
             console.log(error);
 
-            result =
-                await require('./Deployments/static/default_manifest.json');
+            result = await require(`${defaultStaticManifestFilePath}`);
 
             // Just use emergency
             if (result === null || result === undefined) {
@@ -609,7 +650,9 @@ export const Config = {
 
         for (let i = 0; i < result.stylesheets.length; i++) {
             console.log('[⚡] Importing Stylesheet: ' + result.stylesheets[i]);
-            await require('/' + result.stylesheets[i].replace('@', ''));
+            await require(`${
+                importRoot + result.stylesheets[i].replace('@', '')
+            }`);
             result.stylesheets[i] = true;
         }
 
@@ -630,13 +673,15 @@ export const Config = {
         ).replace('@', '');
 
         console.log('[⚡] Fetching Site Background Image: ' + background);
-        result.background = await require('/' + background);
+        result.background = await require(`${importRoot + background}`);
         console.log(
             '[⚡] Fetching Header Background Image: ' + headerBackground
         );
-        result.headerBackground = await require('/' + headerBackground);
+        result.headerBackground = await require(`${
+            importRoot + headerBackground
+        }`);
         console.log('[⚡] Fetching Default Placeholder Image: ' + defaultImage);
-        result.defaultImage = await require('/' + defaultImage);
+        result.defaultImage = await require(`${importRoot + defaultImage}`);
 
         if (result.images === undefined || result.images.length === 0) {
             result.images = object.images;
@@ -647,8 +692,9 @@ export const Config = {
             for (const key of keys) {
                 const value = result.images[key];
                 console.log('[⚡] Fetching Custom Image: ' + value);
-                result.images[key.toLowerCase()] = await require('/' +
-                    value.replace('@', ''));
+                result.images[key.toLowerCase()] = await require(`${
+                    importRoot + value.replace('@', '')
+                }`);
             }
         } catch (error) {
             console.log('[😞] Bad custom image files');
@@ -663,12 +709,13 @@ export const Config = {
      * Run dev/updateImports.js to gather new pages and update the pages.json file
      */
     async loadPages() {
-        const pages = await require('./Resources/pages.json');
+        const pages = await require(`${pagesFilePath}`);
 
         for (const page of pages) {
             console.log('[✒️pages] requiring page ' + page.path);
-            let requirePage = await require('./' +
-                page.path.replace('.js', ''));
+            let requirePage = await require(`${
+                pageRoot + page.path.replace('.js', '')
+            }`);
             requirePage = requirePage.default || requirePage;
 
             if (requirePage.url === undefined) {
@@ -692,7 +739,7 @@ export const Config = {
      */
     async loadMods() {
         try {
-            const result = await require('./Deployments/mods/modManifest.json');
+            const result = await require(`${modManifestFilePath}`);
 
             for (const modname of Object.keys(result.mods)) {
                 modController.mods[modname] = result.mods[modname];
@@ -702,11 +749,9 @@ export const Config = {
                     console.log(
                         '[💎gems] reading mod manifest: ' + modname + '.json'
                     );
-                    const manifest = require('./Deployments/mods/' +
-                        modname +
-                        '/' +
-                        modname +
-                        '.json');
+                    const manifest = require(`${
+                        modsRoot + modname + '/' + modname + '.json'
+                    }`);
                     result.mods[modname] = manifest;
                 } catch (error) {
                     console.log(
@@ -720,9 +765,11 @@ export const Config = {
                 if (result.mods[modname].main) {
                     console.log('[💎gems] loading ' + modname + "'s main.js");
                     const promise = async () =>
-                        require('./Deployments/mods/' +
+                        require(`${
+                            modsRoot +
                             (result.mods[modname].mainSrc ||
-                                modname + '/main.js'));
+                                modname + '/main.js')
+                        }`);
 
                     promise().then((result) => {
                         console.log('[💎gems] loaded' + modname + "'s main.js");
@@ -760,8 +807,9 @@ export const Config = {
             for (const page of pages) {
                 try {
                     console.log('[💎gems] requiring page: ' + page.page);
-                    let requirePage = await require('./Deployments/mods/' +
-                        page.page.replace('.js', ''));
+                    let requirePage = await require(`${
+                        modsRoot + page.page.replace('.js', '')
+                    }`);
 
                     requirePage = requirePage.default || requirePage;
                     requirePage.src = page.page;
@@ -840,6 +888,37 @@ export const Config = {
     },
 
     /**
+     * loads scripts for tokenMethods
+     * @returns
+     */
+    async loadTokenMethodScripts() {
+        let scripts = {};
+        let manifest = await require(`${tokenMethodManifestFilePath}`);
+
+        if (
+            manifest !== null &&
+            manifest?.scripts !== undefined &&
+            manifest.scripts.length > 0
+        )
+            for (let i = 0; i < manifest.scripts.length; i++) {
+                try {
+                    scripts[manifest.scripts[i].split('.')[0]] = (
+                        await require(`${
+                            tokenMethodRoot + manifest.scripts[i]
+                        }`)
+                    ).default;
+                    Config.tokenMethodScripts = scripts;
+                } catch (error) {
+                    console.log(
+                        '[😞] could not load token script:' +
+                            manifest.scripts[i]
+                    );
+                    console.error(error);
+                }
+            }
+    },
+
+    /**
      * Loads deployInfo, chainId and project as well as the project specific settings and resource files, must be called immediately before the app is started
      */
     async load() {
@@ -849,9 +928,9 @@ export const Config = {
                 try {
                     if (Config.settings.production) {
                         deployInfo =
-                            await require('./Deployments/production/.deployInfo');
+                            await require(`${deployInfoProductionFilePath}`);
                     } else {
-                        deployInfo = await require('./Deployments/.deployInfo');
+                        deployInfo = await require(`${deployInfo}`);
                     }
                 } catch (error) {
                     console.log('[😞] could not load .deployInfo');
@@ -881,8 +960,10 @@ export const Config = {
                 }
             } else {
                 try {
-                    deployInfo = await require('./Deployments/.deployInfo' +
-                        (Config.settings.projectSpecificMode ? '_bundle' : ''));
+                    deployInfo = await require(`${
+                        deployInfoFilePath +
+                        (Config.settings.projectSpecificMode ? '_bundle' : '')
+                    }`);
                 } catch (error) {
                     console.log('[😞] could not load .deployInfo_bundle');
                     console.log(error);
@@ -917,10 +998,9 @@ export const Config = {
             if (!Config.settings.projectSpecificMode) {
                 try {
                     if (Config.settings.production) {
-                        chainId =
-                            await require('./Deployments/production/.chainId');
+                        chainId = await require(`${chainIdProductionFilePath}`);
                     } else {
-                        chainId = await require('./Deployments/.chainId');
+                        chainId = await require(`${chainIdFilePath}`);
                     }
                 } catch (error) {
                     console.log('[😞] could not load chainId');
@@ -934,10 +1014,10 @@ export const Config = {
                     result = Number.parseInt(result);
                     Config.requiredChainId = result;
                 }
-
-                await tokenMethods.loadScripts();
             }
 
+            console.log('[📙] Requiring token methods');
+            await Config.loadTokenMethodScripts();
             console.log('[📙] Requiring resource strings');
             await Config.loadResourceStrings();
             console.log('[📙] Requiring pages');

@@ -1,1 +1,0 @@
-import Mocha from 'mocha';

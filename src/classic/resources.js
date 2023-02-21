@@ -153,11 +153,7 @@ export class Resources {
 
     async initialize() {
         let Config = Controller.getConfig();
-        ResStrings = await import(
-            '../../../../../src/Resources/' +
-                Config.resources.replace(/.js/g, '') +
-                '.js'
-        );
+        ResStrings = Config.resourceFile;
 
         // This.#map has to be defined here due to getDescription needing to be loaded
         this.#map = {

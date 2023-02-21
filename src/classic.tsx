@@ -21,15 +21,15 @@ const _ipfsController = IPFSController.default;
 const _tokenMethods = TokenMethods.default;
 
 const exportDefaultExports = {
-    Controller: _controller,
-    ModController: _modController,
-    StorageController: _storageController,
-    Helpers: _helpers,
-    PageController: _pageController,
-    StickerController: _stickerController,
-    Resources: _resources,
-    TinySVG: _tinySVG,
-    IPFSController: _ipfsController,
-    TokenMethods: _tokenMethods,
+    controller: _controller,
+    modController: _modController,
+    storageController: _storageController,
+    helpers: _helpers,
+    pageController: _pageController,
+    stickerController: _stickerController,
+    resources: _resources,
+    tinySVG: _tinySVG,
+    ipfsController: _ipfsController,
+    tokenMethods: _tokenMethods,
 };
 export default exportDefaultExports;

@@ -1,5 +1,5 @@
-import ModController from '../modController';
-import PageController from '../pageController';
+import modController from '../modController';
+import pageController from '../pageController';
 import tokenMethods from '../tokenMethods';
 
 export let chainId;
@@ -385,6 +385,7 @@ export const Config = {
         'Checking For Splunge Buildups...',
         'Crying...',
     ],
+    resourceFile: {},
     loadedContent: {},
     isBadStaticManifest: false,
     nullAddress: '0x0000000000000000000000000000000000000000',
@@ -428,7 +429,7 @@ export const Config = {
             path += 'production/';
         }
 
-        return require('/src/Deployments/' + path + contract + '.json');
+        return require('./Deployments/' + path + contract + '.json');
     },
     getDeploymentDestination(contract) {
         return (
@@ -495,6 +496,42 @@ export const Config = {
 
         return 22 * 1e9;
     },
+
+    /**
+     * Loads a resource file from the /Resources/ folder relative to the current file
+     */
+    async loadResourceStrings() {
+        let result = await require('./Resources/' +
+            Config.resources.replace(/.js/g, '') +
+            '.js');
+
+        Config.resourceFile = result.default || result;
+    },
+
+    /**
+     * Reads a project URI
+     * @param {string} fileName
+     * @returns
+     * @private
+     */
+    async getProjectURI(fileName, isJson = false) {
+        let result;
+        result = await require('./Deployments/projects/' +
+            (isJson ? fileName + '.json' : fileName));
+
+        result = result?.default || result;
+
+        if (
+            fileName !== 'default' &&
+            Config.default.settings.overwriteModules &&
+            result.modules !== undefined
+        ) {
+            Config.default.deployInfo.modules = { ...result.modules };
+        }
+
+        return result;
+    },
+
     async loadStaticManifest() {
         // Init with default values so stuff isnt broken
         const object = {
@@ -511,7 +548,7 @@ export const Config = {
         let result = {};
         try {
             console.log('[👓] Reading manifest.json');
-            result = await require('/src/Deployments/static/manifest.json');
+            result = await require('./Deployments/static/manifest.json');
 
             if (
                 result === null ||
@@ -527,7 +564,7 @@ export const Config = {
             console.log(error);
 
             result =
-                await require('/src/Deployments/static/default_manifest.json');
+                await require('./Deployments/static/default_manifest.json');
 
             // Just use emergency
             if (result === null || result === undefined) {
@@ -594,11 +631,12 @@ export const Config = {
         return result;
     },
     async loadPages() {
-        const pages = await require('/Resources/pages.json');
+        const pages = await require('./Resources/pages.json');
 
         for (const page of pages) {
             console.log('[✒️pages] requiring page ' + page.path);
-            let requirePage = await require('/' + page.path.replace('.js', ''));
+            let requirePage = await require('./' +
+                page.path.replace('.js', ''));
             requirePage = requirePage.default || requirePage;
 
             if (requirePage.url === undefined) {
@@ -607,9 +645,9 @@ export const Config = {
                         (page.id || page.name) +
                         ' does not have url set, registering as virtual page'
                 );
-                requirePage = PageController.registerFakePage(requirePage);
+                requirePage = pageController.registerFakePage(requirePage);
             } else {
-                requirePage = PageController.registerPage(
+                requirePage = pageController.registerPage(
                     requirePage,
                     requirePage.developer === true
                 );
@@ -618,18 +656,17 @@ export const Config = {
     },
     async loadMods() {
         try {
-            const result =
-                await require('/src/Deployments/mods/modManifest.json');
+            const result = await require('./Deployments/mods/modManifest.json');
 
             for (const modname of Object.keys(result.mods)) {
-                ModController.mods[modname] = result.mods[modname];
+                modController.mods[modname] = result.mods[modname];
                 console.log('[💎gems] found gem: ' + modname);
 
                 try {
                     console.log(
                         '[💎gems] reading mod manifest: ' + modname + '.json'
                     );
-                    const manifest = require('/src/Deployments/mods/' +
+                    const manifest = require('./Deployments/mods/' +
                         modname +
                         '/' +
                         modname +
@@ -647,13 +684,13 @@ export const Config = {
                 if (result.mods[modname].main) {
                     console.log('[💎gems] loading ' + modname + "'s main.js");
                     const promise = async () =>
-                        require('/src/Deployments/mods/' +
+                        require('./Deployments/mods/' +
                             (result.mods[modname].mainSrc ||
                                 modname + '/main.js'));
 
                     promise().then((result) => {
                         console.log('[💎gems] loaded' + modname + "'s main.js");
-                        ModController.modMains[modname] =
+                        modController.modMains[modname] =
                             result.default || result;
                     });
                 }
@@ -663,7 +700,7 @@ export const Config = {
                     result.files[modname] !== undefined &&
                     result.files[modname].pages !== undefined
                 ) {
-                    ModController.modPages[modname] = Object.values(
+                    modController.modPages[modname] = Object.values(
                         result.files[modname].pages
                     ).map((_page) => {
                         console.log('[💎gems] found page: ' + _page);
@@ -675,11 +712,11 @@ export const Config = {
                 }
             }
 
-            ModController.modManifest = { ...result };
+            modController.modManifest = { ...result };
 
             // Now lets require all the mod pages
             let pages = [];
-            for (const newPages of Object.values(ModController.modPages)) {
+            for (const newPages of Object.values(modController.modPages)) {
                 pages = [...pages, ...newPages];
             }
 
@@ -687,7 +724,7 @@ export const Config = {
             for (const page of pages) {
                 try {
                     console.log('[💎gems] requiring page: ' + page.page);
-                    let requirePage = await require('/src/Deployments/mods/' +
+                    let requirePage = await require('./Deployments/mods/' +
                         page.page.replace('.js', ''));
 
                     requirePage = requirePage.default || requirePage;
@@ -701,9 +738,9 @@ export const Config = {
                                 '  does not have url set, registering as virtual gem page'
                         );
                         requirePage =
-                            PageController.registerFakePage(requirePage);
+                            pageController.registerFakePage(requirePage);
                     } else {
-                        requirePage = PageController.registerPage(
+                        requirePage = pageController.registerPage(
                             requirePage,
                             requirePage.developer === true,
                             null,
@@ -725,8 +762,8 @@ export const Config = {
                 }
             }
 
-            ModController.modPages = newModPages;
-            ModController.modsSuccess = true;
+            modController.modPages = newModPages;
+            modController.modsSuccess = true;
         } catch (error) {
             console.log('[⚠️] WARNING! failure to load gems');
             console.log(error);
@@ -757,10 +794,9 @@ export const Config = {
                 try {
                     if (Config.settings.production) {
                         deployInfo =
-                            await require('/src/Deployments/production/.deployInfo');
+                            await require('./Deployments/production/.deployInfo');
                     } else {
-                        deployInfo =
-                            await require('/src/Deployments/.deployInfo');
+                        deployInfo = await require('./Deployments/.deployInfo');
                     }
                 } catch (error) {
                     console.log('[😞] could not load .deployInfo');
@@ -790,7 +826,7 @@ export const Config = {
                 }
             } else {
                 try {
-                    deployInfo = await require('/src/Deployments/.deployInfo' +
+                    deployInfo = await require('./Deployments/.deployInfo' +
                         (Config.settings.projectSpecificMode ? '_bundle' : ''));
                 } catch (error) {
                     console.log('[😞] could not load .deployInfo_bundle');
@@ -827,9 +863,9 @@ export const Config = {
                 try {
                     if (Config.settings.production) {
                         chainId =
-                            await require('/src/Deployments/production/.chainId');
+                            await require('./Deployments/production/.chainId');
                     } else {
-                        chainId = await require('/src/Deployments/.chainId');
+                        chainId = await require('./Deployments/.chainId');
                     }
                 } catch (error) {
                     console.log('[😞] could not load chainId');
@@ -847,6 +883,8 @@ export const Config = {
                 await tokenMethods.loadScripts();
             }
 
+            console.log('[📙] Requiring resource strings');
+            await Config.loadResourceStrings();
             console.log('[📙] Requiring pages');
             await Config.loadPages();
             console.log('[📙] Requiring gems');

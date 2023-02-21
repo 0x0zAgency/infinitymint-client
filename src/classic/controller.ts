@@ -177,8 +177,8 @@ export class Controller {
         _utf8_encode?: (string: any) => string;
         _utf8_decode?: (utftext: any) => string;
     }; // For accessing in tokenMethod scripts
-    StorageController: typeof storageController; // For accesing in tokenMethod scripts
-    Config: typeof import('./utils/config');
+    storageController: typeof storageController; // For accesing in tokenMethod scripts
+    config: typeof import('./utils/config');
     web3: import('web3').default = null;
     walletError = null;
     isLoading = false;
@@ -192,7 +192,6 @@ export class Controller {
     localProjectURI: InfinityMintProjectJavascriptDeployed;
     paths = {};
     nullAddress = '0x0000000000000000000000000000000000000000';
-
     // Private
     #events = {};
     #instances: Dictionary<Contract> = {};
@@ -203,8 +202,9 @@ export class Controller {
     #preloadInterval; // This is useful ignore vscodes lies
 
     constructor() {
+        //save base64
         this.Base64 = Base64;
-        this.StorageController = storageController;
+        this.storageController = storageController;
         // Web3 stuff
         this.web3 = new Web3(Web3.givenProvider || 'http://localhost:8545'); // Throws
         try {
@@ -234,6 +234,23 @@ export class Controller {
     }
 
     /**
+     * Starts the InfinityMint classic controller
+     * @param _config
+     */
+    async start(_config: typeof import('./utils/config')) {
+        storageController.loadSavedData();
+        this.config = _config;
+        try {
+            await this.config.default.load();
+            controller.log('[✔️] InfinityMint Loaded');
+        } catch (error) {
+            controller.log('[❌] InfinityMint Loaded');
+            controller.log(error);
+            throw error;
+        }
+    }
+
+    /**
      * Sets this controller to be admin mode
      * @param value
      */
@@ -249,7 +266,7 @@ export class Controller {
         if (config.default === undefined)
             throw new Error('please provide the full module');
 
-        this.Config = config;
+        this.config = config;
     }
 
     /**
@@ -260,23 +277,23 @@ export class Controller {
             // Everything here is loaded instantly
             // these can be invoked through createCntract and just supplying InfnityMintWallet,
             contracts: {
-                Fake_InfinityMintWallet: this.Config.default.getDeployment(
+                Fake_InfinityMintWallet: this.config.default.getDeployment(
                     'Fake_InfinityMintWallet'
                 ),
-                InfinityMint: this.Config.default.getDeployment('InfinityMint'),
-                [this.Config.default.deployInfo.modules.svg ||
-                this.Config.default.deployInfo.modules.controller]:
-                    this.Config.default.getDeployment(
-                        this.Config.default.deployInfo.modules.svg ||
-                            this.Config.default.deployInfo.modules.controller
+                InfinityMint: this.config.default.getDeployment('InfinityMint'),
+                [this.config.default.deployInfo.modules.svg ||
+                this.config.default.deployInfo.modules.controller]:
+                    this.config.default.getDeployment(
+                        this.config.default.deployInfo.modules.svg ||
+                            this.config.default.deployInfo.modules.controller
                     ),
                 InfinityMintApi:
-                    this.Config.default.getDeployment('InfinityMintApi'),
-                InfinityMintProject: this.Config.default.getDeployment(
+                    this.config.default.getDeployment('InfinityMintApi'),
+                InfinityMintProject: this.config.default.getDeployment(
                     'InfinityMintProject'
                 ),
                 InfinityMintLinker:
-                    this.Config.default.getDeployment('InfinityMintLinker'),
+                    this.config.default.getDeployment('InfinityMintLinker'),
             },
         };
     }
@@ -309,7 +326,7 @@ export class Controller {
         }
 
         if (args.loadGasPrice) {
-            await this.Config.default.loadGasPrices().catch((error) => {
+            await this.config.default.loadGasPrices().catch((error) => {
                 this.log('could not get updated gas prices');
                 this.log(error, 'error');
             });
@@ -682,7 +699,7 @@ export class Controller {
                 Date.now(),
             validTill:
                 Date.now() +
-                this.Config.default.settings.cacheLength +
+                this.config.default.settings.cacheLength +
                 (Math.random() * 6 + 1) * 1000 * 60, // So they all don't hit at once
             token: {
                 tokenId,
@@ -913,7 +930,7 @@ export class Controller {
 
     getCollectionURL(tokenId: string) {
         return (
-            this.Config.default.getNetwork().openseaAssets +
+            this.config.default.getNetwork().openseaAssets +
             this.#abis.contracts.InfinityMint.address +
             '/' +
             tokenId
@@ -975,7 +992,7 @@ export class Controller {
                 result.colours
             )[0];
 
-            if (!this.Config.default.settings.useOldColours) {
+            if (!this.config.default.settings.useOldColours) {
                 colours = unpackColours([...result.colours]);
             }
         }
@@ -1104,10 +1121,10 @@ export class Controller {
     // Want to add new events? check src/this.Config.default.js => events array
     setupEvents(contract = 'InfinityMint') {
         for (const event of Object.values<string>(
-            this.Config.default.events[contract.replace('Fake_', '')]
+            this.config.default.events[contract.replace('Fake_', '')]
         )) {
             this.#instances[contract].events[event]((error, events) => {
-                if (!this.Config.default.getNetwork().useAllEvents) {
+                if (!this.config.default.getNetwork().useAllEvents) {
                     this.pushToEvent(event, error, events);
                 }
             });
@@ -1154,8 +1171,8 @@ export class Controller {
         let onBoard = await import('bnc-onboard');
         onBoard = onBoard.default;
         this.onboard = (onBoard as any)({
-            dappId: this.Config.default.onboardApiKey,
-            networkId: chainId || this.Config.default.requiredChainId,
+            dappId: this.config.default.onboardApiKey,
+            networkId: chainId || this.config.default.requiredChainId,
             subscriptions: {
                 wallet: async (wallet) => {
                     // Instantiate web3 when the user has selected a wallet
@@ -1183,7 +1200,7 @@ export class Controller {
         // If we have an invalid wallet then we need to "onboard" then aka show the onboard js pop up
         if (
             !this.isWalletValid &&
-            !this.Config.default.settings.requireWallet &&
+            !this.config.default.settings.requireWallet &&
             storageController.getGlobalPreference('web3Check') !== true
         ) {
             this.log('[⚠️] Wallet needs onboarding', 'warning');
@@ -1230,14 +1247,14 @@ export class Controller {
             .then(() => {
                 // If we are on polygon we cant just listen for events on the contract so
                 // we need to historically pull stuff
-                if (this.Config.default.getNetwork().useAllEvents) {
+                if (this.config.default.getNetwork().useAllEvents) {
                     this.#instances[contract].events.allEvents(
                         {
                             filter: args.filter || {},
                             fromBlock: blockNumber,
                             to:
                                 blockNumber +
-                                this.Config.default.settings.blockRange,
+                                this.config.default.settings.blockRange,
                         },
                         (error, events) => {
                             if (error !== null && error.code !== undefined) {
@@ -1523,11 +1540,11 @@ export class Controller {
                 delete objs[tokenId];
             } else if (
                 Object.values(storageController.values.tokens).length >
-                (this.Config.default.settings.saveTokenRange || 16)
+                (this.config.default.settings.saveTokenRange || 16)
             ) {
                 if (
                     tokenId >
-                    (this.Config.default.settings.saveTokenRange || 16)
+                    (this.config.default.settings.saveTokenRange || 16)
                 ) {
                     delete storageController.values.tokens[
                         Object.keys(storageController.values.tokens).shift()
@@ -1705,7 +1722,7 @@ export class Controller {
     /**
      * Gets draw settings for the current path
      */
-    getPathSettings(pathId): InfinityMintProjectPath {
+    getPathSettings(pathId: string | number): InfinityMintProjectPath {
         const settings = this.getProjectSettings();
         return {
             ...(settings.paths as any).default,
@@ -1723,20 +1740,7 @@ export class Controller {
         fileName: string = 'default',
         isJson = false
     ): Promise<InfinityMintProjectJavascriptDeployed> {
-        let result;
-        result = await require('../../../../../src/Deployments/projects/' +
-            (isJson ? fileName + '.json' : fileName));
-
-        result = result?.default || result;
-
-        if (
-            fileName !== 'default' &&
-            this.Config.default.settings.overwriteModules &&
-            result.modules !== undefined
-        ) {
-            this.Config.default.deployInfo.modules = { ...result.modules };
-        }
-
+        let result = this.config.default.getProjectURI(fileName, isJson);
         tokenMethods.load();
         return result;
     }
@@ -1746,7 +1750,7 @@ export class Controller {
      * @returns
      */
     getConfig() {
-        return this.Config.default;
+        return this.config.default;
     }
 
     /**
@@ -1758,11 +1762,11 @@ export class Controller {
 
         if (
             !this.isWalletValid &&
-            this.Config.default.settings.useLocalProjectAsDefault
+            this.config.default.settings.useLocalProjectAsDefault
         ) {
             settings = this.localProjectURI;
         } else if (
-            !this.Config.default.settings.useLocalProjectURI &&
+            !this.config.default.settings.useLocalProjectURI &&
             this.isWalletValid
         ) {
             settings = this.getContractValue(
@@ -1773,11 +1777,11 @@ export class Controller {
                 settings === null ||
                 settings === undefined
             ) {
-                settings = this.Config.default.settings.useLocalProjectAsBackup
+                settings = this.config.default.settings.useLocalProjectAsBackup
                     ? this.localProjectURI
                     : this.defaultProjectURI;
             }
-        } else if (this.Config.default.settings.useLocalProjectURI) {
+        } else if (this.config.default.settings.useLocalProjectURI) {
             settings = this.localProjectURI;
         }
 
@@ -2018,13 +2022,13 @@ export class Controller {
         const chainId = await this.web3.eth.getChainId();
 
         if (
-            this.Config.default.requiredChainId !== chainId ||
-            this.Config.default.networks[chainId] === undefined
+            this.config.default.requiredChainId !== chainId ||
+            this.config.default.networks[chainId] === undefined
         ) {
             throw new Error(
                 'Invalid network, please make sure the network you are connected to is ' +
-                    this.Config.default.networks[
-                        this.Config.default.requiredChainId
+                    this.config.default.networks[
+                        this.config.default.requiredChainId
                     ].name
             );
         }
@@ -2040,11 +2044,11 @@ export class Controller {
 
         try {
             if (
-                this.Config.default.settings.useLocalProjectAsDefault ||
-                this.Config.default.settings.useLocalProjectURI
+                this.config.default.settings.useLocalProjectAsDefault ||
+                this.config.default.settings.useLocalProjectURI
             ) {
                 this.localProjectURI = await this.getProjectURI(
-                    this.Config.default.settings.localProject,
+                    this.config.default.settings.localProject,
                     true
                 );
             }
@@ -2117,7 +2121,7 @@ export class Controller {
             let parsedResult;
 
             if (
-                this.Config.default.settings.localContentOnLocalhost &&
+                this.config.default.settings.localContentOnLocalhost &&
                 window.location.href.includes('localhost') &&
                 path.paths.localStorage
             ) {
@@ -2142,7 +2146,7 @@ export class Controller {
             if (
                 (path.paths.ipfs && !path.paths.projectStorage) ||
                 (path.paths.localStorage === true &&
-                    !this.Config.default.settings.forceLocalContent &&
+                    !this.config.default.settings.forceLocalContent &&
                     path.paths.ipfs)
             ) {
                 this.log('fetching ipfs: ' + path.paths.ipfsURL, 'ipfs');
@@ -2178,7 +2182,7 @@ export class Controller {
                 }
             } else if (
                 !path.paths.projectStorage &&
-                this.Config.default.settings.forceLocalContent &&
+                this.config.default.settings.forceLocalContent &&
                 !path.paths.localStorage
             ) {
                 this.log(
@@ -2192,7 +2196,7 @@ export class Controller {
                 path.paths.localStorage &&
                 (path.paths.ipfs !== true ||
                     (window.location.href.includes('localhost') &&
-                        this.Config.default.settings.localContentOnLocalhost))
+                        this.config.default.settings.localContentOnLocalhost))
             ) {
                 const response = await fetch(path.paths.data);
                 this.log('fetching from current websites storage', 'ipfs');
@@ -2273,7 +2277,7 @@ export class Controller {
         if (libraries === null) {
             libraries = {
                 InfinityMintUtil:
-                    this.Config.default.getDeployment('InfinityMintUtil'),
+                    this.config.default.getDeployment('InfinityMintUtil'),
             };
         }
 
@@ -2284,7 +2288,7 @@ export class Controller {
             forceAbi === undefined
         ) {
             try {
-                abi = this.Config.default.getDeployment(contract);
+                abi = this.config.default.getDeployment(contract);
             } catch (error) {
                 this.log(error);
                 throw new Error('bad contract: ' + contract);
@@ -2301,7 +2305,7 @@ export class Controller {
         });
         instance = await instance.send({
             from: this.accounts[0],
-            gasPrice: this.Config.default.getGasPrice(
+            gasPrice: this.config.default.getGasPrice(
                 storageController.getGlobalPreference('gasSetting') || 'medium'
             ),
         });
@@ -2329,7 +2333,7 @@ export class Controller {
             forceAbi === undefined
         ) {
             try {
-                abi = this.Config.default.getDeployment(contract).abi;
+                abi = this.config.default.getDeployment(contract).abi;
             } catch (error) {
                 this.log(error);
                 throw new Error('bad contract: ' + contract);
@@ -2407,7 +2411,7 @@ export class Controller {
                                 value = JSON.parse(value);
                                 if (
                                     value.local === true &&
-                                    !this.Config.default.settings
+                                    !this.config.default.settings
                                         .useLocalProjectURI
                                 ) {
                                     this.log(
@@ -2423,7 +2427,7 @@ export class Controller {
                                 console.log(value);
                                 console.log('bad parse');
                                 console.log(error);
-                                value = this.Config.default.settings
+                                value = this.config.default.settings
                                     .useLocalProjectAsBackup
                                     ? this.localProjectURI
                                     : this.defaultProjectURI;
@@ -2448,7 +2452,7 @@ export class Controller {
                                     'failed to get object uri: ' + value,
                                     'warning'
                                 );
-                                value = this.Config.default.settings
+                                value = this.config.default.settings
                                     .useLocalProjectAsBackup
                                     ? this.localProjectURI
                                     : this.defaultProjectURI;
@@ -2457,7 +2461,7 @@ export class Controller {
 
                         // Add initial tag if tag is missing
                         if (
-                            this.Config.default.settings.useLocalProjectAsBackup
+                            this.config.default.settings.useLocalProjectAsBackup
                         ) {
                             if (value.tag === undefined) {
                                 value.tag =

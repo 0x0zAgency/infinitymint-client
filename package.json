@@ -1,6 +1,6 @@
 {
     "name": "infinitymint-client",
-    "version": "2.3.12",
+    "version": "2.4.0",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/0x0zAgency/infinitymint-client.git"

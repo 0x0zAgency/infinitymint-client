@@ -1,9 +1,11 @@
 import controller from '../src/classic/controller';
 import * as ReactConfig from '../src/classic/utils/config';
 import glob from 'glob';
+import Mocha from 'mocha';
 
 (async () => {
     try {
+        const mocha = new Mocha();
         // Load the default projectUI just for testing
         controller.defaultProjectURI = await controller.getProjectURI(
             'default'

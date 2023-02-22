@@ -1,0 +1,16 @@
+{
+    "updated": 0,
+    "background": "Images/default_background.jpg",
+    "headerBackground": "@Images/default_header.png",
+    "backgroundColour": "black",
+    "textColour": "light",
+    "stylesheets": ["@Styles/app.css"],
+    "images": {
+        "features": "@Images/default_features.gif",
+        "loading": "@Images/loadingGif.gif",
+        "texture": "@Images/invalid_wallet.jpg",
+        "teamDefaultIcon": "@Images/person.png",
+        "noWeb3": "@Images/missingWeb3.png",
+        "loadingComponent": "@Images/loadingGif.gif"
+    }
+}

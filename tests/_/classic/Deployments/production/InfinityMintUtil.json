@@ -1,0 +1,56 @@
+{
+  "address": "0xd7fcAa6A3e68e4eDAb6eA551594cF60CCe436F73",
+  "abi": [],
+  "transactionHash": "0xfc83a46c57d81448462283b2770b7e5d500c9f5269f4f78465f3ed666ae18c4c",
+  "receipt": {
+    "to": null,
+    "from": "0x527738Dd42170065d778C89264654b03f8Ed989B",
+    "contractAddress": "0xd7fcAa6A3e68e4eDAb6eA551594cF60CCe436F73",
+    "transactionIndex": 54,
+    "gasUsed": "72217",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000040000000000800000000000000000000100000000000000000000000001000000000000000000000000000000000080000004000000000000000000000000000008000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000004000000000000000000001000000000000000000000000000000100000000000000000000000040000000000000000000000000000000000000000000000100000",
+    "blockHash": "0x8f0f164fedcd96c5d3ece2a42179b8e2a5c79369359abb62ff1dd5eb1a567028",
+    "transactionHash": "0xfc83a46c57d81448462283b2770b7e5d500c9f5269f4f78465f3ed666ae18c4c",
+    "logs": [
+      {
+        "transactionIndex": 54,
+        "blockNumber": 39045793,
+        "transactionHash": "0xfc83a46c57d81448462283b2770b7e5d500c9f5269f4f78465f3ed666ae18c4c",
+        "address": "0x0000000000000000000000000000000000001010",
+        "topics": [
+          "0x4dfe1bbbcf077ddc3e01291eea2d5c70c2b422b415d95645b9adcfd678cb1d63",
+          "0x0000000000000000000000000000000000000000000000000000000000001010",
+          "0x000000000000000000000000527738dd42170065d778c89264654b03f8ed989b",
+          "0x000000000000000000000000bdbd4347b082d9d6bdf2da4555a37ce52a2e2120"
+        ],
+        "data": "0x0000000000000000000000000000000000000000000000000008d3f12b11aa9e00000000000000000000000000000000000000000000000053d9319d1befaa62000000000000000000000000000000000000000000000186ea0e91cca11202af00000000000000000000000000000000000000000000000053d05dabf0ddffc4000000000000000000000000000000000000000000000186ea1765bdcc23ad4d",
+        "logIndex": 195,
+        "blockHash": "0x8f0f164fedcd96c5d3ece2a42179b8e2a5c79369359abb62ff1dd5eb1a567028"
+      }
+    ],
+    "blockNumber": 39045793,
+    "cumulativeGasUsed": "9180321",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "b0f3f5743d043d6d0147204e57adad5c",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.12+commit.f00d7308\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/InfinityMintUtil.sol\":\"InfinityMintUtil\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":20},\"remappings\":[]},\"sources\":{\"contracts/InfinityMintUtil.sol\":{\"content\":\"//SPDX-License-Identifier: UNLICENSED\\n//llydia cross 2021\\npragma solidity ^0.8.0;\\n\\nlibrary InfinityMintUtil {\\n    function toString(uint256 _i)\\n        internal\\n        pure\\n        returns (string memory _uintAsString)\\n    {\\n        if (_i == 0) {\\n            return \\\"0\\\";\\n        }\\n        uint256 j = _i;\\n        uint256 len;\\n        while (j != 0) {\\n            len++;\\n            j /= 10;\\n        }\\n        bytes memory bstr = new bytes(len);\\n        uint256 k = len;\\n        while (_i != 0) {\\n            k = k - 1;\\n            uint8 temp = (48 + uint8(_i - (_i / 10) * 10));\\n            bytes1 b1 = bytes1(temp);\\n            bstr[k] = b1;\\n            _i /= 10;\\n        }\\n        return string(bstr);\\n    }\\n\\n    function filepath(\\n        string memory directory,\\n        string memory file,\\n        string memory extension\\n    ) internal pure returns (string memory) {\\n        return\\n            abi.decode(abi.encodePacked(directory, file, extension), (string));\\n    }\\n\\n    //checks if two strings (or bytes) are equal\\n    function isEqual(bytes memory s1, bytes memory s2)\\n        internal\\n        pure\\n        returns (bool)\\n    {\\n        bytes memory b1 = bytes(s1);\\n        bytes memory b2 = bytes(s2);\\n        uint256 l1 = b1.length;\\n        if (l1 != b2.length) return false;\\n        for (uint256 i = 0; i < l1; i++) {\\n            //check each byte\\n            if (b1[i] != b2[i]) return false;\\n        }\\n        return true;\\n    }\\n}\\n\",\"keccak256\":\"0x414a2931293db93950726b75c54b8083051b1004291fd70bac069ad5d769bc53\",\"license\":\"UNLICENSED\"}},\"version\":1}",
+  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206f26b00ed59f7475db7ada91e58fd915823f1d3e9680af0aa8a0b746a98e041564736f6c634300080c0033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206f26b00ed59f7475db7ada91e58fd915823f1d3e9680af0aa8a0b746a98e041564736f6c634300080c0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}

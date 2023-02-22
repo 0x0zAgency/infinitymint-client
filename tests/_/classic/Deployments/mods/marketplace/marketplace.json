@@ -1,0 +1,27 @@
+{
+    "manifest": {
+        "name": "Marketplace Extension",
+        "author": "Llydia Cross",
+        "description": "Enables marketplace functionality inside of InfinityMint.",
+        "version": 1,
+        "dependencies": []
+    },
+    "loaded": 1677033850034,
+    "path": "mods/marketplace/",
+    "name": "marketplace",
+    "enabled": true,
+    "setupMethod": null,
+    "main": true,
+    "mainSrc": "marketplace/main.js",
+    "reactPath": "/Users/llydiacross/Sources/infinitymint-buildtools/../awedacity.eth/src/Deployments/mods/marketplace/",
+    "files": {
+        "pages": [
+            "marketplace/Pages/Offer"
+        ],
+        "images": [],
+        "styles": [],
+        "components": [],
+        "modals": [],
+        "resources": []
+    }
+}

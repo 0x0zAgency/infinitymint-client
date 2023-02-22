@@ -1,0 +1,7 @@
+{
+    "updated": 1677033850067,
+    "project": "awedacity_ticketmint",
+    "scripts": [
+        "MagicMirror.js"
+    ]
+}

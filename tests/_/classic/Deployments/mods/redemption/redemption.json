@@ -1,0 +1,39 @@
+{
+    "manifest": {
+        "name": "ERC721 Redemption Tools",
+        "author": "Llydia Cross",
+        "description": "Offers two forms of redemption for ERC721 tokens. The first method is a passcode based system which doesn't need any wallets to be set up. The second is classic Merkle Tree requiring addresses.",
+        "version": 1,
+        "production": true,
+        "requirements": {
+            "version": "hydra"
+        },
+        "dependencies": [
+            "@openzeppelin/contracts"
+        ]
+    },
+    "loaded": 1677033850035,
+    "path": "mods/redemption/",
+    "name": "redemption",
+    "enabled": true,
+    "main": true,
+    "mainSrc": "redemption/main.js",
+    "reactPath": "/Users/llydiacross/Sources/infinitymint-buildtools/../awedacity.eth/src/Deployments/mods/redemption/",
+    "files": {
+        "pages": [
+            "redemption/Pages/Redemption",
+            "redemption/Pages/RedemptionControls",
+            "redemption/Pages/SimpleWhitelist"
+        ],
+        "images": [],
+        "styles": [],
+        "components": [],
+        "modals": [
+            "redemption/Modals/GeneratePhraseSetModal",
+            "redemption/Modals/LoadPhraseSetModal",
+            "redemption/Modals/ShowPhraseModal",
+            "redemption/Modals/ValidateRequestModal"
+        ],
+        "resources": []
+    }
+}

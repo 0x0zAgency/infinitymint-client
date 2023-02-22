@@ -1,15 +1,45 @@
-import ModController from '../modController';
-import PageController from '../pageController';
-import tokenMethods from '../tokenMethods';
+/**
+ * InfinityMint DAPP Configuration File
+ */
 
-export let chainId;
-export let deployInfo;
+const modController = require('../modController');
+const pageController = require('../pageController');
+
+/**
+ * Locations for the various required files
+ */
+const importRoot = './';
+const resourcesRoot = './Resources/';
+const deploymentsRoot = './Deployments/';
+const pageRoot = './';
+const tokenMethodRoot = './Deployments/scripts/';
+const tokenMethodManifestFilePath = './Deployments/scripts/manifest.json';
+const deployInfoFilePath = './Deployments/.deployInfo';
+const deployInfoProductionFilePath = './Deployments/production/.deployInfo';
+const staticManifestFilePath = './Deployments/static/manifest.json';
+const defaultStaticManifestFilePath =
+    './Deployments/static/default_manifest.json';
+const pagesFilePath = './Resources/pages.json';
+const modsRoot = './Deployments/mods/';
+const modManifestFilePath = './Deployments/mods/modManifest.json';
+const deploymentsProductionRoot = './Deployments/production/';
+const projectsRoot = './Deployments/projects/';
+
+/**
+ * DAPP ChainID and deployInfo
+ */
+let chainId;
+let deployInfo;
+//exports
+module.exports.chainId = chainId;
+module.exports.deployInfo = deployInfo;
+
 /**
  * Holds all of the configuation for the DAPP
  */
-export const Config = {
+const Config = {
     /**
-     * Tweak application settings here
+     * DAPP Settings
      * ============================================================∂========================
      */
     settings: {
@@ -112,48 +142,15 @@ export const Config = {
     },
 
     /**
-     * Hidden Pages
+     * Pages
      * ====================================================================================
      */
-
-    hiddenPages: [
-        'Team',
-        'Facts',
-        'Gallery',
-        'StickerCreator',
-        'EditToken',
-        'Launchpad',
-        //'SelectiveMint',
-    ],
+    hiddenPages: [],
 
     /**
-     * Resources + Language/Localization + Gas Limits
+     * Networks
      * ====================================================================================
      */
-
-    // references a resource file inside of the resources folder
-    // you can use this to change the language of the site or implement custom text with out editing react code
-    resources: 'default_awedacity', // You don't need to put the .js but you can.
-    useGasLimitEstimates: true, // Pull from receipt file
-    gasLimit: {
-        preview: 1_500_000,
-        mint: 1_250_000,
-        mintPreview: 750_000,
-    },
-    defaultSet: 'AwE',
-    sets: {
-        AwE: 'MTY3NDA2NDAzNzIzOC4xOTUz',
-    },
-    dataReader: {
-        readAsText: ['svg', 'tinysvg', 'xml', 'html', 'text'],
-        readAsDataURL: ['jpg', 'jpeg', 'gif', 'png'],
-    },
-
-    /**
-     * Tweak Gas Settings here
-     * ====================================================================================
-     */
-
     networks: {
         1337: {
             name: 'Ganache',
@@ -271,7 +268,7 @@ export const Config = {
             openseaAssets: 'https://testnets.opensea.io/assets/goerli/',
             useAllEvents: false,
         },
-        80_001: {
+        80001: {
             name: 'Polygon Mumbai',
             tokenscan: 'https://mumbai.polygonscan.com/',
             token: 'matic',
@@ -327,14 +324,70 @@ export const Config = {
     },
 
     /**
-     * Ignore and do not change these!
+     * Resources
      * ====================================================================================
      */
+    // references a resource file inside of the resources folder
+    // you can use this to change the language of the site or implement custom text with out editing react code
+    resources: 'default_awedacity', // You don't need to put the .js but you can.
+
+    /**
+     * Gas Limits
+     * ====================================================================================
+     */
+    useGasLimitEstimates: true, // Pull from receipt file
+    gasLimit: {
+        preview: 1_500_000,
+        mint: 1_250_000,
+        mintPreview: 750_000,
+    },
+
+    /**
+     * Misc
+     * ====================================================================================
+     */
+    loadReasons: [
+        'Preparing Bitcoin Ramen...',
+        'Abstracting Core Principles...',
+        'Injecting Mantas DNA Into People...',
+        'Resurrecting Christ And Minting Him To The Blockchain...',
+        'Rolling Up A Joint, Sec...',
+        'Assembling Battle Robots...',
+        'Generating Sad Panda Dalle-2 Outputs...',
+        'Checking For Splunge Buildups...',
+        'Crying...',
+    ],
     credits: {
         llydiaTwitter: '',
         joshTwitter: '',
         agencyTwitter: '',
     },
+    dataReader: {
+        readAsText: ['svg', 'tinysvg', 'xml', 'html', 'text'],
+        readAsDataURL: ['jpg', 'jpeg', 'gif', 'png'],
+    },
+
+    /**
+     * Gems
+     * ====================================================================================
+     */
+    defaultSet: 'AwE',
+    sets: {
+        AwE: 'MTY3NDA2NDAzNzIzOC4xOTUz',
+    },
+
+    /**
+     * Onboard Settings
+     * ====================================================================================
+     */
+    onboardApiKey: 'a67bbab8-49d6-4fb3-88d3-2446be6c37d7',
+
+    /**
+     * Do not edit below this line
+     * ====================================================================================
+     * Ignore and do not change these!
+     * ====================================================================================
+     */
     tokenMap: {
         pathId: 'pathId',
         pathSize: 'pathSize',
@@ -371,28 +424,13 @@ export const Config = {
         },
     },
     deployInfo: {},
+    tokenMethodScripts: {},
     // Only change these if you know what ya doin!
     requiredChainId: 1337, // If .chainId exists in deployments this will be overshadowed
-    onboardApiKey: 'a67bbab8-49d6-4fb3-88d3-2446be6c37d7',
-    loadReasons: [
-        'Preparing Bitcoin Ramen...',
-        'Abstracting Core Principles...',
-        'Injecting Mantas DNA Into People...',
-        'Resurrecting Christ And Minting Him To The Blockchain...',
-        'Rolling Up A Joint, Sec...',
-        'Assembling Battle Robots...',
-        'Generating Sad Panda Dalle-2 Outputs...',
-        'Checking For Splunge Buildups...',
-        'Crying...',
-    ],
+    resourceFile: {},
     loadedContent: {},
     isBadStaticManifest: false,
     nullAddress: '0x0000000000000000000000000000000000000000',
-
-    /**
-     * Do not edit below this line
-     * ====================================================================================
-     */
 
     /**
      * Returns true if api is enabled in deployInfo and there is a public key defined
@@ -406,6 +444,10 @@ export const Config = {
         );
     },
 
+    /**
+     * returns the current name of the project
+     * @returns
+     */
     getProjectName() {
         return Config?.deployInfo?.project || Config.settings.localProject;
     },
@@ -424,12 +466,22 @@ export const Config = {
         let path = Config.settings.projectSpecificMode
             ? Config.getProjectName() + '/'
             : '';
-        if (Config.settings.production) {
-            path += 'production/';
-        }
 
-        return require('/src/Deployments/' + path + contract + '.json');
+        return require(`${
+            (Config.settings.production
+                ? deploymentsRoot
+                : deploymentsProductionRoot) +
+            path +
+            contract +
+            '.json'
+        }`);
     },
+
+    /**
+     * Easy way to return the address of a contract
+     * @param {*} contract
+     * @returns
+     */
     getDeploymentDestination(contract) {
         return (
             Config.deployInfo?.contracts[contract] ||
@@ -437,6 +489,11 @@ export const Config = {
             Config.nullAddress
         );
     },
+
+    /**
+     *
+     * @returns
+     */
     getNetwork() {
         return (
             Config.networks[Config.requiredChainId] || {
@@ -444,9 +501,18 @@ export const Config = {
             }
         );
     },
+
+    /**
+     *
+     * @returns
+     */
     getGasPrices() {
         return Config.networks[Config.requiredChainId].gasPrices || {};
     },
+
+    /**
+     * Loads gas prices from the network config
+     */
     async loadGasPrices() {
         const _ = Config.networks[Config.requiredChainId] || {};
 
@@ -478,6 +544,7 @@ export const Config = {
             };
         }
     },
+
     getGasPrice(type = undefined) {
         if (Config.getNetwork() === undefined) {
             return 22 * 1e9;
@@ -495,6 +562,47 @@ export const Config = {
 
         return 22 * 1e9;
     },
+
+    /**
+     * Loads a resource file from the /Resources/ folder relative to the current file
+     */
+    async loadResourceStrings() {
+        let result = await require(resourcesRoot +
+            Config.resources.replace(/.js/g, '') +
+            '.js');
+
+        Config.resourceFile = result.default || result;
+    },
+
+    /**
+     * Reads a project URI
+     * @param {string} fileName
+     * @returns
+     * @private
+     */
+    async getProjectURI(fileName, isJson = false) {
+        let result;
+        result = await require(`${
+            projectsRoot + (isJson ? fileName + '.json' : fileName)
+        }`);
+
+        result = result?.default || result;
+
+        if (
+            fileName !== 'default' &&
+            Config.settings.overwriteModules &&
+            result.modules !== undefined
+        ) {
+            Config.deployInfo.modules = { ...result.modules };
+        }
+
+        return result;
+    },
+
+    /**
+     * static manifest holds the images to use for what ever depending on the project
+     * @returns
+     */
     async loadStaticManifest() {
         // Init with default values so stuff isnt broken
         const object = {
@@ -511,7 +619,7 @@ export const Config = {
         let result = {};
         try {
             console.log('[👓] Reading manifest.json');
-            result = await require('/src/Deployments/static/manifest.json');
+            result = await require(`${staticManifestFilePath}`);
 
             if (
                 result === null ||
@@ -526,8 +634,7 @@ export const Config = {
             Config.isBadStaticManifest = true;
             console.log(error);
 
-            result =
-                await require('/src/Deployments/static/default_manifest.json');
+            result = await require(`${defaultStaticManifestFilePath}`);
 
             // Just use emergency
             if (result === null || result === undefined) {
@@ -536,15 +643,11 @@ export const Config = {
             }
         }
 
-        document.querySelectorAll('body')[0].style.backgroundColor =
-            result.backgroundColour || 'black';
-        window.document.title =
-            result.pageTitle ||
-            `Infinity Mint - ${Config.getProjectName() || 'Minter'}`;
-
         for (let i = 0; i < result.stylesheets.length; i++) {
             console.log('[⚡] Importing Stylesheet: ' + result.stylesheets[i]);
-            await require('/' + result.stylesheets[i].replace('@', ''));
+            await require(`${
+                importRoot + result.stylesheets[i].replace('@', '')
+            }`);
             result.stylesheets[i] = true;
         }
 
@@ -565,13 +668,15 @@ export const Config = {
         ).replace('@', '');
 
         console.log('[⚡] Fetching Site Background Image: ' + background);
-        result.background = await require('/' + background);
+        result.background = await require(`${importRoot + background}`);
         console.log(
             '[⚡] Fetching Header Background Image: ' + headerBackground
         );
-        result.headerBackground = await require('/' + headerBackground);
+        result.headerBackground = await require(`${
+            importRoot + headerBackground
+        }`);
         console.log('[⚡] Fetching Default Placeholder Image: ' + defaultImage);
-        result.defaultImage = await require('/' + defaultImage);
+        result.defaultImage = await require(`${importRoot + defaultImage}`);
 
         if (result.images === undefined || result.images.length === 0) {
             result.images = object.images;
@@ -582,8 +687,9 @@ export const Config = {
             for (const key of keys) {
                 const value = result.images[key];
                 console.log('[⚡] Fetching Custom Image: ' + value);
-                result.images[key.toLowerCase()] = await require('/' +
-                    value.replace('@', ''));
+                result.images[key.toLowerCase()] = await require(`${
+                    importRoot + value.replace('@', '')
+                }`);
             }
         } catch (error) {
             console.log('[😞] Bad custom image files');
@@ -593,12 +699,18 @@ export const Config = {
         Config.loadedContent = result;
         return result;
     },
+
+    /**
+     * Run dev/updateImports.js to gather new pages and update the pages.json file
+     */
     async loadPages() {
-        const pages = await require('/Resources/pages.json');
+        const pages = await require(`${pagesFilePath}`);
 
         for (const page of pages) {
             console.log('[✒️pages] requiring page ' + page.path);
-            let requirePage = await require('/' + page.path.replace('.js', ''));
+            let requirePage = await require(`${
+                pageRoot + page.path.replace('.js', '')
+            }`);
             requirePage = requirePage.default || requirePage;
 
             if (requirePage.url === undefined) {
@@ -607,33 +719,34 @@ export const Config = {
                         (page.id || page.name) +
                         ' does not have url set, registering as virtual page'
                 );
-                requirePage = PageController.registerFakePage(requirePage);
+                requirePage = pageController.registerFakePage(requirePage);
             } else {
-                requirePage = PageController.registerPage(
+                requirePage = pageController.registerPage(
                     requirePage,
                     requirePage.developer === true
                 );
             }
         }
     },
+
+    /**
+     * Reads the modManifest file and loads all mods inside of the /Mods/ folder
+     */
     async loadMods() {
         try {
-            const result =
-                await require('/src/Deployments/mods/modManifest.json');
+            const result = await require(`${modManifestFilePath}`);
 
             for (const modname of Object.keys(result.mods)) {
-                ModController.mods[modname] = result.mods[modname];
+                modController.mods[modname] = result.mods[modname];
                 console.log('[💎gems] found gem: ' + modname);
 
                 try {
                     console.log(
                         '[💎gems] reading mod manifest: ' + modname + '.json'
                     );
-                    const manifest = require('/src/Deployments/mods/' +
-                        modname +
-                        '/' +
-                        modname +
-                        '.json');
+                    const manifest = require(`${
+                        modsRoot + modname + '/' + modname + '.json'
+                    }`);
                     result.mods[modname] = manifest;
                 } catch (error) {
                     console.log(
@@ -646,14 +759,18 @@ export const Config = {
 
                 if (result.mods[modname].main) {
                     console.log('[💎gems] loading ' + modname + "'s main.js");
-                    const promise = async () =>
-                        require('/src/Deployments/mods/' +
+                    // eslint-disable-next-line no-loop-func
+                    const promise = async () => {
+                        await require(`${
+                            modsRoot +
                             (result.mods[modname].mainSrc ||
-                                modname + '/main.js'));
+                                modname + '/main.js')
+                        }`);
+                    };
 
                     promise().then((result) => {
                         console.log('[💎gems] loaded' + modname + "'s main.js");
-                        ModController.modMains[modname] =
+                        modController.modMains[modname] =
                             result.default || result;
                     });
                 }
@@ -663,7 +780,7 @@ export const Config = {
                     result.files[modname] !== undefined &&
                     result.files[modname].pages !== undefined
                 ) {
-                    ModController.modPages[modname] = Object.values(
+                    modController.modPages[modname] = Object.values(
                         result.files[modname].pages
                     ).map((_page) => {
                         console.log('[💎gems] found page: ' + _page);
@@ -675,11 +792,11 @@ export const Config = {
                 }
             }
 
-            ModController.modManifest = { ...result };
+            modController.modManifest = { ...result };
 
             // Now lets require all the mod pages
             let pages = [];
-            for (const newPages of Object.values(ModController.modPages)) {
+            for (const newPages of Object.values(modController.modPages)) {
                 pages = [...pages, ...newPages];
             }
 
@@ -687,8 +804,9 @@ export const Config = {
             for (const page of pages) {
                 try {
                     console.log('[💎gems] requiring page: ' + page.page);
-                    let requirePage = await require('/src/Deployments/mods/' +
-                        page.page.replace('.js', ''));
+                    let requirePage = await require(`${
+                        modsRoot + page.page.replace('.js', '')
+                    }`);
 
                     requirePage = requirePage.default || requirePage;
                     requirePage.src = page.page;
@@ -701,9 +819,9 @@ export const Config = {
                                 '  does not have url set, registering as virtual gem page'
                         );
                         requirePage =
-                            PageController.registerFakePage(requirePage);
+                            pageController.registerFakePage(requirePage);
                     } else {
-                        requirePage = PageController.registerPage(
+                        requirePage = pageController.registerPage(
                             requirePage,
                             requirePage.developer === true,
                             null,
@@ -725,31 +843,81 @@ export const Config = {
                 }
             }
 
-            ModController.modPages = newModPages;
-            ModController.modsSuccess = true;
+            modController.modPages = newModPages;
+            modController.modsSuccess = true;
         } catch (error) {
             console.log('[⚠️] WARNING! failure to load gems');
             console.log(error);
         }
     },
+
+    /**
+     * Returns a background from the projects resources
+     */
     getBackground() {
         return (
             Config.loadedContent.background?.default ||
             Config.loadedContent.defaultImage?.default
         );
     },
+
+    /**
+     * Returns a header background from the projects resources
+     * @returns
+     */
     getHeaderBackground() {
         return (
             Config.loadedContent.headerBackground?.default ||
             Config.loadedContent.defaultImage?.default
         );
     },
+
+    /**
+     * Returns a base64 encoded image from the projects resources
+     * @param {string} image
+     * @returns
+     */
     getImage(image) {
         return (
             Config.loadedContent?.images[image.toLowerCase()]?.default ||
             Config.loadedContent.defaultImage?.default
         );
     },
+
+    /**
+     * loads scripts for tokenMethods
+     * @returns
+     */
+    async loadTokenMethodScripts() {
+        let scripts = {};
+        let manifest = await require(`${tokenMethodManifestFilePath}`);
+
+        if (
+            manifest !== null &&
+            manifest?.scripts !== undefined &&
+            manifest.scripts.length > 0
+        )
+            for (let i = 0; i < manifest.scripts.length; i++) {
+                try {
+                    scripts[manifest.scripts[i].split('.')[0]] = (
+                        await require(`${
+                            tokenMethodRoot + manifest.scripts[i]
+                        }`)
+                    ).default;
+                    Config.tokenMethodScripts = scripts;
+                } catch (error) {
+                    console.log(
+                        '[😞] could not load token script:' +
+                            manifest.scripts[i]
+                    );
+                    console.error(error);
+                }
+            }
+    },
+
+    /**
+     * Loads deployInfo, chainId and project as well as the project specific settings and resource files, must be called immediately before the app is started
+     */
     async load() {
         // Set up the chainId
         try {
@@ -757,10 +925,9 @@ export const Config = {
                 try {
                     if (Config.settings.production) {
                         deployInfo =
-                            await require('/src/Deployments/production/.deployInfo');
+                            await require(`${deployInfoProductionFilePath}`);
                     } else {
-                        deployInfo =
-                            await require('/src/Deployments/.deployInfo');
+                        deployInfo = await require(`${deployInfoFilePath}`);
                     }
                 } catch (error) {
                     console.log('[😞] could not load .deployInfo');
@@ -768,8 +935,11 @@ export const Config = {
                     deployInfo = null;
                 }
 
-                if (deployInfo !== null) {
-                    let result = await fetch(deployInfo.default);
+                if (
+                    deployInfo !== null &&
+                    (deployInfo.default || deployInfo) === 'string'
+                ) {
+                    let result = await fetch(deployInfo.default || deployInfo);
                     result = await result.text();
                     Config.deployInfo = JSON.parse(result);
 
@@ -780,25 +950,33 @@ export const Config = {
                         Config.settings.localProject =
                             Config.deployInfo.project;
                     }
+                } else deployInfo = deployInfo.default || deployInfo;
 
-                    if (
-                        chainId == null &&
-                        Config.deployInfo.chainId !== undefined
-                    ) {
-                        Config.requiredChainId = Config.deployInfo.chainId;
-                    }
+                Config.deployInfo = deployInfo;
+
+                if (
+                    chainId == null &&
+                    Config.deployInfo.chainId !== undefined
+                ) {
+                    Config.requiredChainId = Config.deployInfo.chainId;
+                    chainId = Config.deployInfo.chainId;
                 }
             } else {
                 try {
-                    deployInfo = await require('/src/Deployments/.deployInfo' +
-                        (Config.settings.projectSpecificMode ? '_bundle' : ''));
+                    deployInfo = await require(`${
+                        deployInfoFilePath +
+                        (Config.settings.projectSpecificMode ? '_bundle' : '')
+                    }`);
                 } catch (error) {
                     console.log('[😞] could not load .deployInfo_bundle');
                     console.log(error);
                     deployInfo = null;
                 }
 
-                if (deployInfo !== null) {
+                if (
+                    deployInfo !== null &&
+                    (deployInfo.default || deployInfo) === 'string'
+                ) {
                     let result = await fetch(deployInfo.default);
                     result = await result.text();
                     Config.deployInfo = JSON.parse(result);
@@ -820,33 +998,15 @@ export const Config = {
                                 Config.deployInfo.defaultProject
                             ].chainId;
                     }
-                }
+                } else deployInfo = deployInfo.default || deployInfo;
+
+                Config.deployInfo = deployInfo;
             }
 
-            if (!Config.settings.projectSpecificMode) {
-                try {
-                    if (Config.settings.production) {
-                        chainId =
-                            await require('/src/Deployments/production/.chainId');
-                    } else {
-                        chainId = await require('/src/Deployments/.chainId');
-                    }
-                } catch (error) {
-                    console.log('[😞] could not load chainId');
-                    console.log(error);
-                    chainId = null;
-                }
-
-                if (chainId !== null) {
-                    let result = await fetch(chainId.default);
-                    result = await result.text();
-                    result = Number.parseInt(result);
-                    Config.requiredChainId = result;
-                }
-
-                await tokenMethods.loadScripts();
-            }
-
+            console.log('[📙] Requiring token methods');
+            await Config.loadTokenMethodScripts();
+            console.log('[📙] Requiring resource strings');
+            await Config.loadResourceStrings();
             console.log('[📙] Requiring pages');
             await Config.loadPages();
             console.log('[📙] Requiring gems');
@@ -858,4 +1018,5 @@ export const Config = {
         }
     },
 };
-export default Config;
+module.exports.Config = Config;
+module.exports.default = Config;

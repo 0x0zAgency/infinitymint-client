@@ -1,0 +1,370 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+@font-face {
+    font-family: 'ColoPro';
+    src: url('../Resources/Colo-Pro.otf');
+}
+
+@font-face {
+    font-family: 'nikeboi';
+    src: url('../Resources/coolvetica.otf');
+}
+@font: root {
+    --menu-bar-color: #280f91;
+    --dark-font-color: #280f91;
+    --light-font-color: #ffd501;
+}
+
+.row {
+    --bs-gutter-x: 0 !important;
+}
+
+.card {
+    margin: 8px 8px 8px 8px;
+}
+
+.navbar-light .navbar-toggler-icon {
+    background-image: url('./hamburger.svg') !important;
+}
+
+.header-bg-image {
+    background-position: center;
+    background-size: cover;
+    background-repeat: repeat;
+    height: 480px;
+}
+
+.canvas-container {
+    max-height: 1024px !important;
+}
+
+.loading-token {
+    opacity: 0.2;
+}
+
+@media (min-width: 992px) {
+    .header-text {
+        font-size: 4.75vw !important;
+    }
+    .header-subtext {
+        font-size: 1.5vw !important;
+    }
+}
+
+.header-text {
+    font-family: 'ColoPro' !important;
+    font-size: 9vw;
+}
+
+.header-subtext {
+    font-size: 3.5vw;
+}
+
+.svg-fix > svg {
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 45vh;
+}
+
+.svg-fix-tiny > svg {
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 100px;
+}
+
+.cool-link {
+    color: limegreen;
+    transition: 0.5s;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1f1b1b;
+    border: 3.6px solid #6a6a6a;
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #b3afb3;
+}
+
+::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 0px;
+    box-shadow: inset 0px 0px 0px 0px #f0f0f0;
+}
+
+body {
+    min-height: 100% !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    background-position: center !important;
+    background-size: cover !important;
+    background-color: black;
+    overflow-x: hidden; /** literally bandaid that shit **/
+}
+
+.navbar-hover {
+    opacity: 0.5;
+    transition: 1s;
+}
+
+.navbar-hover:hover {
+    opacity: 1;
+}
+
+.cool-link:hover {
+    background: linear-gradient(
+        to right,
+        #6666ff,
+        #0099ff,
+        #00ff00,
+        #ff3399,
+        #6666ff
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: rainbow_animation 2s ease-in-out infinite;
+    background-size: 400% 100%;
+}
+
+/* Flickering animation */
+@keyframes flicker {
+    0%,
+    18%,
+    22%,
+    25%,
+    53%,
+    57%,
+    100% {
+        text-shadow: 0 0 2px #fff, 0 0 8px #fff, 0 0 12px #fff,
+            0 0 16px rgb(255, 0, 212), 0 0 22px rgb(255, 0, 212),
+            0 0 44px rgb(255, 0, 212);
+    }
+
+    20%,
+    24%,
+    55% {
+        text-shadow: none;
+    }
+}
+
+@keyframes flickerBlue {
+    0%,
+    18%,
+    22%,
+    25%,
+    53%,
+    57%,
+    100% {
+        text-shadow: 0 0 2px rgb(181, 225, 255), 0 0 8px rgb(181, 225, 255),
+            0 0 12px rgb(20, 60, 194), 0 0 16px rgb(20, 60, 194),
+            0 0 22px rgb(20, 60, 224), 0 0 44px rgb(20, 60, 224);
+    }
+
+    20%,
+    24%,
+    55% {
+        text-shadow: none;
+    }
+}
+
+@keyframes flickerRed {
+    0%,
+    18%,
+    22%,
+    25%,
+    53%,
+    57%,
+    100% {
+        text-shadow: 0 0 2px rgb(255, 123, 0), 0 0 8px rgb(221, 115, 15),
+            0 0 12px rgb(255, 41, 41), 0 0 16px rgb(255, 41, 41),
+            0 0 22px rgb(255, 41, 41), 0 0 44px rgb(255, 41, 41);
+    }
+
+    20%,
+    24%,
+    55% {
+        text-shadow: none;
+    }
+}
+
+@keyframes flickerGreen {
+    0%,
+    18%,
+    22%,
+    25%,
+    53%,
+    57%,
+    100% {
+        text-shadow: 0 0 2px rgb(208, 255, 0), 0 0 8px rgb(125, 221, 15),
+            0 0 12px rgb(41, 255, 52), 0 0 16px rgb(41, 255, 52),
+            0 0 22px rgb(60, 170, 17), 0 0 44px rgb(60, 170, 17);
+    }
+
+    20%,
+    24%,
+    55% {
+        text-shadow: none;
+    }
+}
+
+.cogFont {
+    font-size: 65px !important;
+    opacity: 0.75;
+}
+
+.loadingIcon {
+    position: absolute;
+    animation: linear infinite;
+    animation-name: moveRight;
+    animation-duration: 60s;
+}
+
+.loadingIconEquipable {
+    position: absolute;
+    margin-left: -4px;
+    margin-top: -10px;
+}
+
+@keyframes moveRight {
+    0% {
+        margin-left: -25%;
+        margin-top: -100px;
+    }
+    50% {
+        margin-left: 50%;
+        margin-top: 50px;
+    }
+    100% {
+        margin-left: 125%;
+        margin-top: 0px;
+    }
+}
+
+.fullOpacityOnHover:hover {
+    opacity: 1 !important;
+}
+
+.neonText {
+    font-family: 'nikeboi' !important;
+    animation: flicker 1.5s infinite alternate;
+}
+
+.neonTextBlue {
+    font-family: 'nikeboi' !important;
+    animation: flickerBlue 1.5s infinite alternate;
+}
+
+.neonTextRed {
+    font-family: 'nikeboi' !important;
+    animation: flickerRed 1.5s infinite alternate;
+}
+
+.neonTextGreen {
+    font-family: 'nikeboi' !important;
+    animation: flickerGreen 1.5s infinite alternate;
+}
+
+@-ms-keyframes spin {
+    from {
+        -ms-transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+    }
+}
+@-moz-keyframes spin {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.svgHover:hover {
+    opacity: 0.5;
+}
+
+.spinText {
+    animation-name: spin;
+    animation-duration: 1000ms;
+    animation-timing-function: linear;
+    background-image: none !important;
+    animation-iteration-count: infinite;
+}
+
+.force-white {
+    color: white !important;
+}
+
+.force-black {
+    color: black !important;
+}
+
+.header-bg-cover {
+    background-color: black;
+    position: absolute;
+    width: 100%;
+    height: 400px;
+    z-index: 0;
+    opacity: 0.65;
+    filter: blur(64px);
+}
+
+.textGold {
+    color: gold !important;
+}
+
+.rainbow-text-animated {
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 3px 3px rgb(245, 250, 255);
+    background-size: 400% 100%;
+    color: transparent;
+    background-image: linear-gradient(
+        to left,
+        violet,
+        indigo,
+        blue,
+        green,
+        yellow,
+        orange,
+        red
+    );
+    animation: rainbow_animation 2s ease-in-out infinite;
+}
+
+@keyframes rainbow_animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}

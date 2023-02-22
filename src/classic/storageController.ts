@@ -38,7 +38,7 @@ export class StorageController {
             transfers: {},
             redemptionRequests: {},
             awaitingCollection: {},
-            pagePrefrences: {},
+            pagePreferences: {},
         };
     }
 
@@ -50,7 +50,7 @@ export class StorageController {
     setGlobalPreference(key: string | number, value: any) {
         const pref = { ...this.getGlobalPreferences() };
         pref[key] = value;
-        this.values.pagePrefrences.global = pref;
+        this.values.pagePreferences.global = pref;
         this.saveData();
     }
 
@@ -77,7 +77,7 @@ export class StorageController {
      * @returns
      */
     getGlobalPreferences() {
-        return this.values.pagePrefrences.global || {};
+        return this.values.pagePreferences.global || {};
     }
 
     /**
@@ -130,11 +130,11 @@ export class StorageController {
                 'storage'
             );
 
-        if (this.values.pagePrefrences[id] === undefined) {
-            this.values.pagePrefrences[id] = {};
+        if (this.values.pagePreferences[id] === undefined) {
+            this.values.pagePreferences[id] = {};
         }
 
-        this.values.pagePrefrences[id][key] = value;
+        this.values.pagePreferences[id][key] = value;
         this.saveData();
     }
 
@@ -144,16 +144,17 @@ export class StorageController {
      * @param {string} id
      * @returns
      */
-    getPagePreference(key: string, id: any, log = false) {
-        if (id !== null && typeof id !== 'string') {
+    getPagePreference(key: string, id?: any, log = false) {
+        if (typeof id === 'number') id = id.toString();
+        if (id && id !== null && typeof id !== 'string') {
             id = id.id || id.name || 'default';
         } else if (
+            id === undefined ||
             id === null ||
             (typeof id === 'string' && id.toLowerCase() === 'global')
         ) {
             id = this.getLocationHref();
         }
-
         if (log) {
             Controller.log(
                 "Reading page prefrence for page id '" +
@@ -164,11 +165,11 @@ export class StorageController {
             );
         }
 
-        if (this.values.pagePrefrences[id] === undefined) {
+        if (this.values.pagePreferences[id] === undefined) {
             return undefined;
         }
 
-        return this.values.pagePrefrences[id][key];
+        return this.values.pagePreferences[id][key];
     }
 
     /**

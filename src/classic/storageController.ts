@@ -144,16 +144,17 @@ export class StorageController {
      * @param {string} id
      * @returns
      */
-    getPagePreference(key: string, id: any, log = false) {
-        if (id !== null && typeof id !== 'string') {
+    getPagePreference(key: string, id?: any, log = false) {
+        if (typeof id === 'number') id = id.toString();
+        if (id && id !== null && typeof id !== 'string') {
             id = id.id || id.name || 'default';
         } else if (
+            id === undefined ||
             id === null ||
             (typeof id === 'string' && id.toLowerCase() === 'global')
         ) {
             id = this.getLocationHref();
         }
-
         if (log) {
             Controller.log(
                 "Reading page prefrence for page id '" +

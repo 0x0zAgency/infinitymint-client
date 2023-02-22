@@ -1,9 +1,9 @@
 import validator from 'validator';
 import tinySVG from './tinysvg';
 import CryptoJS from 'crypto-js';
-import StorageController from './storageController';
-import StickerController from './stickerController';
-import Controller from './controller';
+import storageController from './storageController';
+import stickerController from './stickerController';
+import controller from './controller';
 import { Component } from 'react';
 
 /**
@@ -11,9 +11,9 @@ import { Component } from 'react';
  * @returns
  */
 export const getGasPrice = () => {
-    let config = Controller.getConfig();
+    let config = controller.getConfig();
     return config.getGasPrice(
-        StorageController.getGlobalPreference('gasSetting') || 'medium'
+        storageController.getGlobalPreference('gasSetting') || 'medium'
     );
 };
 
@@ -41,6 +41,7 @@ export const send = async (
 ) => {
     let statement = prepareCall(contractName, method, args);
     if (options.gasPrice === undefined) options.gasPrice = getGasPrice();
+    options.from = controller.accounts[0];
     return await statement.send(options);
 };
 
@@ -69,7 +70,7 @@ export const call = async (contractName: any, method: any, args: any = []) => {
  * @returns
  */
 export const prepareCall = (contractName, method: string, args?: any) => {
-    let contract = Controller.getContract(contractName);
+    let contract = controller.getContract(contractName);
 
     if (!contract?.methods?.[method])
         throw new Error(
@@ -134,12 +135,12 @@ export const saveObject = (
     values: any,
     encode: boolean = true
 ) => {
-    if (StorageController.values[key] === undefined) {
-        StorageController.values[key][id] = {};
+    if (storageController.values[key] === undefined) {
+        storageController.values[key][id] = {};
     }
 
-    if (StorageController.values[key][id] === undefined) {
-        StorageController.values[key][id] = {};
+    if (storageController.values[key][id] === undefined) {
+        storageController.values[key][id] = {};
     }
 
     for (let [index, value] of Object.entries<any>(values)) {
@@ -151,15 +152,15 @@ export const saveObject = (
             try {
                 value = encodeURI(value);
             } catch (error) {
-                Controller.log('failed to encode value', 'error');
-                Controller.log(error);
+                controller.log('failed to encode value', 'error');
+                controller.log(error);
             }
         }
 
-        StorageController.values[key][id][index] = value;
+        storageController.values[key][id][index] = value;
     }
 
-    StorageController.saveData();
+    storageController.saveData();
 };
 
 /**
@@ -273,29 +274,29 @@ export const unpackColours = (colours) => {
 };
 
 export const getDeploymentAddress = (token, link) => {
-    let Config = Controller.getConfig();
-    if (StorageController.values.deployments[token.tokenId] === undefined) {
+    let Config = controller.getConfig();
+    if (storageController.values.deployments[token.tokenId] === undefined) {
         return Config.nullAddress;
     }
 
     if (
-        StorageController.values.deployments[token.tokenId][link.contract] ===
+        storageController.values.deployments[token.tokenId][link.contract] ===
         undefined
     ) {
         return Config.nullAddress;
     }
 
     return (
-        StorageController.values.deployments[token.tokenId][link.contract]
+        storageController.values.deployments[token.tokenId][link.contract]
             ._address ||
-        StorageController.values.deployments[token.tokenId][link.contract]
+        storageController.values.deployments[token.tokenId][link.contract]
             .address ||
         Config.nullAddress
     );
 };
 
 export const hasLink = (token, key) => {
-    const links = Controller.getProjectSettings().links || {};
+    const links = controller.getProjectSettings().links || {};
 
     if (links[key] === undefined) {
         return false;
@@ -309,8 +310,8 @@ export const hasLink = (token, key) => {
 };
 
 export const hasDeployment = (token, index) => {
-    let Config = Controller.getConfig();
-    const links = Controller.getProjectSettings().links || {};
+    let Config = controller.getConfig();
+    const links = controller.getProjectSettings().links || {};
     const keys = Object.keys(links);
     let link;
 
@@ -326,14 +327,14 @@ export const hasDeployment = (token, index) => {
     }
 
     return (
-        StorageController.values.deployments[token.tokenId] !== undefined &&
-        StorageController.values.deployments[token.tokenId][link.contract] !==
+        storageController.values.deployments[token.tokenId] !== undefined &&
+        storageController.values.deployments[token.tokenId][link.contract] !==
             undefined &&
-        StorageController.values.deployments[token.tokenId][link.contract].link
+        storageController.values.deployments[token.tokenId][link.contract].link
             ?.index === index &&
-        StorageController.values.deployments[token.tokenId][link.contract]
+        storageController.values.deployments[token.tokenId][link.contract]
             .address !== undefined &&
-        StorageController.values.deployments[token.tokenId][link.contract]
+        storageController.values.deployments[token.tokenId][link.contract]
             .address !== Config.nullAddress
     );
 };
@@ -343,7 +344,7 @@ export const enycrptString = (string, key) => CryptoJS.AES.encrypt(string, key);
 export const getHost = () => {
     let host = window.location.host;
 
-    host = !StorageController.getLocationHref().includes('https://')
+    host = !storageController.getLocationHref().includes('https://')
         ? 'http://' + host
         : 'https://' + host;
 
@@ -355,14 +356,14 @@ export const getHost = () => {
 };
 
 export const connectWallet = async () => {
-    const result = await Controller.onboardWallet();
-    let Config = Controller.getConfig();
+    const result = await controller.onboardWallet();
+    let Config = controller.getConfig();
 
     if (result) {
-        StorageController.setGlobalPreference('forceWallet', true);
+        storageController.setGlobalPreference('forceWallet', true);
 
         if (!Config.settings.requireWallet) {
-            StorageController.setGlobalPreference('requireWallet', true);
+            storageController.setGlobalPreference('requireWallet', true);
         }
     }
 
@@ -460,33 +461,33 @@ export const loadStickers = async (reactComponent: Component) => {
 
         // Must be called before any use of sticker controller method
         if (
-            StickerController.instance === undefined ||
-            StickerController.isDifferentTokenId(
+            stickerController.instance === undefined ||
+            stickerController.isDifferentTokenId(
                 (reactComponent.state as any).tokenId
             )
         ) {
-            await StickerController.createContract(
+            await stickerController.createContract(
                 (reactComponent.state as any).tokenId
             );
         }
 
-        let stickerPrice = await StickerController.getStickerPrice();
+        let stickerPrice = await stickerController.getStickerPrice();
 
         if (stickerPrice !== undefined && stickerPrice !== null) {
-            stickerPrice = Controller.web3.utils.fromWei(stickerPrice);
+            stickerPrice = controller.web3.utils.fromWei(stickerPrice);
         }
 
         reactComponent.setState({
             stickerPrice,
         });
 
-        let stickers = await StickerController.getStickers();
+        let stickers = await stickerController.getStickers();
 
         stickers = stickers.map((value) => {
             let sticker;
             sticker =
                 typeof value !== 'object'
-                    ? Controller.decodeSticker(value, true, false)
+                    ? controller.decodeSticker(value, true, false)
                     : value;
 
             sticker = sticker.request || sticker;
@@ -496,7 +497,7 @@ export const loadStickers = async (reactComponent: Component) => {
             }
 
             sticker.verified = false;
-            if (StickerController.verifyStickerChecksum(sticker.sticker)) {
+            if (stickerController.verifyStickerChecksum(sticker.sticker)) {
                 sticker.verified = true;
             }
 
@@ -524,8 +525,8 @@ export const loadStickers = async (reactComponent: Component) => {
             });
         }
     } catch (error) {
-        Controller.log('[😞] Sticker Error', 'error');
-        Controller.log(error);
+        controller.log('[😞] Sticker Error', 'error');
+        controller.log(error);
         reactComponent.setState({
             hasStickerContract: false,
         });
@@ -544,16 +545,16 @@ export const loadStickers = async (reactComponent: Component) => {
 export const getStickers = async (tokenId: any) => {
     try {
         // Must be called before any use of sticker controller method
-        await StickerController.createContract(tokenId);
-        let stickers = await StickerController.getStickers();
+        await stickerController.createContract(tokenId);
+        let stickers = await stickerController.getStickers();
 
         stickers = stickers.map((value: any) => {
             let sticker = value;
             if (typeof sticker !== 'object') {
-                sticker = Controller.decodeSticker(value, true, false);
+                sticker = controller.decodeSticker(value, true, false);
                 sticker.sticker = JSON.parse(sticker.sticker);
                 sticker.verified = false;
-                if (StickerController.verifyStickerChecksum(sticker.sticker)) {
+                if (stickerController.verifyStickerChecksum(sticker.sticker)) {
                     sticker.verified = true;
                 }
 
@@ -571,8 +572,8 @@ export const getStickers = async (tokenId: any) => {
 
         return stickers;
     } catch (error) {
-        Controller.log('[😞] Could not get stickers', 'error');
-        Controller.log(error);
+        controller.log('[😞] Could not get stickers', 'error');
+        controller.log(error);
     }
 
     return [];
@@ -580,14 +581,14 @@ export const getStickers = async (tokenId: any) => {
 
 // TODO: needs rewriting, pulls image paths twice right now
 export const loadPath = async (projectURI, pathId) => {
-    let Config = Controller.getConfig();
+    let Config = controller.getConfig();
     // If don't load
     try {
         if (
-            Controller.paths[pathId] !== undefined &&
-            Controller.paths[pathId].loaded
+            controller.paths[pathId] !== undefined &&
+            controller.paths[pathId].loaded
         ) {
-            Controller.log(
+            controller.log(
                 'skipping loading path for pathId ' +
                     pathId +
                     ' as already loaded',
@@ -599,14 +600,14 @@ export const loadPath = async (projectURI, pathId) => {
         if (
             projectURI.paths[pathId].dontLoad ||
             (projectURI.paths[pathId].paths.dontLoad &&
-                Controller.paths[pathId] === undefined)
+                controller.paths[pathId] === undefined)
         ) {
             if (
                 (projectURI?.paths[pathId].paths.ipfs === false ||
                     projectURI?.paths[pathId].paths?.ipfsURL) &&
                 projectURI.paths[pathId].paths.localStorage !== true
             ) {
-                Controller.paths[pathId] = {
+                controller.paths[pathId] = {
                     ...projectURI.paths[pathId],
                     loaded: true,
                 };
@@ -634,7 +635,7 @@ export const loadPath = async (projectURI, pathId) => {
                                           10) *
                                       10
                         ); // Try for 15 seconds
-                        Controller.log(
+                        controller.log(
                             'Fetching big path from IPFS: ' +
                                 projectURI.paths[pathId].paths.ipfsURL,
                             'ipfs'
@@ -650,7 +651,7 @@ export const loadPath = async (projectURI, pathId) => {
                         if (
                             projectURI.paths[pathId].paths.localStorage === true
                         ) {
-                            Controller.log(
+                            controller.log(
                                 'Fetching big path from local storage: ' +
                                     projectURI.paths[pathId].paths.data,
                                 'paths'
@@ -672,7 +673,7 @@ export const loadPath = async (projectURI, pathId) => {
                 } else if (
                     projectURI.paths[pathId].paths.localStorage === true
                 ) {
-                    Controller.log(
+                    controller.log(
                         'Fetching big path from local storage: ' +
                             projectURI.paths[pathId].paths.data,
                         'paths'
@@ -699,7 +700,7 @@ export const loadPath = async (projectURI, pathId) => {
                 });
 
                 try {
-                    Controller.paths[pathId] = {
+                    controller.paths[pathId] = {
                         ...projectURI.paths[pathId],
                         paths: {
                             ...projectURI.paths[pathId].paths,
@@ -721,7 +722,7 @@ export const loadPath = async (projectURI, pathId) => {
                             );
                             reader.readAsDataURL(blob);
                         });
-                        Controller.paths[pathId] = {
+                        controller.paths[pathId] = {
                             ...projectURI.paths[pathId],
                             paths: {
                                 ...projectURI.paths[pathId].paths,
@@ -730,13 +731,13 @@ export const loadPath = async (projectURI, pathId) => {
                         };
                         // Decode the SVG
                         if (
-                            Controller.paths[pathId].paths.data.includes(
+                            controller.paths[pathId].paths.data.includes(
                                 'base64,'
                             )
                         ) {
-                            Controller.paths[pathId].paths.data =
-                                Controller.Base64.decode(
-                                    Controller.paths[pathId].paths.data.split(
+                            controller.paths[pathId].paths.data =
+                                controller.Base64.decode(
+                                    controller.paths[pathId].paths.data.split(
                                         'base64,'
                                     )[1]
                                 );
@@ -746,7 +747,7 @@ export const loadPath = async (projectURI, pathId) => {
                         projectURI.paths[pathId].fileName.includes('.jpg') ||
                         projectURI.paths[pathId].fileName.indexOf('.jpeg')
                     ) {
-                        Controller.log(
+                        controller.log(
                             `fetching pathId's ${pathId} image data and encoding it in base64`,
                             'paths'
                         );
@@ -757,7 +758,7 @@ export const loadPath = async (projectURI, pathId) => {
                                       projectURI.paths[pathId].paths.data,
                             'base64'
                         );
-                        Controller.paths[pathId] = {
+                        controller.paths[pathId] = {
                             ...projectURI.paths[pathId],
                             paths: {
                                 ...projectURI.paths[pathId].paths,
@@ -766,7 +767,7 @@ export const loadPath = async (projectURI, pathId) => {
                             loaded: true,
                         };
                     } else {
-                        Controller.log(
+                        controller.log(
                             'Path loading not supported for unknown filetype: ' +
                                 projectURI.paths[pathId].fileName,
                             'warning'
@@ -776,8 +777,8 @@ export const loadPath = async (projectURI, pathId) => {
             }
         }
     } catch (error) {
-        Controller.log('[😞] Could not load path', 'error');
-        Controller.log(error);
+        controller.log('[😞] Could not load path', 'error');
+        controller.log(error);
     }
 };
 
@@ -815,7 +816,7 @@ export const loadToken = async (
     checkFlags: boolean = true,
     returnFlags = false
 ) => {
-    let Config = Controller.getConfig();
+    let Config = controller.getConfig();
     try {
         reactComponent.setState({
             loading: true,
@@ -825,10 +826,10 @@ export const loadToken = async (
             throw new Error('tokenId is not defined');
         }
 
-        const result = await Controller.getTokenObject(
+        const result = await controller.getTokenObject(
             (reactComponent.state as any).tokenId
         );
-        const projectURI = Controller.getProjectSettings();
+        const projectURI = controller.getProjectSettings();
 
         // If the final result lands up being an object
         if (result !== null) {
@@ -841,22 +842,22 @@ export const loadToken = async (
 
             if (
                 checkFlags &&
-                ((!Controller.hasFlag(
+                ((!controller.hasFlag(
                     (reactComponent.state as any).tokenId,
                     'checkedTokenURI'
                 ) &&
-                    !Controller.hasFlag(
+                    !controller.hasFlag(
                         (reactComponent.state as any).tokenId,
                         'tokenURI'
                     ) &&
-                    result.owner === Controller.accounts[0]) ||
-                    (result.owner === Controller.accounts[0] &&
-                        StorageController.values.tokenURI[
+                    result.owner === controller.accounts[0]) ||
+                    (result.owner === controller.accounts[0] &&
+                        storageController.values.tokenURI[
                             (reactComponent.state as any).tokenId
                         ] === undefined))
             ) {
-                const tokenURI = await Controller.callMethod(
-                    Controller.accounts[0],
+                const tokenURI = await controller.callMethod(
+                    controller.accounts[0],
                     'InfinityMint',
                     'tokenURI',
                     {
@@ -871,50 +872,50 @@ export const loadToken = async (
                  * that way as well.
                  */
 
-                Controller.setFlag(
+                controller.setFlag(
                     (reactComponent.state as any).tokenId,
                     'checkedTokenURI',
                     true
                 );
 
                 if (tokenURI === undefined || tokenURI === '') {
-                    Controller.setFlag(
+                    controller.setFlag(
                         (reactComponent.state as any).tokenId,
                         'emptyTokenURI',
                         true
                     );
                     if (returnFlags || !Config.settings.forceTokenURIRefresh) {
-                        Controller.setFlag(
+                        controller.setFlag(
                             (reactComponent.state as any).tokenId,
                             'tokenURI',
                             true
                         );
                     } else {
                         try {
-                            await Controller.updateTokenURI(
+                            await controller.updateTokenURI(
                                 (reactComponent.state as any).tokenId
                             );
-                            Controller.setFlag(
+                            controller.setFlag(
                                 (reactComponent.state as any).tokenId,
                                 'tokenURI',
                                 false
                             );
                         } catch (error) {
-                            Controller.log('[😞] TokenURI Error', 'error');
-                            Controller.log(error);
+                            controller.log('[😞] TokenURI Error', 'error');
+                            controller.log(error);
                         }
                     }
                 } else {
                     try {
                         const finish = (uri) => {
                             if (uri.default === true) {
-                                Controller.setFlag(
+                                controller.setFlag(
                                     (reactComponent.state as any).tokenId,
                                     'tokenURI',
                                     false
                                 );
                             } else {
-                                Controller.setFlag(
+                                controller.setFlag(
                                     (reactComponent.state as any).tokenId,
                                     'tokenURI',
                                     true
@@ -922,11 +923,11 @@ export const loadToken = async (
                             }
 
                             if (
-                                StorageController.values.tokenURI[
+                                storageController.values.tokenURI[
                                     (reactComponent.state as any).tokenId
                                 ] === undefined
                             ) {
-                                StorageController.values.tokenURI[
+                                storageController.values.tokenURI[
                                     (reactComponent.state as any).tokenId
                                 ] = uri;
                             }
@@ -934,11 +935,11 @@ export const loadToken = async (
                             // Update if newer
                             if (
                                 uri.updated >
-                                (StorageController.values.tokenURI[
+                                (storageController.values.tokenURI[
                                     (reactComponent.state as any).tokenId
                                 ].updated || 0)
                             ) {
-                                StorageController.values.tokenURI[
+                                storageController.values.tokenURI[
                                     (reactComponent.state as any).tokenId
                                 ] = uri;
                             }
@@ -955,14 +956,14 @@ export const loadToken = async (
 
                         finish(processedTokenURI);
                     } catch (error) {
-                        Controller.log(
+                        controller.log(
                             '[😞] unparsable or broken tokenURI',
                             'error'
                         );
-                        Controller.log(error);
+                        controller.log(error);
                     }
 
-                    StorageController.saveData();
+                    storageController.saveData();
                 }
             }
 
@@ -971,21 +972,20 @@ export const loadToken = async (
                 !returnFlags &&
                 checkFlags &&
                 Config.settings.forceTokenURIRefresh &&
-                Controller.hasFlag(
+                controller.hasFlag(
                     (reactComponent.state as any).tokenId,
                     'tokenURI'
                 ) &&
-                result.owner === Controller.accounts[0]
+                result.owner === controller.accounts[0]
             ) {
-                await Controller.updateTokenURI(
-                    (reactComponent.state as any).tokenId
-                )
+                await controller
+                    .updateTokenURI((reactComponent.state as any).tokenId)
                     .then(() => {
-                        Controller.toggleFlag(
+                        controller.toggleFlag(
                             (reactComponent.state as any).tokenId,
                             'tokenURI'
                         );
-                        Controller.setFlag(
+                        controller.setFlag(
                             (reactComponent.state as any).tokenId,
                             'checkedTokenURI',
                             true
@@ -999,7 +999,7 @@ export const loadToken = async (
                             loading: false,
                         });
                     });
-                Controller.setFlag(
+                controller.setFlag(
                     (reactComponent.state as any).tokenId,
                     'emptyTokenURI',
                     false
@@ -1016,7 +1016,7 @@ export const loadToken = async (
         }
 
         if ((reactComponent.state as any).isValid && returnFlags) {
-            return StorageController.values.tokens[
+            return storageController.values.tokens[
                 (reactComponent.state as any).tokenId
             ].flags;
         }
@@ -1025,7 +1025,7 @@ export const loadToken = async (
             throw new Error('bad token');
         }
     } catch (error) {
-        Controller.log(error);
+        controller.log(error);
         reactComponent.setState({
             error,
             isValid: false,
@@ -1034,7 +1034,7 @@ export const loadToken = async (
 };
 
 export const getLink = (token, key) => {
-    const project = Controller.getProjectSettings();
+    const project = controller.getProjectSettings();
     return project.links[key];
 };
 
@@ -1043,7 +1043,7 @@ export const hasLinkKey = (token, key) => {
         return false;
     }
 
-    const project = Controller.getProjectSettings();
+    const project = controller.getProjectSettings();
 
     if (project.links === undefined) {
         return false;

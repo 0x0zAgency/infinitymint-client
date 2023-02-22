@@ -1,8 +1,7 @@
 require('mocha');
 const { assert } = require('chai');
-const classic = require('../../dist/src/classic').default;
 const testConfig = require('../_/classic/config.js'); // This is the config file specifically for testing
-const { controller } = classic;
+const controller = require('../../dist/src/classic/controller').default; //the controller
 
 describe('[Classic] Controller Class', () => {
     /**

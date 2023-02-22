@@ -7,16 +7,27 @@ import * as StickerController from './classic/stickerController';
 import * as Resources from './classic/resources';
 import * as TinySVG from './classic/tinysvg';
 import * as TokenMethods from './classic/tokenMethods';
+import * as IPFSController from './classic/ipfs/web3Storage';
 
-const _controller = Controller.default;
-const _modController = ModController.default;
-const _storageController = StorageController.default;
-const _helpers = Helpers;
-const _pageController = PageController.default;
-const _stickerController = StickerController.default;
-const _resources = Resources.default;
-const _tinySVG = TinySVG.default;
-const _tokenMethods = TokenMethods.default;
+export const _ipfsController = IPFSController.default;
+
+export const _controller = Controller.default;
+
+export const _modController = ModController.default;
+
+export const _storageController = StorageController.default;
+
+export const _helpers = Helpers;
+
+export const _pageController = PageController.default;
+
+export const _stickerController = StickerController.default;
+
+export const _resources = Resources.default;
+
+export const _tinySVG = TinySVG.default;
+
+export const _tokenMethods = TokenMethods.default;
 
 const exportDefaultExports = {
     controller: _controller,
@@ -26,6 +37,7 @@ const exportDefaultExports = {
     pageController: _pageController,
     stickerController: _stickerController,
     resources: _resources,
+    ipfsController: _ipfsController,
     tinySVG: _tinySVG,
     tokenMethods: _tokenMethods,
 };

@@ -3,7 +3,6 @@ const { assert } = require('chai');
 const classic = require('../../dist/src/classic').default;
 const testConfig = require('../_/classic/config.js'); // This is the config file specifically for testing
 const { controller } = classic;
-const { call, send } = require('../../dist/src/classic/helpers');
 
 describe('[Classic] Controller Class', () => {
     /**

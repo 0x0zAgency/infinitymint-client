@@ -249,7 +249,7 @@ export class Controller {
             this.defaultProjectURI = await this.getProjectURI();
             controller.log('[✔️] Default URI Loaded Loaded');
             this.loadAbis();
-            controller.log('[✔️]ABI Loaded Loaded');
+            controller.log('[✔️] ABIs Loaded Loaded');
             this.initializeContracts();
             controller.log('[✔️] Initialized Contracts');
         } catch (error) {

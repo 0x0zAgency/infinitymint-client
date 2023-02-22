@@ -8,35 +8,36 @@ const pageController = require('../pageController');
 /**
  * Locations for the various required files
  */
-const importRoot = '/';
+const importRoot = './';
 const resourcesRoot = './Resources/';
 const deploymentsRoot = './Deployments/';
 const pageRoot = './';
 const tokenMethodRoot = './Deployments/scripts/';
 const tokenMethodManifestFilePath = './Deployments/scripts/manifest.json';
-const deployInfoFilePath = './Deployments/deployInfo.json';
+const deployInfoFilePath = './Deployments/.deployInfo';
+const deployInfoProductionFilePath = './Deployments/production/.deployInfo';
 const staticManifestFilePath = './Deployments/static/manifest.json';
 const defaultStaticManifestFilePath =
     './Deployments/static/default_manifest.json';
-const chainIdFilePath = './Deployments/.chainId';
-const chainIdProductionFilePath = './Deployments/production/.chainId';
 const pagesFilePath = './Resources/pages.json';
 const modsRoot = './Deployments/mods/';
 const modManifestFilePath = './Deployments/mods/modManifest.json';
-const deployInfoProductionFilePath = './Deployments/production/deployInfo.json';
 const deploymentsProductionRoot = './Deployments/production/';
 const projectsRoot = './Deployments/projects/';
 
 /**
  * DAPP ChainID and deployInfo
  */
-export let chainId;
-export let deployInfo;
+let chainId;
+let deployInfo;
+//exports
+module.exports.chainId = chainId;
+module.exports.deployInfo = deployInfo;
 
 /**
  * Holds all of the configuation for the DAPP
  */
-export const Config = {
+const Config = {
     /**
      * DAPP Settings
      * ============================================================∂========================
@@ -642,12 +643,6 @@ export const Config = {
             }
         }
 
-        document.querySelectorAll('body')[0].style.backgroundColor =
-            result.backgroundColour || 'black';
-        window.document.title =
-            result.pageTitle ||
-            `Infinity Mint - ${Config.getProjectName() || 'Minter'}`;
-
         for (let i = 0; i < result.stylesheets.length; i++) {
             console.log('[⚡] Importing Stylesheet: ' + result.stylesheets[i]);
             await require(`${
@@ -764,12 +759,14 @@ export const Config = {
 
                 if (result.mods[modname].main) {
                     console.log('[💎gems] loading ' + modname + "'s main.js");
-                    const promise = async () =>
-                        require(`${
+                    // eslint-disable-next-line no-loop-func
+                    const promise = async () => {
+                        await require(`${
                             modsRoot +
                             (result.mods[modname].mainSrc ||
                                 modname + '/main.js')
                         }`);
+                    };
 
                     promise().then((result) => {
                         console.log('[💎gems] loaded' + modname + "'s main.js");
@@ -930,7 +927,7 @@ export const Config = {
                         deployInfo =
                             await require(`${deployInfoProductionFilePath}`);
                     } else {
-                        deployInfo = await require(`${deployInfo}`);
+                        deployInfo = await require(`${deployInfoFilePath}`);
                     }
                 } catch (error) {
                     console.log('[😞] could not load .deployInfo');
@@ -938,8 +935,11 @@ export const Config = {
                     deployInfo = null;
                 }
 
-                if (deployInfo !== null) {
-                    let result = await fetch(deployInfo.default);
+                if (
+                    deployInfo !== null &&
+                    (deployInfo.default || deployInfo) === 'string'
+                ) {
+                    let result = await fetch(deployInfo.default || deployInfo);
                     result = await result.text();
                     Config.deployInfo = JSON.parse(result);
 
@@ -950,13 +950,16 @@ export const Config = {
                         Config.settings.localProject =
                             Config.deployInfo.project;
                     }
+                } else deployInfo = deployInfo.default || deployInfo;
 
-                    if (
-                        chainId == null &&
-                        Config.deployInfo.chainId !== undefined
-                    ) {
-                        Config.requiredChainId = Config.deployInfo.chainId;
-                    }
+                Config.deployInfo = deployInfo;
+
+                if (
+                    chainId == null &&
+                    Config.deployInfo.chainId !== undefined
+                ) {
+                    Config.requiredChainId = Config.deployInfo.chainId;
+                    chainId = Config.deployInfo.chainId;
                 }
             } else {
                 try {
@@ -970,7 +973,10 @@ export const Config = {
                     deployInfo = null;
                 }
 
-                if (deployInfo !== null) {
+                if (
+                    deployInfo !== null &&
+                    (deployInfo.default || deployInfo) === 'string'
+                ) {
                     let result = await fetch(deployInfo.default);
                     result = await result.text();
                     Config.deployInfo = JSON.parse(result);
@@ -992,28 +998,9 @@ export const Config = {
                                 Config.deployInfo.defaultProject
                             ].chainId;
                     }
-                }
-            }
+                } else deployInfo = deployInfo.default || deployInfo;
 
-            if (!Config.settings.projectSpecificMode) {
-                try {
-                    if (Config.settings.production) {
-                        chainId = await require(`${chainIdProductionFilePath}`);
-                    } else {
-                        chainId = await require(`${chainIdFilePath}`);
-                    }
-                } catch (error) {
-                    console.log('[😞] could not load chainId');
-                    console.log(error);
-                    chainId = null;
-                }
-
-                if (chainId !== null) {
-                    let result = await fetch(chainId.default);
-                    result = await result.text();
-                    result = Number.parseInt(result);
-                    Config.requiredChainId = result;
-                }
+                Config.deployInfo = deployInfo;
             }
 
             console.log('[📙] Requiring token methods');
@@ -1031,4 +1018,5 @@ export const Config = {
         }
     },
 };
-export default Config;
+module.exports.Config = Config;
+module.exports.default = Config;

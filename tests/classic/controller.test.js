@@ -2,10 +2,11 @@ require('mocha');
 const { assert } = require('chai');
 const testConfig = require('../_/classic/config.js'); // This is the config file specifically for testing
 const controller = require('../../dist/src/classic/controller').default; //the controller
+const { send, call } = require('../../dist/src/classic/helpers');
 
 describe('[Classic] Controller Class', () => {
     /**
-     * @type {typeof import('../../dist/src/classic/utils/config').Config}
+     * @type {typeof import('../../dist/src/classic/utils/config.mjs').Config}
      */
     let config;
     /**
@@ -30,5 +31,21 @@ describe('[Classic] Controller Class', () => {
             project.contracts['InfinityMint'],
             config.deployInfo.contracts['InfinityMint']
         );
+    });
+
+    it('Should try and get the max supply, should be equal to a variable in the project file', async () => {
+        let result = await call('InfinityMint', 'totalSupply');
+        assert.equal(result, project.deployment.maxSupply);
+    });
+
+    it('Should try and authenticate the current deployer with the InfinityMint contract', async () => {
+        await send('InfinityMint', 'setPrivilages', [
+            config.deployInfo.deployer,
+            true,
+        ]);
+        let result = await call('InfinityMint', 'isAuthenticated', [
+            config.deployInfo.deployer,
+        ]);
+        assert.isTrue(result);
     });
 });

@@ -5,7 +5,7 @@ const controller = require('../../dist/src/classic/controller').default; //the c
 
 describe('[Classic] Config Test', () => {
     /**
-     * @type {typeof import('../../dist/src/classic/utils/config').Config}
+     * @type {typeof import('../../dist/src/classic/utils/config.mjs').Config}
      */
     let config;
     it('Should attempt to load the controller using our test config', async () => {

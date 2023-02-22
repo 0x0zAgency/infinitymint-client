@@ -1,5 +1,5 @@
-const glob = require('glob');
-const Mocha = require('mocha');
+import Mocha from 'mocha';
+import glob from 'glob';
 
 (async () => {
     try {
@@ -8,7 +8,7 @@ const Mocha = require('mocha');
         // Add all the files to mocha.
         await new Promise((resolve, reject) => {
             // Relative to the project root.
-            glob(process.cwd() + '/tests/**/*.test.js', (error, files) => {
+            glob(process.cwd() + '/tests/**/*.test.ts', (error, files) => {
                 if (error) {
                     reject(error);
                     return;

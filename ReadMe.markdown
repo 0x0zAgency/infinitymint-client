@@ -4,9 +4,9 @@ InfinityMint Client is a collection of React friendly components and utilities t
 
 ## 🗿 Requirements
 
-- Mac OSX (any version), Windows (XP, Vista, 7, 8, 10, 11), Debian (5+), Ubuntu (14+)
-- Node **16.0.0** or Higher
-- ZSH, Fish or equivalent. **(Bash users may/not encounter issues.)**
+-   Mac OSX (any version), Windows (XP, Vista, 7, 8, 10, 11), Debian (5+), Ubuntu (14+)
+-   Node **16.0.0** or Higher
+-   ZSH, Fish or equivalent. **(Bash users may/not encounter issues.)**
 
 ## 🗿 Boilerplates & Starter-kits
 

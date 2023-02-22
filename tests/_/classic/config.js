@@ -2,8 +2,10 @@
  * InfinityMint DAPP Configuration File
  */
 
-const modController = require('../../../dist/src/classic/modController');
-const pageController = require('../../../dist/src/classic/pageController');
+const modController =
+    require('../../../dist/src/classic/modController').default;
+const pageController =
+    require('../../../dist/src/classic/pageController').default;
 
 /**
  * Locations for the various required files
@@ -64,6 +66,8 @@ const loadTokenMethods = async (tokenMethodManifest) => {
 const loadPages = async (pages) => {
     for (const page of pages) {
         console.log('[✒️pages] requiring page ' + page.path);
+
+        /** 
         let requirePage = await require(`${
             './' + (page?.path || '').replace('.js', '')
         }`);
@@ -82,6 +86,7 @@ const loadPages = async (pages) => {
                 requirePage.developer === true
             );
         }
+        */
     }
 };
 
@@ -181,6 +186,7 @@ const loadGems = async (modManifest) => {
                 console.log(error);
             }
 
+            /**
             if (modManifest.mods[modname].main) {
                 console.log('[💎gems] loading ' + modname + "'s main.js");
                 // eslint-disable-next-line no-loop-func
@@ -191,6 +197,7 @@ const loadGems = async (modManifest) => {
                 console.log('[💎gems] loaded' + modname + "'s main.js");
                 modController.modMains[modname] = result.default || result;
             }
+            **/
 
             if (
                 modManifest.mods[modname].enabled &&
@@ -218,6 +225,8 @@ const loadGems = async (modManifest) => {
         }
 
         const newModPages = {};
+
+        /**
         for (const page of pages) {
             try {
                 console.log('[💎gems] requiring page: ' + page.page);
@@ -258,6 +267,7 @@ const loadGems = async (modManifest) => {
                 console.log(error);
             }
         }
+        */
 
         modController.modPages = newModPages;
         modController.modsSuccess = true;
@@ -872,11 +882,11 @@ const Config = {
             console.log('[📙] Requiring token methods');
             //await loadTokenMethods(tokenMethodManifest);
             console.log('[📙] Requiring resource strings');
-            //await loadResourceStrings(Config.resources);
+            await loadResourceStrings(Config.resources);
             console.log('[📙] Requiring pages');
-            //await loadPages(pages);
+            await loadPages(pages);
             console.log('[📙] Requiring gems');
-            //await loadGems(modManifest);
+            await loadGems(modManifest);
             console.log('[📙] Requiring Static Manifest Assets');
             //await loadStaticManifest(staticManifest);
         } catch (error) {

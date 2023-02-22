@@ -16,7 +16,7 @@
     },
     "main": "dist/index.js",
     "scripts": {
-        "test": "npx tsc && node dev/test.js",
+        "test": "npx tsc && ts-node dev/test.ts",
         "start": "node react/start.js",
         "build": "node react/build.js",
         "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",

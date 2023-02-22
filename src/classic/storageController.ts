@@ -323,7 +323,7 @@ export class StorageController {
      * Saves all the data inside of fields to local storage and packs objects accordingly
      */
     saveData(log = false) {
-        Controller.log('Saving storage data', 'storage');
+        if (log) Controller.log('Saving storage data', 'storage');
         for (const [key, value] of Object.entries(this.fields)) {
             let item = this.values[key];
             if (typeof value === 'object') {

@@ -82,6 +82,8 @@ export const prepareCall = (contractName, method: string, args?: any) => {
     else if (args instanceof Array === false && typeof args === 'object')
         args = Object.values(args);
 
+    //remove bad args
+    args = args.filter((arg) => arg !== undefined && arg !== null);
     let callable = contract.methods[method];
     // invalid attempt to spread non-iterable instance in order to be iterable, non-array objects must have a [symbol.iterator]() method
     //IM SO SORRY FOR THIS

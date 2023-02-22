@@ -6,7 +6,6 @@ import * as PageController from './classic/pageController';
 import * as StickerController from './classic/stickerController';
 import * as Resources from './classic/resources';
 import * as TinySVG from './classic/tinysvg';
-import * as IPFSController from './classic/ipfsController';
 import * as TokenMethods from './classic/tokenMethods';
 
 const _controller = Controller.default;
@@ -17,7 +16,6 @@ const _pageController = PageController.default;
 const _stickerController = StickerController.default;
 const _resources = Resources.default;
 const _tinySVG = TinySVG.default;
-const _ipfsController = IPFSController.default;
 const _tokenMethods = TokenMethods.default;
 
 const exportDefaultExports = {
@@ -29,7 +27,6 @@ const exportDefaultExports = {
     stickerController: _stickerController,
     resources: _resources,
     tinySVG: _tinySVG,
-    ipfsController: _ipfsController,
     tokenMethods: _tokenMethods,
 };
 export default exportDefaultExports;

@@ -136,8 +136,8 @@ export class TokenMethods {
         let Config = controller.getConfig();
         this.scripts['SimpleSVG'] = this.scripts['SimpleSVG'] || SimpleSVG;
         this.scripts = Config.tokenMethodScripts;
-        this.renderToken = this.getScript('default').renderToken;
-        this.createTokenURI = this.getScript('default').createTokenURI;
+        this.renderToken = this.getScript('default')?.renderToken;
+        this.createTokenURI = this.getScript('default')?.createTokenURI;
 
         let renderScript =
             Config.deployInfo?.modules?.renderScript ||

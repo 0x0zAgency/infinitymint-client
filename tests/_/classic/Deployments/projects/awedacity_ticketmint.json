@@ -1,0 +1,2246 @@
+{
+    "description": {
+        "name": "AWEdacity Tickets",
+        "token": "AWEdacity🎫Ticket",
+        "tokenPlural": "AWEdacity🎫Tickets",
+        "tokenSymbol": "🎫",
+        "authors": [
+            {
+                "name": "Awedacity Confrence",
+                "ens": "awedacityconference.eth",
+                "twitter": "https://twitter.com/nathania_ml",
+                "avatar": "https://pbs.twimg.com/profile_images/1615766585171394574/UEQZOFBa_400x400.jpg"
+            },
+            {
+                "name": "🎫Mint.eth > Metaticket.eth",
+                "ens": "0x0z.eth",
+                "twitter": "https://twitter.com/0x0zAgency",
+                "avatar": "https://pbs.twimg.com/profile_images/1587901306039148544/Igqsaicc_400x400.jpg"
+            },
+            {
+                "name": "llydia.eth",
+                "ens": "llydia.eth",
+                "twitter": "https://twitter.com/lydsmas",
+                "avatar": "https://pbs.twimg.com/profile_images/1617141865672835074/f4RN4jnT_400x400.jpg"
+            },
+            {
+                "name": "0xWizardOf0z",
+                "ens": "0xWizardOfOz.eth",
+                "twitter": "https://twitter.com/0xWizardOf0z",
+                "avatar": "https://pbs.twimg.com/profile_images/1600937709823991808/qLpmre9L_400x400.png"
+            },
+            {
+                "name": "Koma",
+                "ens": "kaelta.eth",
+                "twitter": "https://twitter.com/komakae_",
+                "avatar": "https://pbs.twimg.com/profile_images/1615512522223755265/mSJsgL8-_400x400.jpg"
+            }
+        ]
+    },
+    "approved": [
+        "0xDFF917ab602e8508b6907dE1b038dd52B24A2379",
+        "0x8514aa48bbB79e9C231890a829Ca33984D38cCf7",
+        "0xbb49c781bd22c93c392a9b1e290501252b598ac3",
+        "0x527738Dd42170065d778C89264654b03f8Ed989B",
+        "0x8084fb0d655C9F08144816763FB123f0F09023F4",
+        "0xef46e23AD155ADBECCEF6AF35692f2Dd2dCB9144",
+        "0x0f27f90361508Ab70B520e8D19C011A78Da280CA",
+        "0x0EeBdD64fc9Ea93C55E0A5C2890387bc03B31cA2",
+        "0x69b96FC9db0aD03B74f3316D7c641cdB278ac243",
+        "0x7319E2DdB7983F2CB5Fe7b89A6f696D8Cf448751",
+        "0xAAE3398095E293C47998633A26Fd8e3337eb385E",
+        "0x1ec694a3686f93250ca05dcaB18e5b1c117D9070",
+        "0x305fd35a294F34398EB610F78408949A5F43B750",
+        "0x717d084F4733d3bff12AbEa8320966Fc538604c8",
+        "0xCca79565d7C8cE1e6d2da6e4F4C6a4d45eb69AFb",
+        "0xD1512C208A1C26CB34039499A2B28967e3bDEbd6",
+        "0xAF50E3950F33C7a5c9662256c3575cA18cb9C9F0",
+        "0xD51a5d4ac575f13b3ec12F17D990472113cc7075",
+        "0xf6072c3A01635eb3128ABe25A8006bE3ED964Ca7",
+        "0x0E845836fb126498eD42f5B69ce2400601B68412",
+        "0xf882F0cF537Ed6188cfb1438C66Ae35Cc5B9792c",
+        "0xB9f191Eb8d586Eeb97199EF75C0954917961D3f4",
+        "0xB25a7e27515Ba692808Ca55EF033261a373F2600",
+        "0xA9D1960140D1F0DB5Fbd96D743db9C420E0CEc7d"
+    ],
+    "royalties": {
+        "stickerSplit": 5,
+        "payouts": [
+            {
+                "name": "0x0z.eth",
+                "address": "0xDFF917ab602e8508b6907dE1b038dd52B24A2379",
+                "splits": {
+                    "mints": 5,
+                    "stickers": 5
+                }
+            },
+            {
+                "name": "awedacityconference.eth",
+                "address": "0x8514aa48bbB79e9C231890a829Ca33984D38cCf7",
+                "splits": {
+                    "mints": 95,
+                    "stickers": 95
+                }
+            }
+        ]
+    },
+    "static": {
+        "background": "@Images/awedacity-bg.png",
+        "headerBackground": "@Images/awedacity-header.jpeg",
+        "defaultImage": "@Images/sad_panda.jpg",
+        "backgroundColour": "#ffd501",
+        "menuColour": "#280f91",
+        "stylesheets": [
+            "Styles/bootstrap.quartz.css"
+        ],
+        "images": {
+            "features": "@Images/default_features.jpg",
+            "loading": "@Images/loading.gif",
+            "texture": "@Images/texture.jpg",
+            "teamDefaultIcon": "@Images/person.png",
+            "noWeb3": "@Images/missingWeb3.png",
+            "loadingComponent": "@Images/loading.gif"
+        },
+        "project": "awedacity_ticketmint",
+        "updated": 1677033850452
+    },
+    "deployment": {
+        "colourChunkSize": 9999,
+        "seedNumber": 256,
+        "startingPrice": 25,
+        "stickerSplit": 20,
+        "baseTokenValue": 1000000000000000000,
+        "randomessFactor": 420,
+        "nameCount": 4,
+        "mustGenerateName": true,
+        "previewCount": 3,
+        "maxSupply": 420,
+        "extraColours": 3,
+        "maxRandomNumber": 512,
+        "incrementalMode": false,
+        "stopDuplicateMint": false,
+        "matchedMode": false,
+        "lowestRarity": false,
+        "highestRarity": false,
+        "randomRarity": true
+    },
+    "paths": {
+        "0": {
+            "fileName": "awedacity/ticket-covers/1.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/1.png",
+                "uploaded": 1675708423447,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/1.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "87e0bc8494e7f13af0f4ce122ed9ac37",
+                "ipfs": true,
+                "size": "3777.6",
+                "cid": "bafybeiexhj3jh354quf2ypmoothqyzjn3zsx3gayl3crk4ej22inbyd5v4",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeiexhj3jh354quf2ypmoothqyzjn3zsx3gayl3crk4ej22inbyd5v4/0.png"
+            },
+            "pathSize": 1,
+            "pathId": 0
+        },
+        "1": {
+            "fileName": "awedacity/ticket-covers/2.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/2.png",
+                "uploaded": 1675708427804,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/2.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "7be885336538551a5a3c144481f94070",
+                "ipfs": true,
+                "size": "3759.1",
+                "cid": "bafybeibe5y5rl2lon3zgmp2243aonrbbyqmh2qsma5i2bozd5flh2soese",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeibe5y5rl2lon3zgmp2243aonrbbyqmh2qsma5i2bozd5flh2soese/1.png"
+            },
+            "pathSize": 1,
+            "pathId": 1
+        },
+        "2": {
+            "fileName": "awedacity/ticket-covers/3.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/3.png",
+                "uploaded": 1675708431486,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/3.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "399c2f08fc8ebb25061e5fa45be26def",
+                "ipfs": true,
+                "size": "3843.3",
+                "cid": "bafybeiaaluwxtqa3ocsryjpvlwj5zz2gl5x2pv6mpsh5tq4ojaqretrq3y",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeiaaluwxtqa3ocsryjpvlwj5zz2gl5x2pv6mpsh5tq4ojaqretrq3y/2.png"
+            },
+            "pathSize": 1,
+            "pathId": 2
+        },
+        "3": {
+            "fileName": "awedacity/ticket-covers/4.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/4.png",
+                "uploaded": 1675708435873,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/4.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "ade26f7d5c005da57b22b99668044e3b",
+                "ipfs": true,
+                "size": "3285.3",
+                "cid": "bafybeiercn6keiefbucp67d3c2wcuufjp22edtikzgnmia5csam5ri5jlu",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeiercn6keiefbucp67d3c2wcuufjp22edtikzgnmia5csam5ri5jlu/3.png"
+            },
+            "pathSize": 1,
+            "pathId": 3
+        },
+        "4": {
+            "fileName": "awedacity/ticket-covers/5.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/5.png",
+                "uploaded": 1675708439745,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/5.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "022adb6752492cccca59f378b5e7359f",
+                "ipfs": true,
+                "size": "3993.7",
+                "cid": "bafybeifgvwhopjnm627st7eq4ewb2o4juulwsggfrinvkzcwlnopfrenkq",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeifgvwhopjnm627st7eq4ewb2o4juulwsggfrinvkzcwlnopfrenkq/4.png"
+            },
+            "pathSize": 1,
+            "pathId": 4
+        },
+        "5": {
+            "fileName": "awedacity/ticket-covers/6.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/6.png",
+                "uploaded": 1675708443537,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/6.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "70cc20b3a3319193c1eedba389e49994",
+                "ipfs": true,
+                "size": "3204.7",
+                "cid": "bafybeifu2pbqk52efire37ygb7zsqvzlobi3eptx3lnlahdkodt3nynfwa",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeifu2pbqk52efire37ygb7zsqvzlobi3eptx3lnlahdkodt3nynfwa/5.png"
+            },
+            "pathSize": 1,
+            "pathId": 5
+        },
+        "6": {
+            "fileName": "awedacity/ticket-covers/7.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/7.png",
+                "uploaded": 1675708447743,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/7.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "6dcf6664559b3272c1df603e145edd42",
+                "ipfs": true,
+                "size": "4399.7",
+                "cid": "bafybeig33ljtdfjbxajyeju4b33rrsgo7u4xf6nttvzhgfs7xzqp7nanwa",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeig33ljtdfjbxajyeju4b33rrsgo7u4xf6nttvzhgfs7xzqp7nanwa/6.png"
+            },
+            "pathSize": 1,
+            "pathId": 6
+        },
+        "7": {
+            "fileName": "awedacity/ticket-covers/8.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/8.png",
+                "uploaded": 1675708451270,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/8.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "b5f399f79a66673662ad0dc324448db8",
+                "ipfs": true,
+                "size": "3108.5",
+                "cid": "bafybeif66p3ucdxit6io7lbpbhrgaxz6nb4uyafts7isqv7ip2lwf2tm2q",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeif66p3ucdxit6io7lbpbhrgaxz6nb4uyafts7isqv7ip2lwf2tm2q/7.png"
+            },
+            "pathSize": 1,
+            "pathId": 7
+        },
+        "8": {
+            "fileName": "awedacity/ticket-covers/9.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/9.png",
+                "uploaded": 1675708454788,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/9.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "23507ca7ef05173d2d42fb23dcc482a3",
+                "ipfs": true,
+                "size": "3697.6",
+                "cid": "bafybeie6duvfrxvkyunn4zttn5k5l3sy3uzigs653jglnek4uje5racdiy",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeie6duvfrxvkyunn4zttn5k5l3sy3uzigs653jglnek4uje5racdiy/8.png"
+            },
+            "pathSize": 1,
+            "pathId": 8
+        },
+        "9": {
+            "fileName": "awedacity/ticket-covers/10.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/10.png",
+                "uploaded": 1675708458496,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/10.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "9a46baeed49ea836fecd93e9d54e966d",
+                "ipfs": true,
+                "size": "4513.9",
+                "cid": "bafybeiam5diejrfghi3s3nvau6apcq5kmy7chf377ok3zbu66nqfwt3mni",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeiam5diejrfghi3s3nvau6apcq5kmy7chf377ok3zbu66nqfwt3mni/9.png"
+            },
+            "pathSize": 1,
+            "pathId": 9
+        },
+        "10": {
+            "fileName": "awedacity/ticket-covers/11.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/11.png",
+                "uploaded": 1675708461970,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/11.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "ee5d0442629185005a739ee2a9e5c0d2",
+                "ipfs": true,
+                "size": "3402.5",
+                "cid": "bafybeic3qyd6uayapymey5ab4rt5c43pd6qe7moqpikq6sh4wp6g2wxjpu",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeic3qyd6uayapymey5ab4rt5c43pd6qe7moqpikq6sh4wp6g2wxjpu/10.png"
+            },
+            "pathSize": 1,
+            "pathId": 10
+        },
+        "11": {
+            "fileName": "awedacity/ticket-covers/12.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/12.png",
+                "uploaded": 1675708465143,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/12.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "753d29a16884aa07ae23bfb7767194b4",
+                "ipfs": true,
+                "size": "4054.2",
+                "cid": "bafybeicxwtlykazmmrcxi2jpsj3bby6324rcxc33ktqk52qhw6jqho4vtu",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeicxwtlykazmmrcxi2jpsj3bby6324rcxc33ktqk52qhw6jqho4vtu/11.png"
+            },
+            "pathSize": 1,
+            "pathId": 11
+        },
+        "12": {
+            "fileName": "awedacity/ticket-covers/13.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/13.png",
+                "uploaded": 1675708468526,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/13.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "baebdeb57b5288d35b20f50bf6d6f418",
+                "ipfs": true,
+                "size": "3830.8",
+                "cid": "bafybeibhobkuumvlysbi4bdvblimhv5pywpig2on5jvyvwb6xp4gdcxkqq",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeibhobkuumvlysbi4bdvblimhv5pywpig2on5jvyvwb6xp4gdcxkqq/12.png"
+            },
+            "pathSize": 1,
+            "pathId": 12
+        },
+        "13": {
+            "fileName": "awedacity/ticket-covers/14.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/14.png",
+                "uploaded": 1675708471488,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/14.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "d74a257a064a9fe469a44027e6ffe25c",
+                "ipfs": true,
+                "size": "4149.0",
+                "cid": "bafybeieidicfy6oomk75txp6mv3gkclvgmwasj6nic665x776yrrlchsc4",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeieidicfy6oomk75txp6mv3gkclvgmwasj6nic665x776yrrlchsc4/13.png"
+            },
+            "pathSize": 1,
+            "pathId": 13
+        },
+        "14": {
+            "fileName": "awedacity/ticket-covers/15.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/15.png",
+                "uploaded": 1675708475265,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/15.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "0ee6a6ed927ba416e1ee307dfdf61969",
+                "ipfs": true,
+                "size": "3684.7",
+                "cid": "bafybeihqsit64n4v3rspdxh7pwcigzt4n2pufltfviy32jfnviaypemj3q",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeihqsit64n4v3rspdxh7pwcigzt4n2pufltfviy32jfnviaypemj3q/14.png"
+            },
+            "pathSize": 1,
+            "pathId": 14
+        },
+        "15": {
+            "fileName": "awedacity/ticket-covers/16.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/16.png",
+                "uploaded": 1675708478939,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/16.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "b31863e62e247db0ac3e85f30e091a22",
+                "ipfs": true,
+                "size": "3226.2",
+                "cid": "bafybeihxo2syoc5pd3ueybeeupbtjtscz2xrwm2p3petsrpujewm4rmcpu",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeihxo2syoc5pd3ueybeeupbtjtscz2xrwm2p3petsrpujewm4rmcpu/15.png"
+            },
+            "pathSize": 1,
+            "pathId": 15
+        },
+        "16": {
+            "fileName": "awedacity/ticket-covers/17.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/17.png",
+                "uploaded": 1675708482040,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/17.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "aff156d2dc050a444bce14c2a03d6472",
+                "ipfs": true,
+                "size": "3737.3",
+                "cid": "bafybeihoryxew3k3wzjpdufwb36lr5nqbfnuydhkweysoflyuow6s3oise",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeihoryxew3k3wzjpdufwb36lr5nqbfnuydhkweysoflyuow6s3oise/16.png"
+            },
+            "pathSize": 1,
+            "pathId": 16
+        },
+        "17": {
+            "fileName": "awedacity/ticket-covers/18.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/18.png",
+                "uploaded": 1675708485732,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/18.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "e544d50b3656fc50bf67242e70c52e9e",
+                "ipfs": true,
+                "size": "4247.0",
+                "cid": "bafybeig7icffae5pwizct3bodvczoe4pftlrfoh6q54bj4nuocaz3fv53y",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeig7icffae5pwizct3bodvczoe4pftlrfoh6q54bj4nuocaz3fv53y/17.png"
+            },
+            "pathSize": 1,
+            "pathId": 17
+        },
+        "18": {
+            "fileName": "awedacity/ticket-covers/19.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/19.png",
+                "uploaded": 1675708490131,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/19.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "d67a897f1988e2f8edebd6014b232de4",
+                "ipfs": true,
+                "size": "4831.8",
+                "cid": "bafybeigdpgcu64hkukyej6tjgenqp5o23lh5m2ubqn7eac3b6fijech54a",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeigdpgcu64hkukyej6tjgenqp5o23lh5m2ubqn7eac3b6fijech54a/18.png"
+            },
+            "pathSize": 1,
+            "pathId": 18
+        },
+        "19": {
+            "fileName": "awedacity/ticket-covers/20.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/20.png",
+                "uploaded": 1675708494334,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/20.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "a2445503170d2daf8436f76b5234e3ee",
+                "ipfs": true,
+                "size": "4223.3",
+                "cid": "bafybeicxkbzy6c3akfrjia2qteffc64uynttyacbp7ij5y2hkyshmkezpm",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeicxkbzy6c3akfrjia2qteffc64uynttyacbp7ij5y2hkyshmkezpm/19.png"
+            },
+            "pathSize": 1,
+            "pathId": 19
+        },
+        "20": {
+            "fileName": "awedacity/ticket-covers/21.png",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {},
+            "paths": {
+                "data": "/imgs/paths/21.png",
+                "uploaded": 1675708498220,
+                "type": "image/png",
+                "pathSize": 1,
+                "fileName": "awedacity/ticket-covers/21.png",
+                "extension": "png",
+                "colours": [],
+                "dontLoad": true,
+                "dontStore": true,
+                "projectStorage": false,
+                "localStorage": true,
+                "checksum": "408dfedfb124ad858b934a34f02d5274",
+                "ipfs": true,
+                "size": "3966.6",
+                "cid": "bafybeiff4vgwkb55ijzszmyjrkvhiiq7u3zufmgdw7p6s54plxuhmt5t5m",
+                "ipfsURL": "https://dweb.link/ipfs/bafybeiff4vgwkb55ijzszmyjrkvhiiq7u3zufmgdw7p6s54plxuhmt5t5m/20.png"
+            },
+            "pathSize": 1,
+            "pathId": 20
+        },
+        "default": {
+            "fileName": "null",
+            "name": "AWEdacity🎫Ticket",
+            "padding": "0%",
+            "innerPadding": "0%",
+            "viewbox": "0 0 1280 1280",
+            "rarity": 100,
+            "translate": {
+                "x": "0%",
+                "y": "0%"
+            },
+            "content": {
+                "pom": {
+                    "momentName": "Awedacity Women's Conference 2023",
+                    "hero": "",
+                    "heroPFP": "",
+                    "heroAvatar": "",
+                    "heroImage": "",
+                    "heroAnimation": "",
+                    "heroVideo": "",
+                    "audio_auralTone": "",
+                    "audio_podcasts": "",
+                    "audio_musics": "",
+                    "audio_clips": "",
+                    "playbill": "",
+                    "roster": "",
+                    "credits": "",
+                    "eventData": "",
+                    "socialTimeCapsule": "",
+                    "eventQuestsAndAchievements": ""
+                },
+                "eGPS": {
+                    "eGPS_locationData": "",
+                    "eGPS_eventMap": "",
+                    "eGPS_eventKey": ""
+                }
+            }
+        }
+    },
+    "names": [],
+    "assets": {},
+    "assetConfig": {},
+    "modules": {
+        "controller": "SimpleImage",
+        "minter": "DefaultMinter",
+        "random": "UnsafeRandom",
+        "royalty": "SplitRoyalty",
+        "renderScript": "MagicMirror",
+        "linker": "InfinityMintLinker"
+    },
+    "mods": {
+        "marketplace": true,
+        "ticketmint": true,
+        "redemption": true,
+        "contentLinks": true
+    },
+    "errors": {},
+    "network": {
+        "chainId": 1337,
+        "name": "ganache"
+    },
+    "id": "989a5cb7-5e64-4a13-93b3-62d88998be75",
+    "stages": {},
+    "deployedMods": {
+        "marketplace": {
+            "manifest": {
+                "name": "Marketplace Extension",
+                "author": "Llydia Cross",
+                "description": "Enables marketplace functionality inside of InfinityMint.",
+                "version": 1,
+                "dependencies": []
+            },
+            "loaded": 1677033829044,
+            "path": "mods/marketplace/",
+            "name": "marketplace",
+            "enabled": true,
+            "setupMethod": null,
+            "contracts": {
+                "Mod_Marketplace": "0x48d59523d6d62d09027aa74e4c3b6670D5A55009"
+            },
+            "receipts": [
+                {
+                    "_format": "hh-sol-artifact-1",
+                    "contractName": "Mod_Marketplace",
+                    "sourceName": "contracts/__mods/Mod_Marketplace.sol",
+                    "abi": {},
+                    "bytecode": 0,
+                    "deployedBytecode": 0,
+                    "linkReferences": {},
+                    "deployedLinkReferences": {},
+                    "devdoc": {
+                        "kind": "dev",
+                        "methods": {},
+                        "version": 1
+                    },
+                    "evm": {},
+                    "metadata": "",
+                    "storageLayout": {
+                        "storage": [
+                            {
+                                "astId": 8867,
+                                "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                "label": "infinityMint",
+                                "offset": 0,
+                                "slot": "0",
+                                "type": "t_address"
+                            },
+                            {
+                                "astId": 8887,
+                                "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                "label": "executionCount",
+                                "offset": 0,
+                                "slot": "1",
+                                "type": "t_uint256"
+                            },
+                            {
+                                "astId": 8894,
+                                "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                "label": "tokenOffers",
+                                "offset": 0,
+                                "slot": "2",
+                                "type": "t_mapping(t_uint32,t_mapping(t_address,t_struct(OfferObject)8874_storage))"
+                            },
+                            {
+                                "astId": 8899,
+                                "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                "label": "userOffers",
+                                "offset": 0,
+                                "slot": "3",
+                                "type": "t_mapping(t_uint32,t_array(t_address)dyn_storage)"
+                            },
+                            {
+                                "astId": 8904,
+                                "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                "label": "transfers",
+                                "offset": 0,
+                                "slot": "4",
+                                "type": "t_mapping(t_uint32,t_struct(TransferObject)8885_storage)"
+                            }
+                        ],
+                        "types": {
+                            "t_address": {
+                                "encoding": "inplace",
+                                "label": "address",
+                                "numberOfBytes": "20"
+                            },
+                            "t_array(t_address)dyn_storage": {
+                                "base": "t_address",
+                                "encoding": "dynamic_array",
+                                "label": "address[]",
+                                "numberOfBytes": "32"
+                            },
+                            "t_bool": {
+                                "encoding": "inplace",
+                                "label": "bool",
+                                "numberOfBytes": "1"
+                            },
+                            "t_mapping(t_address,t_struct(OfferObject)8874_storage)": {
+                                "encoding": "mapping",
+                                "key": "t_address",
+                                "label": "mapping(address => struct Mod_Marketplace.OfferObject)",
+                                "numberOfBytes": "32",
+                                "value": "t_struct(OfferObject)8874_storage"
+                            },
+                            "t_mapping(t_uint32,t_array(t_address)dyn_storage)": {
+                                "encoding": "mapping",
+                                "key": "t_uint32",
+                                "label": "mapping(uint32 => address[])",
+                                "numberOfBytes": "32",
+                                "value": "t_array(t_address)dyn_storage"
+                            },
+                            "t_mapping(t_uint32,t_mapping(t_address,t_struct(OfferObject)8874_storage))": {
+                                "encoding": "mapping",
+                                "key": "t_uint32",
+                                "label": "mapping(uint32 => mapping(address => struct Mod_Marketplace.OfferObject))",
+                                "numberOfBytes": "32",
+                                "value": "t_mapping(t_address,t_struct(OfferObject)8874_storage)"
+                            },
+                            "t_mapping(t_uint32,t_struct(TransferObject)8885_storage)": {
+                                "encoding": "mapping",
+                                "key": "t_uint32",
+                                "label": "mapping(uint32 => struct Mod_Marketplace.TransferObject)",
+                                "numberOfBytes": "32",
+                                "value": "t_struct(TransferObject)8885_storage"
+                            },
+                            "t_struct(OfferObject)8874_storage": {
+                                "encoding": "inplace",
+                                "label": "struct Mod_Marketplace.OfferObject",
+                                "members": [
+                                    {
+                                        "astId": 8869,
+                                        "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                        "label": "sender",
+                                        "offset": 0,
+                                        "slot": "0",
+                                        "type": "t_address"
+                                    },
+                                    {
+                                        "astId": 8871,
+                                        "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                        "label": "tokenId",
+                                        "offset": 0,
+                                        "slot": "1",
+                                        "type": "t_uint256"
+                                    },
+                                    {
+                                        "astId": 8873,
+                                        "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                        "label": "value",
+                                        "offset": 0,
+                                        "slot": "2",
+                                        "type": "t_uint256"
+                                    }
+                                ],
+                                "numberOfBytes": "96"
+                            },
+                            "t_struct(TransferObject)8885_storage": {
+                                "encoding": "inplace",
+                                "label": "struct Mod_Marketplace.TransferObject",
+                                "members": [
+                                    {
+                                        "astId": 8876,
+                                        "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                        "label": "tokenId",
+                                        "offset": 0,
+                                        "slot": "0",
+                                        "type": "t_uint256"
+                                    },
+                                    {
+                                        "astId": 8878,
+                                        "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                        "label": "from",
+                                        "offset": 0,
+                                        "slot": "1",
+                                        "type": "t_address"
+                                    },
+                                    {
+                                        "astId": 8880,
+                                        "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                        "label": "to",
+                                        "offset": 0,
+                                        "slot": "2",
+                                        "type": "t_address"
+                                    },
+                                    {
+                                        "astId": 8882,
+                                        "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                        "label": "value",
+                                        "offset": 0,
+                                        "slot": "3",
+                                        "type": "t_uint256"
+                                    },
+                                    {
+                                        "astId": 8884,
+                                        "contract": "contracts/__mods/Mod_Marketplace.sol:Mod_Marketplace",
+                                        "label": "hasTransfer",
+                                        "offset": 0,
+                                        "slot": "4",
+                                        "type": "t_bool"
+                                    }
+                                ],
+                                "numberOfBytes": "160"
+                            },
+                            "t_uint256": {
+                                "encoding": "inplace",
+                                "label": "uint256",
+                                "numberOfBytes": "32"
+                            },
+                            "t_uint32": {
+                                "encoding": "inplace",
+                                "label": "uint32",
+                                "numberOfBytes": "4"
+                            }
+                        }
+                    },
+                    "userdoc": {
+                        "kind": "user",
+                        "methods": {},
+                        "version": 1
+                    },
+                    "solcInput": "",
+                    "solcInputHash": "6e9aa7b6a6e3ea130e840e49f0c21c0a",
+                    "transactionHash": "0xc7db8c415bb3cbca57ec8bc5d2a2163d3288999853e891aafc7bb45b50f2a77b",
+                    "args": [
+                        "0xC8EFcFb0F41Db995b7F412D155B9953689bdcB6c"
+                    ],
+                    "address": "0x48d59523d6d62d09027aa74e4c3b6670D5A55009",
+                    "receipt": {
+                        "to": null,
+                        "from": "0x8084fb0d655C9F08144816763FB123f0F09023F4",
+                        "contractAddress": "0x48d59523d6d62d09027aa74e4c3b6670D5A55009",
+                        "transactionIndex": 0,
+                        "gasUsed": {
+                            "type": "BigNumber",
+                            "hex": "0x118899"
+                        },
+                        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                        "blockHash": "0xc0c84dd0f3d9e0559797d2ad8a27946e48e990dae17426b269b41eb6ac565100",
+                        "transactionHash": "0xc7db8c415bb3cbca57ec8bc5d2a2163d3288999853e891aafc7bb45b50f2a77b",
+                        "logs": [],
+                        "blockNumber": 17,
+                        "confirmations": 1,
+                        "cumulativeGasUsed": {
+                            "type": "BigNumber",
+                            "hex": "0x118899"
+                        },
+                        "effectiveGasPrice": {
+                            "type": "BigNumber",
+                            "hex": "0x0d4576fa00"
+                        },
+                        "status": 1,
+                        "type": 0,
+                        "byzantium": true
+                    },
+                    "libraries": {
+                        "InfinityMintUtil": "0x7BC11e6ceaD3F04Ee56e735Ca70199FB5Bf4aCC8"
+                    },
+                    "newlyDeployed": true
+                }
+            ]
+        },
+        "redemption": {
+            "manifest": {
+                "name": "ERC721 Redemption Tools",
+                "author": "Llydia Cross",
+                "description": "Offers two forms of redemption for ERC721 tokens. The first method is a passcode based system which doesn't need any wallets to be set up. The second is classic Merkle Tree requiring addresses.",
+                "version": 1,
+                "production": true,
+                "requirements": {
+                    "version": "hydra"
+                },
+                "dependencies": [
+                    "@openzeppelin/contracts"
+                ]
+            },
+            "loaded": 1677033829044,
+            "path": "mods/redemption/",
+            "name": "redemption",
+            "enabled": true,
+            "contracts": {
+                "Mod_Redemption": "0x8c3Ae0430eab1549606A1D5aA31441Eb7Cb5C014",
+                "Mod_RedemptionLinker": "0x8d7BDd3BF16412F251c35B12fe099CBEBBe928b3"
+            },
+            "receipts": [
+                {
+                    "_format": "hh-sol-artifact-1",
+                    "contractName": "Mod_Redemption",
+                    "sourceName": "contracts/__mods/Mod_Redemption.sol",
+                    "abi": {},
+                    "bytecode": 0,
+                    "deployedBytecode": 0,
+                    "linkReferences": {},
+                    "deployedLinkReferences": {},
+                    "devdoc": {
+                        "kind": "dev",
+                        "methods": {},
+                        "version": 1
+                    },
+                    "evm": {},
+                    "metadata": "",
+                    "storageLayout": {
+                        "storage": [
+                            {
+                                "astId": 458,
+                                "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                "label": "deployer",
+                                "offset": 0,
+                                "slot": "0",
+                                "type": "t_address"
+                            },
+                            {
+                                "astId": 461,
+                                "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                "label": "executionCount",
+                                "offset": 0,
+                                "slot": "1",
+                                "type": "t_uint256"
+                            },
+                            {
+                                "astId": 465,
+                                "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                "label": "approved",
+                                "offset": 0,
+                                "slot": "2",
+                                "type": "t_mapping(t_address,t_bool)"
+                            },
+                            {
+                                "astId": 10086,
+                                "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                "label": "erc721",
+                                "offset": 0,
+                                "slot": "3",
+                                "type": "t_contract(IERC721)1441"
+                            },
+                            {
+                                "astId": 10090,
+                                "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                "label": "activeRedemptions",
+                                "offset": 0,
+                                "slot": "4",
+                                "type": "t_mapping(t_uint256,t_bytes_storage)"
+                            },
+                            {
+                                "astId": 10095,
+                                "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                "label": "requests",
+                                "offset": 0,
+                                "slot": "5",
+                                "type": "t_mapping(t_uint256,t_struct(Request)10117_storage)"
+                            },
+                            {
+                                "astId": 10100,
+                                "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                "label": "successfulRedemptions",
+                                "offset": 0,
+                                "slot": "6",
+                                "type": "t_mapping(t_uint256,t_struct(SuccessfulRedemption)10128_storage)"
+                            },
+                            {
+                                "astId": 10104,
+                                "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                "label": "requestCount",
+                                "offset": 0,
+                                "slot": "7",
+                                "type": "t_mapping(t_address,t_uint256)"
+                            },
+                            {
+                                "astId": 10108,
+                                "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                "label": "blockedWallets",
+                                "offset": 0,
+                                "slot": "8",
+                                "type": "t_mapping(t_address,t_bool)"
+                            }
+                        ],
+                        "types": {
+                            "t_address": {
+                                "encoding": "inplace",
+                                "label": "address",
+                                "numberOfBytes": "20"
+                            },
+                            "t_bool": {
+                                "encoding": "inplace",
+                                "label": "bool",
+                                "numberOfBytes": "1"
+                            },
+                            "t_bytes_storage": {
+                                "encoding": "bytes",
+                                "label": "bytes",
+                                "numberOfBytes": "32"
+                            },
+                            "t_contract(IERC721)1441": {
+                                "encoding": "inplace",
+                                "label": "contract IERC721",
+                                "numberOfBytes": "20"
+                            },
+                            "t_mapping(t_address,t_bool)": {
+                                "encoding": "mapping",
+                                "key": "t_address",
+                                "label": "mapping(address => bool)",
+                                "numberOfBytes": "32",
+                                "value": "t_bool"
+                            },
+                            "t_mapping(t_address,t_uint256)": {
+                                "encoding": "mapping",
+                                "key": "t_address",
+                                "label": "mapping(address => uint256)",
+                                "numberOfBytes": "32",
+                                "value": "t_uint256"
+                            },
+                            "t_mapping(t_uint256,t_bytes_storage)": {
+                                "encoding": "mapping",
+                                "key": "t_uint256",
+                                "label": "mapping(uint256 => bytes)",
+                                "numberOfBytes": "32",
+                                "value": "t_bytes_storage"
+                            },
+                            "t_mapping(t_uint256,t_struct(Request)10117_storage)": {
+                                "encoding": "mapping",
+                                "key": "t_uint256",
+                                "label": "mapping(uint256 => struct Mod_Redemption.Request)",
+                                "numberOfBytes": "32",
+                                "value": "t_struct(Request)10117_storage"
+                            },
+                            "t_mapping(t_uint256,t_struct(SuccessfulRedemption)10128_storage)": {
+                                "encoding": "mapping",
+                                "key": "t_uint256",
+                                "label": "mapping(uint256 => struct Mod_Redemption.SuccessfulRedemption)",
+                                "numberOfBytes": "32",
+                                "value": "t_struct(SuccessfulRedemption)10128_storage"
+                            },
+                            "t_struct(Request)10117_storage": {
+                                "encoding": "inplace",
+                                "label": "struct Mod_Redemption.Request",
+                                "members": [
+                                    {
+                                        "astId": 10110,
+                                        "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                        "label": "sender",
+                                        "offset": 0,
+                                        "slot": "0",
+                                        "type": "t_address"
+                                    },
+                                    {
+                                        "astId": 10112,
+                                        "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                        "label": "redemption",
+                                        "offset": 0,
+                                        "slot": "1",
+                                        "type": "t_bytes_storage"
+                                    },
+                                    {
+                                        "astId": 10114,
+                                        "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                        "label": "key",
+                                        "offset": 0,
+                                        "slot": "2",
+                                        "type": "t_bytes_storage"
+                                    },
+                                    {
+                                        "astId": 10116,
+                                        "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                        "label": "valid",
+                                        "offset": 0,
+                                        "slot": "3",
+                                        "type": "t_bool"
+                                    }
+                                ],
+                                "numberOfBytes": "128"
+                            },
+                            "t_struct(SuccessfulRedemption)10128_storage": {
+                                "encoding": "inplace",
+                                "label": "struct Mod_Redemption.SuccessfulRedemption",
+                                "members": [
+                                    {
+                                        "astId": 10119,
+                                        "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                        "label": "receiver",
+                                        "offset": 0,
+                                        "slot": "0",
+                                        "type": "t_address"
+                                    },
+                                    {
+                                        "astId": 10121,
+                                        "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                        "label": "admin",
+                                        "offset": 0,
+                                        "slot": "1",
+                                        "type": "t_address"
+                                    },
+                                    {
+                                        "astId": 10123,
+                                        "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                        "label": "time",
+                                        "offset": 0,
+                                        "slot": "2",
+                                        "type": "t_uint256"
+                                    },
+                                    {
+                                        "astId": 10125,
+                                        "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                        "label": "tokenId",
+                                        "offset": 0,
+                                        "slot": "3",
+                                        "type": "t_uint256"
+                                    },
+                                    {
+                                        "astId": 10127,
+                                        "contract": "contracts/__mods/Mod_Redemption.sol:Mod_Redemption",
+                                        "label": "valid",
+                                        "offset": 0,
+                                        "slot": "4",
+                                        "type": "t_bool"
+                                    }
+                                ],
+                                "numberOfBytes": "160"
+                            },
+                            "t_uint256": {
+                                "encoding": "inplace",
+                                "label": "uint256",
+                                "numberOfBytes": "32"
+                            }
+                        }
+                    },
+                    "userdoc": {
+                        "kind": "user",
+                        "methods": {
+                            "approveRedeem(uint256,bytes)": {
+                                "notice": "Approves a request to redeem a token"
+                            },
+                            "onERC721Received(address,address,uint256,bytes)": {
+                                "notice": "Allows this redemption contract to receive ERC721 from approved addresses only"
+                            },
+                            "rejectRedeem(uint256)": {
+                                "notice": "Rejects a request to redeem a token"
+                            },
+                            "requestToken(uint256,bytes,bytes)": {
+                                "notice": "Requests a token to be transfered to the sender"
+                            }
+                        },
+                        "version": 1
+                    },
+                    "solcInput": "",
+                    "solcInputHash": "6e9aa7b6a6e3ea130e840e49f0c21c0a",
+                    "transactionHash": "0x8dff377214f58d9ff7321a8f42bc88f6701fdba3afaf6d1b3eb597fdd4f82017",
+                    "args": [
+                        "0xC8EFcFb0F41Db995b7F412D155B9953689bdcB6c"
+                    ],
+                    "address": "0x8c3Ae0430eab1549606A1D5aA31441Eb7Cb5C014",
+                    "receipt": {
+                        "to": null,
+                        "from": "0x8084fb0d655C9F08144816763FB123f0F09023F4",
+                        "contractAddress": "0x8c3Ae0430eab1549606A1D5aA31441Eb7Cb5C014",
+                        "transactionIndex": 0,
+                        "gasUsed": {
+                            "type": "BigNumber",
+                            "hex": "0x208d8d"
+                        },
+                        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                        "blockHash": "0x56944442cfadba15a50e2420c657873f05cfdfc5c8066adc39c0429af784e94d",
+                        "transactionHash": "0x8dff377214f58d9ff7321a8f42bc88f6701fdba3afaf6d1b3eb597fdd4f82017",
+                        "logs": [],
+                        "blockNumber": 18,
+                        "confirmations": 1,
+                        "cumulativeGasUsed": {
+                            "type": "BigNumber",
+                            "hex": "0x208d8d"
+                        },
+                        "effectiveGasPrice": {
+                            "type": "BigNumber",
+                            "hex": "0x0d4576fa00"
+                        },
+                        "status": 1,
+                        "type": 0,
+                        "byzantium": true
+                    },
+                    "libraries": {
+                        "InfinityMintUtil": "0x7BC11e6ceaD3F04Ee56e735Ca70199FB5Bf4aCC8"
+                    },
+                    "newlyDeployed": true
+                },
+                {
+                    "_format": "hh-sol-artifact-1",
+                    "contractName": "Mod_RedemptionLinker",
+                    "sourceName": "contracts/__mods/Mod_RedemptionLinker.sol",
+                    "abi": {},
+                    "bytecode": 0,
+                    "deployedBytecode": 0,
+                    "linkReferences": {},
+                    "deployedLinkReferences": {},
+                    "devdoc": {
+                        "kind": "dev",
+                        "methods": {
+                            "approve(address,uint256)": {
+                                "details": "will Throw if tokenId does not exist"
+                            },
+                            "isApprovedOrOwner(address,uint256)": {
+                                "details": "same as open zepps"
+                            },
+                            "ownerOf(uint256)": {
+                                "details": "will Throw if the token does not exist"
+                            },
+                            "safeTransferFrom(address,address,uint256)": {
+                                "details": "Emits a {Transfer} event."
+                            },
+                            "safeTransferFrom(address,address,uint256,bytes)": {
+                                "details": "Emits a {Transfer} event."
+                            },
+                            "supportsInterface(bytes4)": {
+                                "details": "See {IERC165-supportsInterface}."
+                            },
+                            "transferFrom(address,address,uint256)": {
+                                "details": "Emits a {Transfer} event."
+                            }
+                        },
+                        "version": 1
+                    },
+                    "evm": {},
+                    "metadata": "",
+                    "storageLayout": {
+                        "storage": [
+                            {
+                                "astId": 704,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "tokens",
+                                "offset": 0,
+                                "slot": "0",
+                                "type": "t_mapping(t_uint256,t_address)"
+                            },
+                            {
+                                "astId": 709,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "uri",
+                                "offset": 0,
+                                "slot": "1",
+                                "type": "t_mapping(t_uint256,t_string_storage)"
+                            },
+                            {
+                                "astId": 714,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "approvedTokens",
+                                "offset": 0,
+                                "slot": "2",
+                                "type": "t_mapping(t_uint256,t_address)"
+                            },
+                            {
+                                "astId": 721,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "operators",
+                                "offset": 0,
+                                "slot": "3",
+                                "type": "t_mapping(t_address,t_mapping(t_address,t_bool))"
+                            },
+                            {
+                                "astId": 726,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "balance",
+                                "offset": 0,
+                                "slot": "4",
+                                "type": "t_mapping(t_address,t_uint256)"
+                            },
+                            {
+                                "astId": 729,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "_name",
+                                "offset": 0,
+                                "slot": "5",
+                                "type": "t_string_storage"
+                            },
+                            {
+                                "astId": 732,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "_symbol",
+                                "offset": 0,
+                                "slot": "6",
+                                "type": "t_string_storage"
+                            },
+                            {
+                                "astId": 458,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "deployer",
+                                "offset": 0,
+                                "slot": "7",
+                                "type": "t_address"
+                            },
+                            {
+                                "astId": 461,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "executionCount",
+                                "offset": 0,
+                                "slot": "8",
+                                "type": "t_uint256"
+                            },
+                            {
+                                "astId": 465,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "approved",
+                                "offset": 0,
+                                "slot": "9",
+                                "type": "t_mapping(t_address,t_bool)"
+                            },
+                            {
+                                "astId": 10894,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "forcedUri",
+                                "offset": 0,
+                                "slot": "10",
+                                "type": "t_string_storage"
+                            },
+                            {
+                                "astId": 10897,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "redemption",
+                                "offset": 0,
+                                "slot": "11",
+                                "type": "t_contract(Mod_Redemption)10879"
+                            },
+                            {
+                                "astId": 10900,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "linker",
+                                "offset": 0,
+                                "slot": "12",
+                                "type": "t_contract(InfinityMintLinker)5562"
+                            },
+                            {
+                                "astId": 10903,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "parent",
+                                "offset": 0,
+                                "slot": "13",
+                                "type": "t_contract(ERC721)1313"
+                            },
+                            {
+                                "astId": 10926,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "redemptions",
+                                "offset": 0,
+                                "slot": "14",
+                                "type": "t_mapping(t_uint256,t_struct(ProofOfRedemption)10914_storage)"
+                            },
+                            {
+                                "astId": 10931,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "tokenIdTable",
+                                "offset": 0,
+                                "slot": "15",
+                                "type": "t_mapping(t_uint256,t_struct(Map)10921_storage)"
+                            },
+                            {
+                                "astId": 10933,
+                                "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                "label": "redemptionTokenId",
+                                "offset": 0,
+                                "slot": "16",
+                                "type": "t_uint256"
+                            }
+                        ],
+                        "types": {
+                            "t_address": {
+                                "encoding": "inplace",
+                                "label": "address",
+                                "numberOfBytes": "20"
+                            },
+                            "t_bool": {
+                                "encoding": "inplace",
+                                "label": "bool",
+                                "numberOfBytes": "1"
+                            },
+                            "t_contract(ERC721)1313": {
+                                "encoding": "inplace",
+                                "label": "contract ERC721",
+                                "numberOfBytes": "20"
+                            },
+                            "t_contract(InfinityMintLinker)5562": {
+                                "encoding": "inplace",
+                                "label": "contract InfinityMintLinker",
+                                "numberOfBytes": "20"
+                            },
+                            "t_contract(Mod_Redemption)10879": {
+                                "encoding": "inplace",
+                                "label": "contract Mod_Redemption",
+                                "numberOfBytes": "20"
+                            },
+                            "t_mapping(t_address,t_bool)": {
+                                "encoding": "mapping",
+                                "key": "t_address",
+                                "label": "mapping(address => bool)",
+                                "numberOfBytes": "32",
+                                "value": "t_bool"
+                            },
+                            "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+                                "encoding": "mapping",
+                                "key": "t_address",
+                                "label": "mapping(address => mapping(address => bool))",
+                                "numberOfBytes": "32",
+                                "value": "t_mapping(t_address,t_bool)"
+                            },
+                            "t_mapping(t_address,t_uint256)": {
+                                "encoding": "mapping",
+                                "key": "t_address",
+                                "label": "mapping(address => uint256)",
+                                "numberOfBytes": "32",
+                                "value": "t_uint256"
+                            },
+                            "t_mapping(t_uint256,t_address)": {
+                                "encoding": "mapping",
+                                "key": "t_uint256",
+                                "label": "mapping(uint256 => address)",
+                                "numberOfBytes": "32",
+                                "value": "t_address"
+                            },
+                            "t_mapping(t_uint256,t_string_storage)": {
+                                "encoding": "mapping",
+                                "key": "t_uint256",
+                                "label": "mapping(uint256 => string)",
+                                "numberOfBytes": "32",
+                                "value": "t_string_storage"
+                            },
+                            "t_mapping(t_uint256,t_struct(Map)10921_storage)": {
+                                "encoding": "mapping",
+                                "key": "t_uint256",
+                                "label": "mapping(uint256 => struct Mod_RedemptionLinker.Map)",
+                                "numberOfBytes": "32",
+                                "value": "t_struct(Map)10921_storage"
+                            },
+                            "t_mapping(t_uint256,t_struct(ProofOfRedemption)10914_storage)": {
+                                "encoding": "mapping",
+                                "key": "t_uint256",
+                                "label": "mapping(uint256 => struct Mod_RedemptionLinker.ProofOfRedemption)",
+                                "numberOfBytes": "32",
+                                "value": "t_struct(ProofOfRedemption)10914_storage"
+                            },
+                            "t_string_storage": {
+                                "encoding": "bytes",
+                                "label": "string",
+                                "numberOfBytes": "32"
+                            },
+                            "t_struct(Map)10921_storage": {
+                                "encoding": "inplace",
+                                "label": "struct Mod_RedemptionLinker.Map",
+                                "members": [
+                                    {
+                                        "astId": 10916,
+                                        "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                        "label": "valid",
+                                        "offset": 0,
+                                        "slot": "0",
+                                        "type": "t_bool"
+                                    },
+                                    {
+                                        "astId": 10918,
+                                        "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                        "label": "redemptionTokenId",
+                                        "offset": 0,
+                                        "slot": "1",
+                                        "type": "t_uint256"
+                                    },
+                                    {
+                                        "astId": 10920,
+                                        "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                        "label": "parentTokenId",
+                                        "offset": 0,
+                                        "slot": "2",
+                                        "type": "t_uint256"
+                                    }
+                                ],
+                                "numberOfBytes": "96"
+                            },
+                            "t_struct(ProofOfRedemption)10914_storage": {
+                                "encoding": "inplace",
+                                "label": "struct Mod_RedemptionLinker.ProofOfRedemption",
+                                "members": [
+                                    {
+                                        "astId": 10905,
+                                        "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                        "label": "valid",
+                                        "offset": 0,
+                                        "slot": "0",
+                                        "type": "t_bool"
+                                    },
+                                    {
+                                        "astId": 10907,
+                                        "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                        "label": "redemptionTokenId",
+                                        "offset": 0,
+                                        "slot": "1",
+                                        "type": "t_uint256"
+                                    },
+                                    {
+                                        "astId": 10909,
+                                        "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                        "label": "redeemedToken",
+                                        "offset": 0,
+                                        "slot": "2",
+                                        "type": "t_uint256"
+                                    },
+                                    {
+                                        "astId": 10911,
+                                        "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                        "label": "redeemer",
+                                        "offset": 0,
+                                        "slot": "3",
+                                        "type": "t_address"
+                                    },
+                                    {
+                                        "astId": 10913,
+                                        "contract": "contracts/__mods/Mod_RedemptionLinker.sol:Mod_RedemptionLinker",
+                                        "label": "time",
+                                        "offset": 0,
+                                        "slot": "4",
+                                        "type": "t_uint256"
+                                    }
+                                ],
+                                "numberOfBytes": "160"
+                            },
+                            "t_uint256": {
+                                "encoding": "inplace",
+                                "label": "uint256",
+                                "numberOfBytes": "32"
+                            }
+                        }
+                    },
+                    "userdoc": {
+                        "kind": "user",
+                        "methods": {
+                            "approve(address,uint256)": {
+                                "notice": "Sets an approved adress for this token"
+                            },
+                            "balanceOf(address)": {
+                                "notice": "blanceOf returns the number of tokens an address currently holds."
+                            },
+                            "exists(uint256)": {
+                                "notice": "Returns true if a token exists."
+                            },
+                            "getApproved(uint256)": {
+                                "notice": "Returns the approved adress for this token."
+                            },
+                            "isApprovedForAll(address,address)": {
+                                "notice": "Will returns true if the operator is approved by the owner address"
+                            },
+                            "isApprovedOrOwner(address,uint256)": {
+                                "notice": "will returns true if the address is apprroved for all, approved operator or is the owner of a token"
+                            },
+                            "name()": {
+                                "notice": "Returns the name of the ERC721  for display on places like Etherscan"
+                            },
+                            "ownerOf(uint256)": {
+                                "notice": "Returns the owner of a current token"
+                            },
+                            "safeTransferFrom(address,address,uint256)": {
+                                "notice": "Just like the method above except with no data field we pass to the implemeting contract."
+                            },
+                            "safeTransferFrom(address,address,uint256,bytes)": {
+                                "notice": "Just like transferFrom except we will check if the to address is a contract and is an IERC721Receiver implementer"
+                            },
+                            "setApprovalForAll(address,bool)": {
+                                "notice": "Will approve an operator for the senders tokens"
+                            },
+                            "supportsInterface(bytes4)": {
+                                "notice": "this is used by opensea/polyscan to detect our ERC721"
+                            },
+                            "symbol()": {
+                                "notice": "Returns the symbol of the ERC721 for display on places like Polyscan"
+                            },
+                            "tokenURI(uint256)": {
+                                "notice": "Returns the tokens URI Metadata object"
+                            },
+                            "transferFrom(address,address,uint256)": {
+                                "notice": "Transfers a token fsrom one address to another. Use safeTransferFrom as that will double check that the address you send this token too is a contract that can actually receive it."
+                            }
+                        },
+                        "version": 1
+                    },
+                    "solcInput": "",
+                    "solcInputHash": "6e9aa7b6a6e3ea130e840e49f0c21c0a",
+                    "transactionHash": "0x0bd7a27d7128da517adaff093537ec148f5c48b35489799a3c53f1c7dfa263d0",
+                    "args": [
+                        "",
+                        "AWEdacity Tickets: Proof Of Moment",
+                        "PoM",
+                        "0x8c3Ae0430eab1549606A1D5aA31441Eb7Cb5C014",
+                        "0xE11028f7CE93bf98de7b356a3184C0c25b9426ab",
+                        "0xC8EFcFb0F41Db995b7F412D155B9953689bdcB6c"
+                    ],
+                    "address": "0x8d7BDd3BF16412F251c35B12fe099CBEBBe928b3",
+                    "receipt": {
+                        "to": null,
+                        "from": "0x8084fb0d655C9F08144816763FB123f0F09023F4",
+                        "contractAddress": "0x8d7BDd3BF16412F251c35B12fe099CBEBBe928b3",
+                        "transactionIndex": 0,
+                        "gasUsed": {
+                            "type": "BigNumber",
+                            "hex": "0x1ccd0f"
+                        },
+                        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                        "blockHash": "0xa31712ebe91d825a0186880518959f47b5dc480dda33451a390ef814e2d2868f",
+                        "transactionHash": "0x0bd7a27d7128da517adaff093537ec148f5c48b35489799a3c53f1c7dfa263d0",
+                        "logs": [],
+                        "blockNumber": 19,
+                        "confirmations": 1,
+                        "cumulativeGasUsed": {
+                            "type": "BigNumber",
+                            "hex": "0x1ccd0f"
+                        },
+                        "effectiveGasPrice": {
+                            "type": "BigNumber",
+                            "hex": "0x0d4576fa00"
+                        },
+                        "status": 1,
+                        "type": 0,
+                        "byzantium": true
+                    },
+                    "libraries": {
+                        "InfinityMintUtil": "0x7BC11e6ceaD3F04Ee56e735Ca70199FB5Bf4aCC8"
+                    },
+                    "newlyDeployed": true
+                }
+            ]
+        },
+        "ticketmint": {
+            "manifest": {
+                "name": "Ticketmint",
+                "author": "Llydia Cross",
+                "description": "",
+                "version": 1
+            },
+            "loaded": 1677033829044,
+            "path": "mods/ticketmint/",
+            "name": "ticketmint",
+            "enabled": true,
+            "contracts": {
+                "Mod_SelectiveMint": "0x4a57c2716c04514ef75D683E8494dA2f95DDDab9"
+            },
+            "receipts": [
+                {
+                    "_format": "hh-sol-artifact-1",
+                    "contractName": "Mod_SelectiveMint",
+                    "sourceName": "contracts/__mods/Mod_SelectiveMint.sol",
+                    "abi": {},
+                    "bytecode": 0,
+                    "deployedBytecode": 0,
+                    "linkReferences": {},
+                    "deployedLinkReferences": {},
+                    "devdoc": {
+                        "kind": "dev",
+                        "methods": {},
+                        "version": 1
+                    },
+                    "evm": {},
+                    "metadata": "",
+                    "storageLayout": {
+                        "storage": [
+                            {
+                                "astId": 458,
+                                "contract": "contracts/__mods/Mod_SelectiveMint.sol:Mod_SelectiveMint",
+                                "label": "deployer",
+                                "offset": 0,
+                                "slot": "0",
+                                "type": "t_address"
+                            },
+                            {
+                                "astId": 461,
+                                "contract": "contracts/__mods/Mod_SelectiveMint.sol:Mod_SelectiveMint",
+                                "label": "executionCount",
+                                "offset": 0,
+                                "slot": "1",
+                                "type": "t_uint256"
+                            },
+                            {
+                                "astId": 465,
+                                "contract": "contracts/__mods/Mod_SelectiveMint.sol:Mod_SelectiveMint",
+                                "label": "approved",
+                                "offset": 0,
+                                "slot": "2",
+                                "type": "t_mapping(t_address,t_bool)"
+                            },
+                            {
+                                "astId": 11229,
+                                "contract": "contracts/__mods/Mod_SelectiveMint.sol:Mod_SelectiveMint",
+                                "label": "assetController",
+                                "offset": 0,
+                                "slot": "3",
+                                "type": "t_contract(InfinityMintAsset)4573"
+                            },
+                            {
+                                "astId": 11232,
+                                "contract": "contracts/__mods/Mod_SelectiveMint.sol:Mod_SelectiveMint",
+                                "label": "erc721",
+                                "offset": 0,
+                                "slot": "4",
+                                "type": "t_contract(InfinityMint)2614"
+                            },
+                            {
+                                "astId": 11235,
+                                "contract": "contracts/__mods/Mod_SelectiveMint.sol:Mod_SelectiveMint",
+                                "label": "randomNumberController",
+                                "offset": 0,
+                                "slot": "5",
+                                "type": "t_contract(RandomNumber)8083"
+                            },
+                            {
+                                "astId": 11238,
+                                "contract": "contracts/__mods/Mod_SelectiveMint.sol:Mod_SelectiveMint",
+                                "label": "valuesController",
+                                "offset": 0,
+                                "slot": "6",
+                                "type": "t_contract(InfinityMintValues)7209"
+                            },
+                            {
+                                "astId": 11241,
+                                "contract": "contracts/__mods/Mod_SelectiveMint.sol:Mod_SelectiveMint",
+                                "label": "royaltyController",
+                                "offset": 0,
+                                "slot": "7",
+                                "type": "t_contract(Royalty)8271"
+                            }
+                        ],
+                        "types": {
+                            "t_address": {
+                                "encoding": "inplace",
+                                "label": "address",
+                                "numberOfBytes": "20"
+                            },
+                            "t_bool": {
+                                "encoding": "inplace",
+                                "label": "bool",
+                                "numberOfBytes": "1"
+                            },
+                            "t_contract(InfinityMint)2614": {
+                                "encoding": "inplace",
+                                "label": "contract InfinityMint",
+                                "numberOfBytes": "20"
+                            },
+                            "t_contract(InfinityMintAsset)4573": {
+                                "encoding": "inplace",
+                                "label": "contract InfinityMintAsset",
+                                "numberOfBytes": "20"
+                            },
+                            "t_contract(InfinityMintValues)7209": {
+                                "encoding": "inplace",
+                                "label": "contract InfinityMintValues",
+                                "numberOfBytes": "20"
+                            },
+                            "t_contract(RandomNumber)8083": {
+                                "encoding": "inplace",
+                                "label": "contract RandomNumber",
+                                "numberOfBytes": "20"
+                            },
+                            "t_contract(Royalty)8271": {
+                                "encoding": "inplace",
+                                "label": "contract Royalty",
+                                "numberOfBytes": "20"
+                            },
+                            "t_mapping(t_address,t_bool)": {
+                                "encoding": "mapping",
+                                "key": "t_address",
+                                "label": "mapping(address => bool)",
+                                "numberOfBytes": "32",
+                                "value": "t_bool"
+                            },
+                            "t_uint256": {
+                                "encoding": "inplace",
+                                "label": "uint256",
+                                "numberOfBytes": "32"
+                            }
+                        }
+                    },
+                    "userdoc": {
+                        "kind": "user",
+                        "methods": {},
+                        "version": 1
+                    },
+                    "solcInput": "",
+                    "solcInputHash": "6e9aa7b6a6e3ea130e840e49f0c21c0a",
+                    "transactionHash": "0x7fa03acea63a88ea7a8ae64317ca063a495f0eaf7fa8cfa810e4ced590481b8c",
+                    "args": [
+                        "0xC8EFcFb0F41Db995b7F412D155B9953689bdcB6c",
+                        "0x3D6083d4a738aE3F84201549cdA6a3349Db4235a",
+                        "0xf1Bdb47c1d181d9f066CeA4E8B7A31566a3a37B7",
+                        "0x1239c31F3cf451d3E2b36E104d3747B394a1ee4e",
+                        "0xFe66F41bEBFc7e57A8A6e5bc85A0BC9667F763da"
+                    ],
+                    "address": "0x4a57c2716c04514ef75D683E8494dA2f95DDDab9",
+                    "receipt": {
+                        "to": null,
+                        "from": "0x8084fb0d655C9F08144816763FB123f0F09023F4",
+                        "contractAddress": "0x4a57c2716c04514ef75D683E8494dA2f95DDDab9",
+                        "transactionIndex": 0,
+                        "gasUsed": {
+                            "type": "BigNumber",
+                            "hex": "0x147a14"
+                        },
+                        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                        "blockHash": "0x65dba67c25b5c5e18e4014e1bf55157ccc33eb2ed9c21a67b908a7654510c542",
+                        "transactionHash": "0x7fa03acea63a88ea7a8ae64317ca063a495f0eaf7fa8cfa810e4ced590481b8c",
+                        "logs": [],
+                        "blockNumber": 20,
+                        "confirmations": 1,
+                        "cumulativeGasUsed": {
+                            "type": "BigNumber",
+                            "hex": "0x147a14"
+                        },
+                        "effectiveGasPrice": {
+                            "type": "BigNumber",
+                            "hex": "0x0d4576fa00"
+                        },
+                        "status": 1,
+                        "type": 0,
+                        "byzantium": true
+                    },
+                    "libraries": {},
+                    "newlyDeployed": true
+                }
+            ]
+        }
+    },
+    "links": {
+        "wallet": {
+            "key": "wallet",
+            "title": "Wallet Expansion (ERC721 Receiver)",
+            "versionType": "wallet",
+            "contract": "InfinityMintWallet",
+            "deployable": true,
+            "description": "Allows the token to act like a wallet, it will be able to hold ERC721 tokens as well as ERC20 tokens. Required for many links to work.",
+            "deployFakeContract": true,
+            "useDefaultLinker": true,
+            "verifyIntegrity": true,
+            "onlyForced": false,
+            "canMint": false,
+            "args": [
+                [
+                    "uint256",
+                    "4294967295",
+                    "tokenId"
+                ],
+                [
+                    "address",
+                    "0x0000000000000000000000000000000000000000",
+                    "erc721Destination"
+                ]
+            ],
+            "index": 0,
+            "active": true
+        },
+        "stickers": {
+            "key": "stickers",
+            "title": "EADS Sticker Controller",
+            "versionType": "EADStickers",
+            "contract": "EADStickers",
+            "deployable": true,
+            "description": "Allows your token access to the Ethereum Ad Network, a sponsorship model which enables stickers to be placed onto your token for a price that you set.",
+            "deployFakeContract": true,
+            "useDefaultLinker": true,
+            "verifyIntegrity": true,
+            "onlyForced": false,
+            "canMint": false,
+            "args": [
+                [
+                    "uint256",
+                    "4294967295",
+                    "tokenId"
+                ],
+                [
+                    "address",
+                    "0x0000000000000000000000000000000000000000",
+                    "erc721Destination"
+                ],
+                [
+                    "address",
+                    "0x0000000000000000000000000000000000000000",
+                    "wallet"
+                ],
+                [
+                    "address",
+                    "0x0000000000000000000000000000000000000000",
+                    "valuesDestination"
+                ]
+            ],
+            "erc721": true,
+            "requirements": [
+                "wallet"
+            ],
+            "index": 1,
+            "active": true
+        },
+        "proof_of_redemption": {
+            "key": "proof_of_redemption",
+            "title": "🗺️ Proof Of Redemption",
+            "description": "Did you redeem your token through our neat redemption system? Then we have a surprise for you! Lets link that to your tokenId so that future owners will know this happened and you shall get a free NFT.",
+            "deployable": false,
+            "deployFakeContract": false,
+            "useDefaultLinker": false,
+            "verifyIntegrity": false,
+            "onlyForced": true,
+            "canMint": true,
+            "erc721": true,
+            "contract": "Mod_RedemptionLinker",
+            "permanent": true,
+            "method": "mintProofOfRedemption",
+            "useHooks": [
+                "redemption"
+            ],
+            "requirements": [
+                "wallet",
+                "stickers"
+            ],
+            "args": [
+                [
+                    "uint256",
+                    "0",
+                    "tokenId"
+                ]
+            ],
+            "index": 2,
+            "active": true
+        },
+        "multiminter": {
+            "key": "multiminter",
+            "title": "MultiMinter Receiver",
+            "versionType": "wallet",
+            "contract": "Mod_MultiReceiver",
+            "deployable": true,
+            "description": "Allows the token receive special MultiMinter tokens. Required for many links to work.",
+            "deployFakeContract": true,
+            "useDefaultLinker": true,
+            "verifyIntegrity": true,
+            "onlyForced": false,
+            "canMint": false,
+            "args": [
+                [
+                    "uint256",
+                    "4294967295",
+                    "tokenId"
+                ],
+                [
+                    "address",
+                    "0x0000000000000000000000000000000000000000",
+                    "erc721Destination"
+                ]
+            ],
+            "index": 3,
+            "active": true
+        }
+    },
+    "contracts": {
+        "InfinityMint": "0xC8EFcFb0F41Db995b7F412D155B9953689bdcB6c",
+        "InfinityMintStorage": "0xDEC6264005f8b6ec29C397182837C23e6eCc97b0",
+        "InfinityMintUtil": "0x7BC11e6ceaD3F04Ee56e735Ca70199FB5Bf4aCC8",
+        "InfinityMintLinker": "0xE11028f7CE93bf98de7b356a3184C0c25b9426ab",
+        "InfinityMintValues": "0x1239c31F3cf451d3E2b36E104d3747B394a1ee4e",
+        "InfinityMintApi": "0x40DF1a8480B2DCaE9360F1bAc4486a76B8D7f09a",
+        "InfinityMintProject": "0xB8057Bd25fCFc766Eb219055B73032B9133a7101",
+        "SimpleImage": "0x3D6083d4a738aE3F84201549cdA6a3349Db4235a",
+        "UnsafeRandom": "0xf1Bdb47c1d181d9f066CeA4E8B7A31566a3a37B7",
+        "DefaultMinter": "0x1aE71A8097523B3b204f2cd0D1C04D963EdD2ea2",
+        "SplitRoyalty": "0xFe66F41bEBFc7e57A8A6e5bc85A0BC9667F763da",
+        "Mod_Marketplace": "0x48d59523d6d62d09027aa74e4c3b6670D5A55009",
+        "Mod_Redemption": "0x8c3Ae0430eab1549606A1D5aA31441Eb7Cb5C014",
+        "Mod_RedemptionLinker": "0x8d7BDd3BF16412F251c35B12fe099CBEBBe928b3",
+        "Mod_SelectiveMint": "0x4a57c2716c04514ef75D683E8494dA2f95DDDab9"
+    },
+    "project": "awedacity_ticketmint",
+    "deployTime": 1677033836188,
+    "deployer": "0x8084fb0d655C9F08144816763FB123f0F09023F4"
+}

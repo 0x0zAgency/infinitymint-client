@@ -1,0 +1,20 @@
+{
+    "background": "@Images/awedacity-bg.png",
+    "headerBackground": "@Images/awedacity-header.jpeg",
+    "defaultImage": "@Images/sad_panda.jpg",
+    "backgroundColour": "#ffd501",
+    "menuColour": "#280f91",
+    "stylesheets": [
+        "Styles/bootstrap.quartz.css"
+    ],
+    "images": {
+        "features": "@Images/default_features.jpg",
+        "loading": "@Images/loading.gif",
+        "texture": "@Images/texture.jpg",
+        "teamDefaultIcon": "@Images/person.png",
+        "noWeb3": "@Images/missingWeb3.png",
+        "loadingComponent": "@Images/loading.gif"
+    },
+    "project": "awedacity_ticketmint",
+    "updated": 1677033850452
+}

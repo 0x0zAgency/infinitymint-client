@@ -1,5 +1,19 @@
 import Controller from './controller';
 
+let localStorage;
+let items = {};
+localStorage = globalThis.localStorage || {
+    setItem: (key: string, value: string) => {
+        items[key] = value;
+    },
+    getItem: (key: string) => {
+        if (!items[key]) return null;
+
+        return items[key];
+    },
+};
+
+//fake local storage
 export class StorageController {
     public values: any = {};
     // Private
@@ -247,7 +261,7 @@ export class StorageController {
             this.values[key] = null;
             const item = localStorage.getItem(key);
 
-            if (item === null && typeof value !== 'object') {
+            if (!item === null && typeof value !== 'object') {
                 continue;
             } else if (item === null && typeof value === 'object') {
                 this.values[key] = {};
@@ -318,7 +332,7 @@ export class StorageController {
             }
 
             // Save
-            localStorage.setItem(key, item);
+            globalThis.localStorage.setItem(key, item);
         }
     }
 }

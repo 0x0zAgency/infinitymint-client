@@ -1,0 +1,37 @@
+{
+    "manifest": {
+        "name": "Ticketmint",
+        "author": "Llydia Cross",
+        "description": "",
+        "version": 1
+    },
+    "loaded": 1677033850035,
+    "path": "mods/ticketmint/",
+    "name": "ticketmint",
+    "enabled": true,
+    "main": true,
+    "mainSrc": "ticketmint/main.js",
+    "reactPath": "/Users/llydiacross/Sources/infinitymint-buildtools/../awedacity.eth/src/Deployments/mods/ticketmint/",
+    "files": {
+        "pages": [
+            "ticketmint/Pages/MintMultiMinter",
+            "ticketmint/Pages/MultiMinter",
+            "ticketmint/Pages/MyMultiMinter",
+            "ticketmint/Pages/SelectiveMint",
+            "ticketmint/Pages/ViewMultiMinter"
+        ],
+        "images": [],
+        "styles": [],
+        "components": [],
+        "modals": [
+            "ticketmint/Modals/CreateMinterModal",
+            "ticketmint/Modals/CreateURIModal",
+            "ticketmint/Modals/LoadTokenURIModal",
+            "ticketmint/Modals/SaveTokenURIModal",
+            "ticketmint/Modals/SetImageModal"
+        ],
+        "resources": [
+            "ticketmint/Resources/Mod_MultiMinter"
+        ]
+    }
+}

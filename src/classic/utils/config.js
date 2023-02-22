@@ -589,10 +589,10 @@ export const Config = {
 
         if (
             fileName !== 'default' &&
-            Config.default.settings.overwriteModules &&
+            Config.settings.overwriteModules &&
             result.modules !== undefined
         ) {
-            Config.default.deployInfo.modules = { ...result.modules };
+            Config.deployInfo.modules = { ...result.modules };
         }
 
         return result;

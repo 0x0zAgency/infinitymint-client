@@ -1,0 +1,133 @@
+{
+    "files": {
+        "marketplace": {
+            "pages": [
+                "marketplace/Pages/Offer"
+            ],
+            "images": [],
+            "styles": [],
+            "components": [],
+            "modals": [],
+            "resources": []
+        },
+        "ticketmint": {
+            "pages": [
+                "ticketmint/Pages/MintMultiMinter",
+                "ticketmint/Pages/MultiMinter",
+                "ticketmint/Pages/MyMultiMinter",
+                "ticketmint/Pages/SelectiveMint",
+                "ticketmint/Pages/ViewMultiMinter"
+            ],
+            "images": [],
+            "styles": [],
+            "components": [],
+            "modals": [
+                "ticketmint/Modals/CreateMinterModal",
+                "ticketmint/Modals/CreateURIModal",
+                "ticketmint/Modals/LoadTokenURIModal",
+                "ticketmint/Modals/SaveTokenURIModal",
+                "ticketmint/Modals/SetImageModal"
+            ],
+            "resources": [
+                "ticketmint/Resources/Mod_MultiMinter"
+            ]
+        },
+        "redemption": {
+            "pages": [
+                "redemption/Pages/Redemption",
+                "redemption/Pages/RedemptionControls",
+                "redemption/Pages/SimpleWhitelist"
+            ],
+            "images": [],
+            "styles": [],
+            "components": [],
+            "modals": [
+                "redemption/Modals/GeneratePhraseSetModal",
+                "redemption/Modals/LoadPhraseSetModal",
+                "redemption/Modals/ShowPhraseModal",
+                "redemption/Modals/ValidateRequestModal"
+            ],
+            "resources": []
+        },
+        "contentLinks": {
+            "pages": [
+                "contentLinks/Pages/Audio",
+                "contentLinks/Pages/Edit",
+                "contentLinks/Pages/EditPath",
+                "contentLinks/Pages/Loading",
+                "contentLinks/Pages/View",
+                "contentLinks/Pages/ViewContent"
+            ],
+            "images": [],
+            "styles": [],
+            "components": [],
+            "modals": [
+                "contentLinks/Modals/DeletePathModal",
+                "contentLinks/Modals/EditPathModal"
+            ],
+            "resources": []
+        }
+    },
+    "updated": 1677033850039,
+    "mods": {
+        "marketplace": {
+            "manifest": {
+                "name": "Marketplace Extension",
+                "author": "Llydia Cross",
+                "description": "Enables marketplace functionality inside of InfinityMint.",
+                "version": 1,
+                "dependencies": []
+            },
+            "loaded": 1677033850034,
+            "path": "mods/marketplace/",
+            "name": "marketplace",
+            "enabled": true,
+            "setupMethod": null
+        },
+        "ticketmint": {
+            "manifest": {
+                "name": "Ticketmint",
+                "author": "Llydia Cross",
+                "description": "",
+                "version": 1
+            },
+            "loaded": 1677033850035,
+            "path": "mods/ticketmint/",
+            "name": "ticketmint",
+            "enabled": true
+        },
+        "redemption": {
+            "manifest": {
+                "name": "ERC721 Redemption Tools",
+                "author": "Llydia Cross",
+                "description": "Offers two forms of redemption for ERC721 tokens. The first method is a passcode based system which doesn't need any wallets to be set up. The second is classic Merkle Tree requiring addresses.",
+                "version": 1,
+                "production": true,
+                "requirements": {
+                    "version": "hydra"
+                },
+                "dependencies": [
+                    "@openzeppelin/contracts"
+                ]
+            },
+            "loaded": 1677033850035,
+            "path": "mods/redemption/",
+            "name": "redemption",
+            "enabled": true
+        },
+        "contentLinks": {
+            "manifest": {
+                "name": "Content Links",
+                "author": "Llydia Cross",
+                "description": "Adds a couple of pages which enable token owners to easily view/play the content attached to a token.",
+                "version": 1
+            },
+            "loaded": 1677033850034,
+            "path": "mods/contentLinks/",
+            "name": "contentLinks",
+            "enabled": true,
+            "deployMethod": null,
+            "setupMethod": null
+        }
+    }
+}

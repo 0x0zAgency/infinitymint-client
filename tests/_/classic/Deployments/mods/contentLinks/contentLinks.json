@@ -1,0 +1,35 @@
+{
+    "manifest": {
+        "name": "Content Links",
+        "author": "Llydia Cross",
+        "description": "Adds a couple of pages which enable token owners to easily view/play the content attached to a token.",
+        "version": 1
+    },
+    "loaded": 1677033850034,
+    "path": "mods/contentLinks/",
+    "name": "contentLinks",
+    "enabled": true,
+    "deployMethod": null,
+    "setupMethod": null,
+    "main": true,
+    "mainSrc": "contentLinks/main.js",
+    "reactPath": "/Users/llydiacross/Sources/infinitymint-buildtools/../awedacity.eth/src/Deployments/mods/contentLinks/",
+    "files": {
+        "pages": [
+            "contentLinks/Pages/Audio",
+            "contentLinks/Pages/Edit",
+            "contentLinks/Pages/EditPath",
+            "contentLinks/Pages/Loading",
+            "contentLinks/Pages/View",
+            "contentLinks/Pages/ViewContent"
+        ],
+        "images": [],
+        "styles": [],
+        "components": [],
+        "modals": [
+            "contentLinks/Modals/DeletePathModal",
+            "contentLinks/Modals/EditPathModal"
+        ],
+        "resources": []
+    }
+}

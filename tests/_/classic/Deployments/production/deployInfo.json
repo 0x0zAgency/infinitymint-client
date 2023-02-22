@@ -1,0 +1,32 @@
+{
+    "chainId": "137",
+    "network": "polygon",
+    "project": "awedacity_ticketmint",
+    "modules": {
+        "controller": "SimpleImage",
+        "minter": "DefaultMinter",
+        "random": "UnsafeRandom",
+        "royalty": "SplitRoyalty",
+        "renderScript": "MagicMirror",
+        "linker": "InfinityMintLinker"
+    },
+    "deployer": "0x527738Dd42170065d778C89264654b03f8Ed989B",
+    "id": "98cd9ace-b2eb-4a74-b3f6-461889cf2210",
+    "date": 1675836013760,
+    "contracts": {
+        "InfinityMint": "0x242BEbAcd80CF66cd51c71436968A286E5522034",
+        "InfinityMintStorage": "0x253d9d729f6e775E283fEbf4Fc1329d43Da5f0Ac",
+        "InfinityMintUtil": "0xd7fcAa6A3e68e4eDAb6eA551594cF60CCe436F73",
+        "InfinityMintLinker": "0x53C6db489fD5Fe31eb4D8Db87f931e82417911C9",
+        "InfinityMintValues": "0x2d65a808DBB7F6fF5d7815F7c0D26cb0B7d8149e",
+        "InfinityMintApi": "0x0E19f2EcD41638965Bea051d2B339E549aE329de",
+        "InfinityMintProject": "0xfa444422dE1cF3575d8920C958fE14c6b860b37E",
+        "SimpleImage": "0x5e42832B838fdE0E2225FdA02400b4dFff8a6EC8",
+        "UnsafeRandom": "0xa71CB00ceBdb6Aa319cCA14DC63BD7B752B03fe8",
+        "DefaultMinter": "0xda6edBB56D7DfC282FA7DbEA658239801D579c1B",
+        "SplitRoyalty": "0xEE88A119Aed4f87097A8d3855c45A3690386c6cC",
+        "Mod_SelectiveMint": "0x18A6Db89478b49CEe39DE01764fd40a0Ec29683D",
+        "Mod_UploadPaths": "0xda08C136DE8C64DF79488E20Ec75D264675226F7",
+        "Mod_Marketplace": "0xf79Bdf166D10a7a5e35A912136a3DA71022Db947"
+    }
+}

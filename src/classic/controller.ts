@@ -243,11 +243,15 @@ export class Controller {
 
         try {
             await this.config.default.load();
-            await this.loadAbis();
-            controller.log('[✔️] InfinityMint Abis Loaded');
             controller.log('[✔️] InfinityMint Loaded');
             tokenMethods.load();
             controller.log('[✔️] Token Methods Loaded');
+            this.defaultProjectURI = await this.getProjectURI();
+            controller.log('[✔️] Default URI Loaded Loaded');
+            this.loadAbis();
+            controller.log('[✔️]ABI Loaded Loaded');
+            this.initializeContracts();
+            controller.log('[✔️] Initialized Contracts');
         } catch (error) {
             controller.log('[❌] InfinityMint Loaded');
             controller.log(error);
@@ -2044,23 +2048,12 @@ export class Controller {
     /**
      * Loads the projects objectURI called before react application renders
      */
-    async loadObjectURI() {
-        this.defaultProjectURI = await this.getProjectURI();
-
-        try {
-            if (
-                this.config.default.settings.useLocalProjectAsDefault ||
-                this.config.default.settings.useLocalProjectURI
-            ) {
-                this.localProjectURI = await this.getProjectURI(
-                    this.config.default.settings.localProject,
-                    true
-                );
-            }
-        } catch (error) {
-            this.localProjectURI = { ...this.defaultProjectURI };
-            this.log('cannot set local object URI: ' + error.message);
-        }
+    async loadObjectURI(
+        project: string = ''
+    ): Promise<InfinityMintProjectJavascriptDeployed> {
+        if (project === '') project = this.config.default.deployInfo.project;
+        this.localProjectURI = await this.getProjectURI(project);
+        return this.localProjectURI;
     }
 
     /**

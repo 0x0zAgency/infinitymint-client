@@ -1,6 +1,9 @@
 {
     "name": "infinitymint-client",
     "version": "2.4.0",
+    "infinityMint": {
+        "allowExport": true
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/0x0zAgency/infinitymint-client.git"

@@ -1,29 +1,36 @@
 require('mocha');
 const { assert } = require('chai');
-const classic = require('../../dist/src/classic');
-const testConfig = require('../_/classic/config'); // This is the config file specifically for testing
-const { call, send } = require('../../dist/src/classic/utils/contract');
+const classic = require('../../dist/src/classic').default;
+const testConfig = require('../_/classic/config.js'); // This is the config file specifically for testing
 const { controller } = classic;
+const { call, send } = require('../../dist/src/classic/helpers');
 
 describe('[Classic] Controller Class', () => {
     /**
      * @type {typeof import('../../dist/src/classic/utils/config').Config}
      */
     let config;
+    /**
+     * @type {typeof import('infinitymint/dist/app/interfaces').InfinityMintProjectJavascript}
+     */
+    let project;
     it('Should attempt to load the controller using our current conifg', async () => {
         await controller.start(testConfig);
         config = controller.getConfig();
     });
-    it('Should attempt to load a project file', async () => {
-        await controller.loadObjectURI();
+    it('Should attempt to load the project file', async () => {
+        project = await controller.loadObjectURI();
+
+        assert.isObject(project);
+        assert.isNotEmpty(project);
+        assert.equal(project.project, config.deployInfo.project);
     });
-    it('Should attempt to check if the deployer is approved with the InfinityMint contract (call test)', () => {
-        let result = call('InfinityMint', 'isApproved', [
-            config.deployInfo.deployer,
-        ]);
-        assert.isTrue(result);
-    });
-    it('Should attempt to approve the deployer with the contrac)', () => {
-        send('InfinityMint', 'setPrivillages', [config.deployInfo.deployer]);
+
+    it('Should have loaded InfinityMint ABI and project contract should match deployInfo contract', () => {
+        assert.isNotEmpty(controller.getContract('InfinityMint'));
+        assert.equal(
+            project.contracts['InfinityMint'],
+            config.deployInfo.contracts['InfinityMint']
+        );
     });
 });

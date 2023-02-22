@@ -1,4 +1,4 @@
-import { Web3Storage, File } from 'web3.storage/dist/bundle.esm.min.js';
+import { Web3Storage, File } from 'web3.storage';
 
 export class IPFSController {
     #instance;

@@ -1,6 +1,6 @@
 import { Web3Storage, File } from 'web3.storage';
 
-export class IPFSController {
+export class Web3StorageController {
     #instance;
 
     createInstance(apikey) {
@@ -82,5 +82,5 @@ export class IPFSController {
         this.#instance = null;
     }
 }
-const ipfsController = new IPFSController();
+const ipfsController = new Web3StorageController();
 export default ipfsController;

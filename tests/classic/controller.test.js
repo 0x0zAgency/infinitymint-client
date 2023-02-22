@@ -38,6 +38,13 @@ describe('[Classic] Controller Class', () => {
         assert.equal(result, project.deployment.maxSupply);
     });
 
+    it('Should return that the current deployer is authenticated', async () => {
+        let result = await call('InfinityMint', 'isAuthenticated', [
+            config.deployInfo.deployer,
+        ]);
+        assert.isTrue(result);
+    });
+
     it('Should try and authenticate the current deployer with the InfinityMint contract', async () => {
         await send('InfinityMint', 'setPrivilages', [
             config.deployInfo.deployer,

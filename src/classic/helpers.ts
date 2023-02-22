@@ -79,15 +79,17 @@ export const prepareCall = (contractName, method: string, args = []) => {
     let callable = contract.methods[method];
     // invalid attempt to spread non-iterable instance in order to be iterable, non-array objects must have a [symbol.iterator]() method
     //IM SO SORRY FOR THIS
-    if (args[0]) return callable(args[0]);
-    else if (args[1]) return callable(args[0], args[1]);
-    else if (args[2]) return callable(args[0], args[1], args[2]);
-    else if (args[3]) return callable(args[0], args[1], args[2], args[3]);
-    else if (args[4])
+    if (args.length === 0) return callable();
+    else if (args.length === 1) return callable(args[0]);
+    else if (args.length === 2) return callable(args[0], args[1]);
+    else if (args.length === 3) return callable(args[0], args[1], args[2]);
+    else if (args.length === 4)
+        return callable(args[0], args[1], args[2], args[3]);
+    else if (args.length === 5)
         return callable(args[0], args[1], args[2], args[3], args[4]);
-    else if (args[5])
+    else if (args.length === 6)
         return callable(args[0], args[1], args[2], args[3], args[4], args[5]);
-    else if (args[6])
+    else if (args.length === 7)
         return callable(
             args[0],
             args[1],
@@ -97,7 +99,7 @@ export const prepareCall = (contractName, method: string, args = []) => {
             args[5],
             args[6]
         );
-    else if (args[7])
+    else
         return callable(
             args[0],
             args[1],
@@ -106,9 +108,8 @@ export const prepareCall = (contractName, method: string, args = []) => {
             args[4],
             args[5],
             args[6],
-            args[7]
+            args[7] // I'm sorry
         );
-    else return callable();
 };
 /**
  * A helper function to storage data, this is used with stickers. Key refers to one of the fields inside

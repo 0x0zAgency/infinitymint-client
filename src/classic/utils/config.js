@@ -8,8 +8,6 @@ import pageController from '../pageController';
 /**
  * Locations for the various required files
  */
-const deploymentsRoot = './Deployments/';
-const deploymentsProductionRoot = './Deployments/production/';
 const tokenMethodRoot = './Deployments/scripts/';
 const modsRoot = './Deployments/mods/';
 
@@ -19,13 +17,21 @@ export const requireModules = async (production) => {
         defaultStaticManifest: await import(
             './Deployments/static/default_manifest.json'
         ),
-        staticManifest: await import('./Deployments/static/manifest.json'),
         modManifest: await import('./Deployments/mods/modManifest.json'),
         pages: await import('./Resources/pages.json'),
         tokenMethodManifest: await import(
             './Deployments/scripts/manifest.json'
         ),
     };
+
+    try {
+        results.staticManifest = await import(
+            './Deployments/static/manifest.json'
+        );
+    } catch (error) {
+        console.log('[⚠️] WARNING! No static manifest found, using default');
+        results.staticManifest = results.defaultStaticManifest;
+    }
 
     Object.keys(results).forEach((key) => {
         results[key] = results[key].default || results[key];
@@ -711,14 +717,12 @@ export const Config = {
             ? Config.getProjectName() + '/'
             : '';
 
-        return require(`${
-            (Config.settings.production
-                ? deploymentsRoot
-                : deploymentsProductionRoot) +
-            path +
-            contract +
-            '.json'
-        }`);
+        if (Config.settings.production)
+            return require('./Deployments/production/' +
+                path +
+                contract +
+                '.json');
+        else return require('./Deployments/' + path + contract + '.json');
     },
 
     /**
@@ -860,7 +864,6 @@ export const Config = {
             const {
                 deployInfo,
                 staticManifest,
-                defaultStaticManifest,
                 pages,
                 modManifest,
                 tokenMethodManifest,

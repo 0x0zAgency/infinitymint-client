@@ -68,13 +68,19 @@ export const call = async (contractName: any, method: any, args: any = []) => {
  * @param args
  * @returns
  */
-export const prepareCall = (contractName, method: string, args = []) => {
+export const prepareCall = (contractName, method: string, args?: any) => {
     let contract = Controller.getContract(contractName);
 
     if (!contract?.methods?.[method])
         throw new Error(
             `Contract ${contractName} does not have method ${method}`
         );
+
+    args = args.parameters || args;
+    if (args instanceof Array === false && typeof args !== 'object')
+        args = [args];
+    else if (args instanceof Array === false && typeof args === 'object')
+        args = Object.values(args);
 
     let callable = contract.methods[method];
     // invalid attempt to spread non-iterable instance in order to be iterable, non-array objects must have a [symbol.iterator]() method

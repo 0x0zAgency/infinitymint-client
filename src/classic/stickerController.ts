@@ -1,7 +1,7 @@
-import tinySVG from 'tinysvg-js';
-import Controller from './controller.js';
-import { md5 } from './helpers.js';
-import StorageController from './storageController.js';
+import tinySVG from './tinysvg';
+import Controller from './controller';
+import { md5 } from './helpers';
+import StorageController from './storageController';
 
 /**
  * Web3 Sticker Controller Class
@@ -76,12 +76,12 @@ export const parseBlockchainSticker = async (value, tokenId) => {
 
 export class StickerController {
     instance;
-    #token;
-    #tokenId;
-    #contractName;
+    private token;
+    private tokenId;
+    private contractName;
 
     async isDifferentTokenId(comparable) {
-        return this.#tokenId !== comparable;
+        return this.tokenId !== comparable;
     }
 
     /**
@@ -93,23 +93,23 @@ export class StickerController {
     async createContract(tokenId, contractName = 'Fake_EADStickers') {
         let Config = Controller.getConfig();
         const abi = Config.getDeployment(contractName).abi;
-        this.#token = await Controller.getTokenObject(tokenId);
-        this.#tokenId = tokenId;
+        this.token = await Controller.getTokenObject(tokenId);
+        this.tokenId = tokenId;
 
-        if (this.#token.tokenId !== this.#tokenId) {
+        if (this.token.tokenId !== this.tokenId) {
             throw new Error('object does not match class parameter');
         }
 
         if (
-            this.#token.destinations[1] === undefined ||
-            this.#token.destinations[1] === Controller.nullAddress
+            this.token.destinations[1] === undefined ||
+            this.token.destinations[1] === Controller.nullAddress
         ) {
             throw new Error('user has not linked sticker contract');
         }
 
-        this.#contractName = contractName;
+        this.contractName = contractName;
         this.instance = Controller.initializeContract(
-            this.#token.destinations[1],
+            this.token.destinations[1],
             contractName,
             true,
             abi
@@ -298,7 +298,7 @@ export class StickerController {
         const sticker = StorageController.values.stickers[localStickerId].final;
         const result = await Controller.sendAndWaitForEvent(
             Controller.accounts[0],
-            this.#contractName,
+            this.contractName,
             'addRequest',
             Config.events.Stickers.RequestAdded,
             {
@@ -312,11 +312,11 @@ export class StickerController {
             throw new Error(result[0]?.message || JSON.stringify(result[0]));
         }
 
-        if (StorageController.values.requests[this.#tokenId] === undefined) {
-            StorageController.values.requests[this.#tokenId] = {};
+        if (StorageController.values.requests[this.tokenId] === undefined) {
+            StorageController.values.requests[this.tokenId] = {};
         }
 
-        StorageController.values.requests[this.#tokenId][localStickerId] = {
+        StorageController.values.requests[this.tokenId][localStickerId] = {
             id: localStickerId,
             time: Date.now(),
             source: 'local',
@@ -342,7 +342,7 @@ export class StickerController {
         return Controller.web3.eth.abi.encodeParameters(
             ['uint64', 'string', 'string', 'address'],
             [
-                this.#tokenId,
+                this.tokenId,
                 sticker.checksum,
                 JSON.stringify(sticker),
                 Controller.accounts[0],
@@ -354,7 +354,7 @@ export class StickerController {
         let Config = Controller.getConfig();
         const result = await Controller.sendAndWaitForEvent(
             Controller.accounts[0],
-            this.#contractName,
+            this.contractName,
             'acceptRequest',
             Config.events.Stickers.RequestAccepted,
             {
@@ -363,8 +363,8 @@ export class StickerController {
             }
         );
 
-        Controller.toggleFlag(this.#tokenId, 'refresh');
-        Controller.toggleFlag(this.#tokenId, 'needsTokenURIREfresh');
+        Controller.toggleFlag(this.tokenId, 'refresh');
+        Controller.toggleFlag(this.tokenId, 'needsTokenURIREfresh');
 
         return result;
     }
@@ -373,7 +373,7 @@ export class StickerController {
         let Config = Controller.getConfig();
         return await Controller.sendAndWaitForEvent(
             Controller.accounts[0],
-            this.#contractName,
+            this.contractName,
             'withdrawRequest',
             Config.events.Stickers.RequestWithdrew,
             {
@@ -404,7 +404,7 @@ export class StickerController {
         let Config = Controller.getConfig();
         return await Controller.sendAndWaitForEvent(
             Controller.accounts[0],
-            this.#contractName,
+            this.contractName,
             'denyRequest',
             Config.events.Stickers.RequestDenied,
             {
@@ -431,7 +431,7 @@ export class StickerController {
 
         return Controller.callMethod(
             Controller.accounts[0],
-            this.#contractName,
+            this.contractName,
             'stickerPrice'
         );
     }
@@ -445,12 +445,12 @@ export class StickerController {
     async getSticker(id, method = 'getMyRequestedSticker') {
         const result = await Controller.callMethod(
             Controller.accounts[0],
-            this.#contractName,
+            this.contractName,
             method,
             { parameters: [id] }
         );
 
-        return parseBlockchainSticker(result, this.#tokenId);
+        return parseBlockchainSticker(result, this.tokenId);
     }
 
     /**
@@ -459,14 +459,14 @@ export class StickerController {
      */
     async getRequests() {
         return await this.getRequestedStickersMethod(
-            this.#tokenId,
+            this.tokenId,
             'getRequests'
         );
     }
 
     async getMyRequestedStickers() {
         return await this.getRequestedStickersMethod(
-            this.#tokenId,
+            this.tokenId,
             'getMyRequests'
         );
     }
@@ -481,7 +481,7 @@ export class StickerController {
         try {
             results = await Controller.callMethod(
                 Controller.accounts[0],
-                this.#contractName,
+                this.contractName,
                 method
             );
         } catch (error) {
@@ -526,7 +526,7 @@ export class StickerController {
 
         const results = await Controller.callMethod(
             Controller.accounts[0],
-            this.#contractName,
+            this.contractName,
             'getStickers',
             {}
         );

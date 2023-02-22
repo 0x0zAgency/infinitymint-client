@@ -2,8 +2,8 @@
  * InfinityMint DAPP Configuration File
  */
 
-import modController from '../modController';
-import pageController from '../pageController';
+const modController = require('infinitymint-client/dist/src/classic/modController');
+const pageController = require('infinitymint-client/dist/src/classic/pageController');
 
 /**
  * Locations for the various required files

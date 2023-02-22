@@ -1,4 +1,3 @@
-import { load } from 'infinitymint';
 import glob from 'glob';
 import Mocha from 'mocha';
 
@@ -6,16 +5,10 @@ import Mocha from 'mocha';
     try {
         const mocha = new Mocha();
 
-        // Load the environment.
-        await load({
-            dontDraw: true,
-            scriptMode: true,
-        });
-
         // Add all the files to mocha.
         await new Promise((resolve, reject) => {
             // Relative to the project root.
-            glob('/tests/**/*.test.ts', (error, files) => {
+            glob(process.cwd() + '/tests/**/*.test.ts', (error, files) => {
                 if (error) {
                     reject(error);
                     return;

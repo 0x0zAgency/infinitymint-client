@@ -1,13 +1,13 @@
-import Controller from './controller.js';
-import Resources from './resources.js';
+import Controller from './controller';
+import Resources from './resources';
 
 export class ModController {
-    modManifest = {};
-    mods = {}; // Loaded by config.js
-    modMains = {};
-    modErrors = {};
-    modPages = {}; // Loaded by config.js
-    modsSuccess = false; // Set by config.js
+    modManifest: any = {}; // Loaded b
+    mods: any = {}; // Loaded by config.js
+    modMains: any = {}; // Loaded b
+    modErrors: any = {}; // Loaded b
+    modPages: any = {}; // Loaded b
+    modsSuccess: boolean = false; // Set by config.js
 
     getModManifest(modName) {
         return this.modManifest.mods[modName];

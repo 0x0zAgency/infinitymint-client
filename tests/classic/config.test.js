@@ -1,12 +1,14 @@
-import 'mocha';
-import { assert } from 'chai';
-import classic from '../../dist/src/classic';
-import testConfig from '../_/classic/config'; // This is the config file specifically for testing
-
+require('mocha');
+const { assert } = require('chai');
+const classic = require('../../dist/src/classic');
+const testConfig = require('../_/classic/config'); // This is the config file specifically for testing
 const { controller } = classic;
 
 describe('[Classic] Config Test', () => {
-    let config: typeof import('../../dist/src/classic/utils/config').Config;
+    /**
+     * @type {typeof import('../../dist/src/classic/utils/config').Config}
+     */
+    let config;
     it('Should attempt to load the controller using our test config', async () => {
         await controller.start(testConfig);
         config = controller.getConfig();

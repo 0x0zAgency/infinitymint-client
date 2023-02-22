@@ -1,15 +1,15 @@
-import Controller from './controller.js';
+import Controller from './controller';
 
 export class StorageController {
-    values = {};
+    public values: any = {};
     // Private
-    #fields;
+    private fields: { [s: string]: unknown } | ArrayLike<unknown>;
     /**
      * Constructor
      */
     constructor() {
         // Define new keys here
-        this.#fields = {
+        this.fields = {
             transactions: {}, // All of your transactions
             tokens: {}, // Cached tokens from the block chain,
             previews: {},
@@ -33,7 +33,7 @@ export class StorageController {
      * @param {string|number} key
      * @param {*} value
      */
-    setGlobalPreference(key, value) {
+    setGlobalPreference(key: string | number, value: any) {
         const pref = { ...this.getGlobalPreferences() };
         pref[key] = value;
         this.values.pagePrefrences.global = pref;
@@ -45,7 +45,7 @@ export class StorageController {
      * @param {string|number} key
      * @returns
      */
-    getGlobalPreference(key) {
+    getGlobalPreference(key: string | number) {
         return this.getGlobalPreferences()[key];
     }
 
@@ -54,7 +54,7 @@ export class StorageController {
      * @param {string|number} key
      * @returns
      */
-    isGlobalPreference(key) {
+    isGlobalPreference(key: string | number) {
         return this.getGlobalPreferences()[key] === true;
     }
 
@@ -95,7 +95,7 @@ export class StorageController {
      * @param {*} value
      * @param {string|number} id
      */
-    setPagePreference(key, value, id = null, log = false) {
+    setPagePreference(key: string, value: any, id: any, log = false) {
         if (id !== null && typeof id !== 'string') {
             id = id.id || id.name || 'default';
         } else if (
@@ -128,7 +128,7 @@ export class StorageController {
      * @param {string} id
      * @returns
      */
-    getPagePreference(key, id = null, log = false) {
+    getPagePreference(key: string, id: any, log = false) {
         if (id !== null && typeof id !== 'string') {
             id = id.id || id.name || 'default';
         } else if (
@@ -161,17 +161,17 @@ export class StorageController {
      * @param {string} id
      * @returns
      */
-    isPageReference(key, id = null) {
+    isPageReference(key: string, id: string = null) {
         return this.getPagePreference(key, id) === true;
     }
 
     /**
      * Trurns true if the key exists, and is not null. use existsAndNotEmpty if using arrays/objects
      * @param {string} key
-     * @param {bool} nullCheck
+     * @param {boolean} nullCheck
      * @returns
      */
-    exists(key, nullCheck = true) {
+    exists(key: string, nullCheck: boolean = true) {
         return (
             this.values[key] !== undefined &&
             (!nullCheck ? true : this.values[key] !== undefined)
@@ -184,7 +184,7 @@ export class StorageController {
      * @param {string} key
      * @returns
      */
-    existsAndNotEmpty(key) {
+    existsAndNotEmpty(key: string) {
         if (!this.exists(key)) {
             return false;
         }
@@ -207,9 +207,14 @@ export class StorageController {
      * Saves a transaction
      * @param {object} tx
      * @param {string} method
-     * @param {bool} save
+     * @param {boolean} save
      */
-    saveTransactionResult(tx, method = 'mint', save = true, log = false) {
+    saveTransactionResult(
+        tx: object,
+        method: string = 'mint',
+        save: boolean = true,
+        log = false
+    ) {
         if (log)
             Controller.log(
                 'Saving transaction result from method: ' + method,
@@ -238,7 +243,7 @@ export class StorageController {
      */
     loadSavedData() {
         Controller.log('Loading storaged data from local storage', 'storage');
-        for (const [key, value] of Object.entries(this.#fields)) {
+        for (const [key, value] of Object.entries(this.fields)) {
             this.values[key] = null;
             const item = localStorage.getItem(key);
 
@@ -277,7 +282,7 @@ export class StorageController {
      */
     wipe() {
         Controller.log('Wiping storage', 'storage');
-        for (const [key] of Object.entries(this.#fields)) {
+        for (const [key] of Object.entries(this.fields)) {
             this.values[key] = {};
         }
     }
@@ -287,7 +292,7 @@ export class StorageController {
      * @param {string} key
      * @param {*} value
      */
-    set(key, value, log = false) {
+    set(key: string, value: any, log = false) {
         if (log) Controller.log('Setting ' + key, 'storage');
         if (this.values[key] === undefined) {
             throw new Error('trying to set an undefined value');
@@ -300,9 +305,9 @@ export class StorageController {
     /**
      * Saves all the data inside of fields to local storage and packs objects accordingly
      */
-    saveData(log) {
+    saveData(log = false) {
         Controller.log('Saving storage data', 'storage');
-        for (const [key, value] of Object.entries(this.#fields)) {
+        for (const [key, value] of Object.entries(this.fields)) {
             let item = this.values[key];
             if (typeof value === 'object') {
                 if (item === null) {

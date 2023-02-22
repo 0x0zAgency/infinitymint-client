@@ -1299,9 +1299,9 @@ export class Controller {
     /**
      * @param {*} event
      * @param {*} timeout
-     * @returns Promise
+     * @returns {Promise<any>}
      */
-    awaitEvent(event: any, timeout: any = 3000) {
+    awaitEvent(event: any, timeout: any = 3000): Promise<any> {
         return new Promise((resolve, reject) => {
             const eventError = this.getEventErrorKey(event);
             const length = this.getLengthOfEvent(event);

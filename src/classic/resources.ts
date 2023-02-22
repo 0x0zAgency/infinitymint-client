@@ -1,7 +1,7 @@
-import Controller from './controller.js';
+import Controller from './controller';
 
 // Loaded through await import
-let ResStrings = {};
+let ResStrings: any = {};
 
 /**
  * Recursive function to replace special keys inside strings in an object
@@ -55,9 +55,9 @@ export const replaceInObject = (object) => {
  * Controller class to work with the strings
  */
 export class Resources {
-    $;
-    #map; // Set in load
-    #savedDescription = {
+    public $;
+    private resourceMap; // Set in load
+    private savedDescription: any = {
         token: 'Unknown',
         name: 'Unknown',
     };
@@ -89,11 +89,11 @@ export class Resources {
     }
 
     projectName() {
-        return this.#savedDescription.name;
+        return this.savedDescription.name;
     }
 
     replaceInString(value_, isPlural = false) {
-        for (const [index, value] of Object.entries(this.#map)) {
+        for (const [index, value] of Object.entries(this.resourceMap)) {
             value_ = value_.replace(
                 // Note: Only replaces one!
                 index,
@@ -109,13 +109,13 @@ export class Resources {
      * @returns
      */
     projectToken() {
-        return this.#savedDescription.token;
+        return this.savedDescription.token;
     }
 
     projectTokenPlural() {
         return (
-            this.#savedDescription.tokenPlural ||
-            this.#savedDescription.token + 's'
+            this.savedDescription.tokenPlural ||
+            this.savedDescription.token + 's'
         );
     }
 
@@ -156,7 +156,7 @@ export class Resources {
         ResStrings = Config.resourceFile;
 
         // This.#map has to be defined here due to getDescription needing to be loaded
-        this.#map = {
+        this.resourceMap = {
             '%token%': (isPlural) =>
                 (isPlural
                     ? this.projectTokenPlural()
@@ -176,7 +176,7 @@ export class Resources {
             '\\g': (isPlural) => (isPlural ? 'es' : ''),
         };
 
-        this.#savedDescription = Controller.getDescription();
+        this.savedDescription = Controller.getDescription();
     }
 
     async load() {

@@ -1,13 +1,15 @@
-import 'mocha';
-import { assert } from 'chai';
-import classic from '../../dist/src/classic';
-import { call, send } from '../../dist/src/classic/helpers';
-import testConfig from '../_/classic/config'; // This is the config file specifically for testing
-
+require('mocha');
+const { assert } = require('chai');
+const classic = require('../../dist/src/classic');
+const testConfig = require('../_/classic/config'); // This is the config file specifically for testing
+const { call, send } = require('../../dist/src/classic/utils/contract');
 const { controller } = classic;
 
 describe('[Classic] Controller Class', () => {
-    let config: typeof import('../../dist/src/classic/utils/config').Config;
+    /**
+     * @type {typeof import('../../dist/src/classic/utils/config').Config}
+     */
+    let config;
     it('Should attempt to load the controller using our current conifg', async () => {
         await controller.start(testConfig);
         config = controller.getConfig();
@@ -17,13 +19,11 @@ describe('[Classic] Controller Class', () => {
     });
     it('Should attempt to check if the deployer is approved with the InfinityMint contract (call test)', () => {
         let result = call('InfinityMint', 'isApproved', [
-            (config.deployInfo as any).deployer,
+            config.deployInfo.deployer,
         ]);
         assert.isTrue(result);
     });
     it('Should attempt to approve the deployer with the contrac)', () => {
-        send('InfinityMint', 'setPrivillages', [
-            (config.deployInfo as any).deployer,
-        ]);
+        send('InfinityMint', 'setPrivillages', [config.deployInfo.deployer]);
     });
 });

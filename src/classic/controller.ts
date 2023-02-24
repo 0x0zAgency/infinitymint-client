@@ -928,7 +928,7 @@ export class Controller {
     mapWindowMethods() {
         window.addEventListener('resize', () => {
             try {
-                tokenMethods.onWindowResize(Controller);
+                tokenMethods.onWindowResize(this);
             } catch (error) {
                 this.log('failed to call resize on tokenMethods', 'warning');
                 console.log(error);

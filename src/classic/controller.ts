@@ -346,9 +346,14 @@ export class Controller {
             'transaction'
         );
 
+        if (args.parameters) delete args.parameters;
+
         if (args.value !== undefined) args.value = value;
         if (type === 'send')
-            return await send(contract, method, parameters, args);
+            return await send(contract, method, parameters, {
+                value: value,
+                ...args,
+            });
         else return await call(contract, method, args);
     }
 

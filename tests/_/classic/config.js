@@ -16,6 +16,8 @@ const modsRoot = './Deployments/mods/';
 const requireModules = async (production) => {
     let results = {
         deployInfo: await require('./Deployments/deployInfo.json'),
+        deployInfoProduction:
+            await require('./Deployments/production/deployInfo.json'),
         defaultStaticManifest:
             await require('./Deployments/static/default_manifest.json'),
         modManifest: await require('./Deployments/mods/modManifest.json'),
@@ -872,13 +874,17 @@ const Config = {
         try {
             const {
                 deployInfo,
+                deployInfoProduction,
                 staticManifest,
                 pages,
                 modManifest,
                 tokenMethodManifest,
             } = await requireModules();
 
-            Config.deployInfo = deployInfo;
+            if (Config.settings.production)
+                Config.deployInfo = deployInfoProduction;
+            else Config.deployInfo = deployInfo;
+
             console.log('[📙] Requiring token methods');
             //await loadTokenMethods(tokenMethodManifest);
             console.log('[📙] Requiring resource strings');

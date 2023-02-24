@@ -2,8 +2,8 @@
  * InfinityMint DAPP Configuration File
  */
 
-const modController = require('../modController');
-const pageController = require('../pageController');
+import modController from '../modController';
+import pageController from '../pageController';
 
 /**
  * Locations for the various required files
@@ -11,20 +11,23 @@ const pageController = require('../pageController');
 const tokenMethodRoot = './Deployments/scripts/';
 const modsRoot = './Deployments/mods/';
 
-const requireModules = async (production) => {
+export const requireModules = async (production) => {
     let results = {
-        deployInfo: await require('./Deployments/deployInfo.json'),
-        defaultStaticManifest:
-            await require('./Deployments/static/default_manifest.json'),
-        modManifest: await require('./Deployments/mods/modManifest.json'),
-        pages: await require('./Resources/pages.json'),
-        tokenMethodManifest:
-            await require('./Deployments/scripts/manifest.json'),
+        deployInfo: await import('./Deployments/deployInfo.json'),
+        defaultStaticManifest: await import(
+            './Deployments/static/default_manifest.json'
+        ),
+        modManifest: await import('./Deployments/mods/modManifest.json'),
+        pages: await import('./Resources/pages.json'),
+        tokenMethodManifest: await import(
+            './Deployments/scripts/manifest.json'
+        ),
     };
 
     try {
-        results.staticManifest =
-            await require('./Deployments/static/manifest.json');
+        results.staticManifest = await import(
+            './Deployments/static/manifest.json'
+        );
     } catch (error) {
         console.log('[⚠️] WARNING! No static manifest found, using default');
         results.staticManifest = results.defaultStaticManifest;
@@ -36,7 +39,7 @@ const requireModules = async (production) => {
     return results;
 };
 
-const loadTokenMethods = async (tokenMethodManifest) => {
+export const loadTokenMethods = async (tokenMethodManifest) => {
     let scripts = {};
     if (
         tokenMethodManifest !== null &&
@@ -61,7 +64,7 @@ const loadTokenMethods = async (tokenMethodManifest) => {
         }
 };
 
-const loadPages = async (pages) => {
+export const loadPages = async (pages) => {
     for (const page of pages) {
         console.log('[✒️pages] requiring page ' + page.path);
         let requirePage = await require(`${
@@ -85,7 +88,7 @@ const loadPages = async (pages) => {
     }
 };
 
-const loadStaticManifest = async (staticManifest) => {
+export const loadStaticManifest = async (staticManifest) => {
     // Init with default values so stuff isnt broken
     const object = {
         background: 'Images/default_background.jpg',
@@ -158,7 +161,7 @@ const loadStaticManifest = async (staticManifest) => {
     return staticManifest;
 };
 
-const loadGems = async (modManifest) => {
+export const loadGems = async (modManifest) => {
     try {
         for (const modname of Object.keys(modManifest.mods)) {
             modController.mods[modname] = modManifest.mods[modname];
@@ -267,7 +270,7 @@ const loadGems = async (modManifest) => {
     }
 };
 
-const loadResourceStrings = async (resourceFile) => {
+export const loadResourceStrings = async (resourceFile) => {
     let result = await require('./Resources/' +
         resourceFile.replace(/.js/g, '') +
         '.js');
@@ -278,15 +281,13 @@ const loadResourceStrings = async (resourceFile) => {
 /**
  * DAPP ChainID and deployInfo
  */
-let chainId;
-let deployInfo;
+export let chainId;
+export let deployInfo;
 
-module.exports.chainId = chainId;
-module.exports.deployInfo = deployInfo;
 /**
  * Holds all of the configuation for the DAPP
  */
-const Config = {
+export const Config = {
     /**
      * DAPP Settings
      * ============================================================∂========================
@@ -870,19 +871,18 @@ const Config = {
 
             Config.deployInfo = deployInfo;
             console.log('[📙] Requiring token methods');
-            //await loadTokenMethods(tokenMethodManifest);
+            await loadTokenMethods(tokenMethodManifest);
             console.log('[📙] Requiring resource strings');
-            //await loadResourceStrings(Config.resources);
+            await loadResourceStrings(Config.resources);
             console.log('[📙] Requiring pages');
-            //await loadPages(pages);
+            await loadPages(pages);
             console.log('[📙] Requiring gems');
-            //await loadGems(modManifest);
+            await loadGems(modManifest);
             console.log('[📙] Requiring Static Manifest Assets');
-            //await loadStaticManifest(staticManifest);
+            await loadStaticManifest(staticManifest);
         } catch (error) {
             console.log(error);
         }
     },
 };
-module.exports.Config = Config;
-module.exports.default = Config;
+export default Config;

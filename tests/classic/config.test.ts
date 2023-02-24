@@ -1,11 +1,11 @@
-require('mocha');
-const { assert } = require('chai');
-const testConfig = require('../_/classic/config.js'); // This is the config file specifically for testing
-const controller = require('../../dist/src/classic/controller').default; //the controller
+import 'mocha';
+import { assert } from 'chai';
+import controller from '../../dist/src/classic/controller';
+import * as testConfig from '../_/classic/config'; // This is the config file specifically for testing
 
 describe('[Classic] Config Test', () => {
     /**
-     * @type {typeof import('../../dist/src/classic/utils/config').Config}
+     * @type {typeof import('../../dist/src/classic/utils/config.mjs').Config}
      */
     let config;
     it('Should attempt to load the controller using our test config', async () => {

@@ -2,37 +2,299 @@
  * InfinityMint DAPP Configuration File
  */
 
-const modController = require('../../../dist/src/classic/modController');
-const pageController = require('../../../dist/src/classic/pageController');
+const modController =
+    require('../../../dist/src/classic/modController').default;
+const pageController =
+    require('../../../dist/src/classic/pageController').default;
 
 /**
  * Locations for the various required files
  */
-const importRoot = './';
-const resourcesRoot = './Resources/';
-const deploymentsRoot = './Deployments/';
-const pageRoot = './';
 const tokenMethodRoot = './Deployments/scripts/';
-const tokenMethodManifestFilePath = './Deployments/scripts/manifest.json';
-const deployInfoFilePath = './Deployments/deployInfo.json';
-const staticManifestFilePath = './Deployments/static/manifest.json';
-const defaultStaticManifestFilePath =
-    './Deployments/static/default_manifest.json';
-const pagesFilePath = './Resources/pages.json';
 const modsRoot = './Deployments/mods/';
-const modManifestFilePath = './Deployments/mods/modManifest.json';
-const deployInfoProductionFilePath = './Deployments/production/deployInfo.json';
-const deploymentsProductionRoot = './Deployments/production/';
-const projectsRoot = './Deployments/projects/';
+
+const requireModules = async (production) => {
+    let results = {
+        deployInfo: await require('./Deployments/deployInfo.json'),
+        deployInfoProduction:
+            await require('./Deployments/production/deployInfo.json'),
+        defaultStaticManifest:
+            await require('./Deployments/static/default_manifest.json'),
+        modManifest: await require('./Deployments/mods/modManifest.json'),
+        pages: await require('./Resources/pages.json'),
+        tokenMethodManifest:
+            await require('./Deployments/scripts/manifest.json'),
+    };
+
+    try {
+        results.staticManifest =
+            await require('./Deployments/static/manifest.json');
+    } catch (error) {
+        console.log('[⚠️] WARNING! No static manifest found, using default');
+        results.staticManifest = results.defaultStaticManifest;
+    }
+
+    Object.keys(results).forEach((key) => {
+        results[key] = results[key].default || results[key];
+    });
+    return results;
+};
+
+const loadTokenMethods = async (tokenMethodManifest) => {
+    let scripts = {};
+    if (
+        tokenMethodManifest !== null &&
+        tokenMethodManifest?.scripts !== undefined &&
+        tokenMethodManifest.scripts.length > 0
+    )
+        for (let i = 0; i < tokenMethodManifest.scripts.length; i++) {
+            try {
+                scripts[tokenMethodManifest.scripts[i].split('.')[0]] = (
+                    await require(`${
+                        tokenMethodRoot + tokenMethodManifest.scripts[i]
+                    }`)
+                ).default;
+                Config.tokenMethodScripts = scripts;
+            } catch (error) {
+                console.log(
+                    '[😞] could not load token script:' +
+                        tokenMethodManifest.scripts[i]
+                );
+                console.error(error);
+            }
+        }
+};
+
+const loadPages = async (pages) => {
+    for (const page of pages) {
+        console.log('[✒️pages] requiring page ' + page.path);
+
+        /** 
+        let requirePage = await require(`${
+            './' + (page?.path || '').replace('.js', '')
+        }`);
+        requirePage = requirePage.default || requirePage;
+
+        if (requirePage.url === undefined) {
+            console.log(
+                '[⚠️] WARNING! Page at ' +
+                    (page.id || page.name) +
+                    ' does not have url set, registering as virtual page'
+            );
+            requirePage = pageController.registerFakePage(requirePage);
+        } else {
+            requirePage = pageController.registerPage(
+                requirePage,
+                requirePage.developer === true
+            );
+        }
+        */
+    }
+};
+
+const loadStaticManifest = async (staticManifest) => {
+    // Init with default values so stuff isnt broken
+    const object = {
+        background: 'Images/default_background.jpg',
+        headerBackground: 'Images/default_header.jpg',
+        defaultImage: 'Images/sad_panda.jpg',
+        backgroundColour: 'black',
+        stylesheets: ['Styles/bootstrap.min.css', 'Styles/app.css'],
+        images: {
+            features: 'Images/default_features.jpg',
+        },
+    };
+
+    for (let i = 0; i < staticManifest.stylesheets.length; i++) {
+        console.log(
+            '[⚡] Importing Stylesheet: ' + staticManifest.stylesheets[i]
+        );
+        await require(`${
+            './' + staticManifest.stylesheets[i].replace('@', '')
+        }`);
+        staticManifest.stylesheets[i] = true;
+    }
+
+    const background = (
+        staticManifest.background ||
+        object.background ||
+        ''
+    ).replace('@', '');
+    const headerBackground = (
+        staticManifest.headerBackground ||
+        object.headerBackground ||
+        ''
+    ).replace('@', '');
+    const defaultImage = (
+        staticManifest.defaultImage ||
+        object.defaultImage ||
+        ''
+    ).replace('@', '');
+
+    console.log('[⚡] Fetching Site Background Image: ' + background);
+    staticManifest.background = await require('./' + background);
+    console.log('[⚡] Fetching Header Background Image: ' + headerBackground);
+    staticManifest.headerBackground = await require(`${
+        './' + headerBackground
+    }`);
+    console.log('[⚡] Fetching Default Placeholder Image: ' + defaultImage);
+    staticManifest.defaultImage = await require('./' + background);
+
+    if (
+        staticManifest.images === undefined ||
+        staticManifest.images.length === 0
+    ) {
+        staticManifest.images = object.images;
+    }
+
+    try {
+        const keys = Object.keys(staticManifest.images);
+        for (const key of keys) {
+            const value = staticManifest.images[key];
+            console.log('[⚡] Fetching Custom Image: ' + value);
+            staticManifest.images[key.toLowerCase()] = await require(`${
+                './' + (value || '').replace('@', '')
+            }`);
+        }
+    } catch (error) {
+        console.log('[😞] Bad custom image files');
+        console.log(error);
+    }
+
+    Config.loadedContent = staticManifest;
+    return staticManifest;
+};
+
+const loadGems = async (modManifest) => {
+    try {
+        for (const modname of Object.keys(modManifest.mods)) {
+            modController.mods[modname] = modManifest.mods[modname];
+            console.log('[💎gems] found gem: ' + modname);
+
+            try {
+                console.log(
+                    '[💎gems] reading mod manifest: ' + modname + '.json'
+                );
+                const manifest = require(`${
+                    modsRoot + modname + '/' + modname + '.json'
+                }`);
+                modManifest.mods[modname] = manifest;
+            } catch (error) {
+                console.log(
+                    '[⚠️] WARNING! Failed to load mod manifest for ' +
+                        modname +
+                        ' information might appear missing'
+                );
+                console.log(error);
+            }
+
+            /**
+            if (modManifest.mods[modname].main) {
+                console.log('[💎gems] loading ' + modname + "'s main.js");
+                // eslint-disable-next-line no-loop-func
+                let result = await require(`${
+                    modsRoot +
+                    (modManifest.mods[modname].mainSrc || modname + '/main.js')
+                }`);
+                console.log('[💎gems] loaded' + modname + "'s main.js");
+                modController.modMains[modname] = result.default || result;
+            }
+            **/
+
+            if (
+                modManifest.mods[modname].enabled &&
+                modManifest.files[modname] !== undefined &&
+                modManifest.files[modname].pages !== undefined
+            ) {
+                modController.modPages[modname] = Object.values(
+                    modManifest.files[modname].pages
+                ).map((_page) => {
+                    console.log('[💎gems] found page: ' + _page);
+                    return {
+                        page: _page,
+                        modname,
+                    };
+                });
+            }
+        }
+
+        modController.modManifest = { ...modManifest };
+
+        // Now lets require all the mod pages
+        let pages = [];
+        for (const newPages of Object.values(modController.modPages)) {
+            pages = [...pages, ...newPages];
+        }
+
+        const newModPages = {};
+
+        /**
+        for (const page of pages) {
+            try {
+                console.log('[💎gems] requiring page: ' + page.page);
+                let requirePage = await require(`${
+                    modsRoot + page.page.replace('.js', '')
+                }`);
+
+                requirePage = requirePage.default || requirePage;
+                requirePage.src = page.page;
+                requirePage.mod = page.modname;
+
+                if (requirePage.url === undefined) {
+                    console.log(
+                        '[⚠️] WARNING! Page at ' +
+                            (page.id || page.name) +
+                            '  does not have url set, registering as virtual gem page'
+                    );
+                    requirePage = pageController.registerFakePage(requirePage);
+                } else {
+                    requirePage = pageController.registerPage(
+                        requirePage,
+                        requirePage.developer === true,
+                        null,
+                        true
+                    );
+                }
+
+                if (
+                    newModPages[page.modname] === undefined ||
+                    Array.isArray(newModPages[page.modname]) !== true
+                ) {
+                    newModPages[page.modname] = [];
+                }
+
+                newModPages[page.modname].push(requirePage);
+            } catch (error) {
+                console.log('[⚠️] WARNING! could not require: ' + page);
+                console.log(error);
+            }
+        }
+        */
+
+        modController.modPages = newModPages;
+        modController.modsSuccess = true;
+    } catch (error) {
+        console.log('[⚠️] WARNING! failure to load gems');
+        console.log(error);
+    }
+};
+
+const loadResourceStrings = async (resourceFile) => {
+    let result = await require('./Resources/' +
+        resourceFile.replace(/.js/g, '') +
+        '.js');
+
+    Config.resourceFile = result.default || result;
+};
 
 /**
  * DAPP ChainID and deployInfo
  */
 let chainId;
 let deployInfo;
+
 module.exports.chainId = chainId;
 module.exports.deployInfo = deployInfo;
-
 /**
  * Holds all of the configuation for the DAPP
  */
@@ -466,27 +728,12 @@ const Config = {
             ? Config.getProjectName() + '/'
             : '';
 
-        return require(`${
-            (Config.settings.production
-                ? deploymentsRoot
-                : deploymentsProductionRoot) +
-            path +
-            contract +
-            '.json'
-        }`);
-    },
-
-    /**
-     * Easy way to return the address of a contract
-     * @param {*} contract
-     * @returns
-     */
-    getDeploymentDestination(contract) {
-        return (
-            Config.deployInfo?.contracts[contract] ||
-            Config.getDeployment(contract).address ||
-            Config.nullAddress
-        );
+        if (Config.settings.production)
+            return require('./Deployments/production/' +
+                path +
+                contract +
+                '.json');
+        else return require('./Deployments/' + path + contract + '.json');
     },
 
     /**
@@ -563,17 +810,6 @@ const Config = {
     },
 
     /**
-     * Loads a resource file from the /Resources/ folder relative to the current file
-     */
-    async loadResourceStrings() {
-        let result = await require(resourcesRoot +
-            Config.resources.replace(/.js/g, '') +
-            '.js');
-
-        Config.resourceFile = result.default || result;
-    },
-
-    /**
      * Reads a project URI
      * @param {string} fileName
      * @returns
@@ -582,7 +818,7 @@ const Config = {
     async getProjectURI(fileName, isJson = false) {
         let result;
         result = await require(`${
-            projectsRoot + (isJson ? fileName + '.json' : fileName)
+            './Deployments/projects/' + (isJson ? fileName + '.json' : fileName)
         }`);
 
         result = result?.default || result;
@@ -596,258 +832,6 @@ const Config = {
         }
 
         return result;
-    },
-
-    /**
-     * static manifest holds the images to use for what ever depending on the project
-     * @returns
-     */
-    async loadStaticManifest() {
-        // Init with default values so stuff isnt broken
-        const object = {
-            background: 'Images/default_background.jpg',
-            headerBackground: 'Images/default_header.jpg',
-            defaultImage: 'Images/sad_panda.jpg',
-            backgroundColour: 'black',
-            stylesheets: ['Styles/bootstrap.min.css', 'Styles/app.css'],
-            images: {
-                features: 'Images/default_features.jpg',
-            },
-        };
-
-        let result = {};
-        try {
-            console.log('[👓] Reading manifest.json');
-            result = await require(`${staticManifestFilePath}`);
-
-            if (
-                result === null ||
-                result === undefined ||
-                typeof result !== 'object' ||
-                Object.keys(result).length === 0
-            ) {
-                throw new Error('bad manifest file');
-            }
-        } catch (error) {
-            console.log('[😞] bad manifest file using default');
-            Config.isBadStaticManifest = true;
-            console.log(error);
-
-            result = await require(`${defaultStaticManifestFilePath}`);
-
-            // Just use emergency
-            if (result === null || result === undefined) {
-                console.log('[😞] WARNING! COULD NOT LOAD DEFAULT MANIFEST!');
-                result = { ...object };
-            }
-        }
-
-        for (let i = 0; i < result.stylesheets.length; i++) {
-            console.log('[⚡] Importing Stylesheet: ' + result.stylesheets[i]);
-            await require(`${
-                importRoot + result.stylesheets[i].replace('@', '')
-            }`);
-            result.stylesheets[i] = true;
-        }
-
-        const background = (
-            result.background ||
-            object.background ||
-            ''
-        ).replace('@', '');
-        const headerBackground = (
-            result.headerBackground ||
-            object.headerBackground ||
-            ''
-        ).replace('@', '');
-        const defaultImage = (
-            result.defaultImage ||
-            object.defaultImage ||
-            ''
-        ).replace('@', '');
-
-        console.log('[⚡] Fetching Site Background Image: ' + background);
-        result.background = await require(`${importRoot + background}`);
-        console.log(
-            '[⚡] Fetching Header Background Image: ' + headerBackground
-        );
-        result.headerBackground = await require(`${
-            importRoot + headerBackground
-        }`);
-        console.log('[⚡] Fetching Default Placeholder Image: ' + defaultImage);
-        result.defaultImage = await require(`${importRoot + defaultImage}`);
-
-        if (result.images === undefined || result.images.length === 0) {
-            result.images = object.images;
-        }
-
-        try {
-            const keys = Object.keys(result.images);
-            for (const key of keys) {
-                const value = result.images[key];
-                console.log('[⚡] Fetching Custom Image: ' + value);
-                result.images[key.toLowerCase()] = await require(`${
-                    importRoot + value.replace('@', '')
-                }`);
-            }
-        } catch (error) {
-            console.log('[😞] Bad custom image files');
-            console.log(error);
-        }
-
-        Config.loadedContent = result;
-        return result;
-    },
-
-    /**
-     * Run dev/updateImports.js to gather new pages and update the pages.json file
-     */
-    async loadPages() {
-        const pages = await require(`${pagesFilePath}`);
-
-        for (const page of pages) {
-            console.log('[✒️pages] requiring page ' + page.path);
-            let requirePage = await require(`${
-                pageRoot + page.path.replace('.js', '')
-            }`);
-            requirePage = requirePage.default || requirePage;
-
-            if (requirePage.url === undefined) {
-                console.log(
-                    '[⚠️] WARNING! Page at ' +
-                        (page.id || page.name) +
-                        ' does not have url set, registering as virtual page'
-                );
-                requirePage = pageController.registerFakePage(requirePage);
-            } else {
-                requirePage = pageController.registerPage(
-                    requirePage,
-                    requirePage.developer === true
-                );
-            }
-        }
-    },
-
-    /**
-     * Reads the modManifest file and loads all mods inside of the /Mods/ folder
-     */
-    async loadMods() {
-        try {
-            const result = await require(`${modManifestFilePath}`);
-
-            for (const modname of Object.keys(result.mods)) {
-                modController.mods[modname] = result.mods[modname];
-                console.log('[💎gems] found gem: ' + modname);
-
-                try {
-                    console.log(
-                        '[💎gems] reading mod manifest: ' + modname + '.json'
-                    );
-                    const manifest = require(`${
-                        modsRoot + modname + '/' + modname + '.json'
-                    }`);
-                    result.mods[modname] = manifest;
-                } catch (error) {
-                    console.log(
-                        '[⚠️] WARNING! Failed to load mod manifest for ' +
-                            modname +
-                            ' information might appear missing'
-                    );
-                    console.log(error);
-                }
-
-                if (result.mods[modname].main) {
-                    console.log('[💎gems] loading ' + modname + "'s main.js");
-                    // eslint-disable-next-line no-loop-func
-                    const promise = async () => {
-                        await require(`${
-                            modsRoot +
-                            (result.mods[modname].mainSrc ||
-                                modname + '/main.js')
-                        }`);
-                    };
-
-                    promise().then((result) => {
-                        console.log('[💎gems] loaded' + modname + "'s main.js");
-                        modController.modMains[modname] =
-                            result.default || result;
-                    });
-                }
-
-                if (
-                    result.mods[modname].enabled &&
-                    result.files[modname] !== undefined &&
-                    result.files[modname].pages !== undefined
-                ) {
-                    modController.modPages[modname] = Object.values(
-                        result.files[modname].pages
-                    ).map((_page) => {
-                        console.log('[💎gems] found page: ' + _page);
-                        return {
-                            page: _page,
-                            modname,
-                        };
-                    });
-                }
-            }
-
-            modController.modManifest = { ...result };
-
-            // Now lets require all the mod pages
-            let pages = [];
-            for (const newPages of Object.values(modController.modPages)) {
-                pages = [...pages, ...newPages];
-            }
-
-            const newModPages = {};
-            for (const page of pages) {
-                try {
-                    console.log('[💎gems] requiring page: ' + page.page);
-                    let requirePage = await require(`${
-                        modsRoot + page.page.replace('.js', '')
-                    }`);
-
-                    requirePage = requirePage.default || requirePage;
-                    requirePage.src = page.page;
-                    requirePage.mod = page.modname;
-
-                    if (requirePage.url === undefined) {
-                        console.log(
-                            '[⚠️] WARNING! Page at ' +
-                                (page.id || page.name) +
-                                '  does not have url set, registering as virtual gem page'
-                        );
-                        requirePage =
-                            pageController.registerFakePage(requirePage);
-                    } else {
-                        requirePage = pageController.registerPage(
-                            requirePage,
-                            requirePage.developer === true,
-                            null,
-                            true
-                        );
-                    }
-
-                    if (
-                        newModPages[page.modname] === undefined ||
-                        Array.isArray(newModPages[page.modname]) !== true
-                    ) {
-                        newModPages[page.modname] = [];
-                    }
-
-                    newModPages[page.modname].push(requirePage);
-                } catch (error) {
-                    console.log('[⚠️] WARNING! could not require: ' + page);
-                    console.log(error);
-                }
-            }
-
-            modController.modPages = newModPages;
-            modController.modsSuccess = true;
-        } catch (error) {
-            console.log('[⚠️] WARNING! failure to load gems');
-            console.log(error);
-        }
     },
 
     /**
@@ -882,136 +866,35 @@ const Config = {
             Config.loadedContent.defaultImage?.default
         );
     },
-
-    /**
-     * loads scripts for tokenMethods
-     * @returns
-     */
-    async loadTokenMethodScripts() {
-        let scripts = {};
-        let manifest = await require(`${tokenMethodManifestFilePath}`);
-
-        if (
-            manifest !== null &&
-            manifest?.scripts !== undefined &&
-            manifest.scripts.length > 0
-        )
-            for (let i = 0; i < manifest.scripts.length; i++) {
-                try {
-                    scripts[manifest.scripts[i].split('.')[0]] = (
-                        await require(`${
-                            tokenMethodRoot + manifest.scripts[i]
-                        }`)
-                    ).default;
-                    Config.tokenMethodScripts = scripts;
-                } catch (error) {
-                    console.log(
-                        '[😞] could not load token script:' +
-                            manifest.scripts[i]
-                    );
-                    console.error(error);
-                }
-            }
-    },
-
     /**
      * Loads deployInfo, chainId and project as well as the project specific settings and resource files, must be called immediately before the app is started
      */
     async load() {
         // Set up the chainId
         try {
-            if (!Config.settings.projectSpecificMode) {
-                try {
-                    if (Config.settings.production) {
-                        deployInfo =
-                            await require(`${deployInfoProductionFilePath}`);
-                    } else {
-                        deployInfo = await require(`${deployInfoFilePath}`);
-                    }
-                } catch (error) {
-                    console.log('[😞] could not load .deployInfo');
-                    console.log(error);
-                    deployInfo = null;
-                }
+            const {
+                deployInfo,
+                deployInfoProduction,
+                staticManifest,
+                pages,
+                modManifest,
+                tokenMethodManifest,
+            } = await requireModules();
 
-                if (
-                    deployInfo !== null &&
-                    (deployInfo.default || deployInfo) === 'string'
-                ) {
-                    let result = await fetch(deployInfo.default || deployInfo);
-                    result = await result.text();
-                    Config.deployInfo = JSON.parse(result);
-
-                    if (
-                        Config.settings.useDeployInfoProject === true &&
-                        Config.settings.useLocalProjectURI !== true
-                    ) {
-                        Config.settings.localProject =
-                            Config.deployInfo.project;
-                    }
-                } else deployInfo = deployInfo.default || deployInfo;
-
-                Config.deployInfo = deployInfo;
-
-                if (
-                    chainId == null &&
-                    Config.deployInfo.chainId !== undefined
-                ) {
-                    Config.requiredChainId = Config.deployInfo.chainId;
-                    chainId = Config.deployInfo.chainId;
-                }
-            } else {
-                try {
-                    deployInfo = await require(`${
-                        deployInfoFilePath +
-                        (Config.settings.projectSpecificMode ? '_bundle' : '')
-                    }`);
-                } catch (error) {
-                    console.log('[😞] could not load .deployInfo_bundle');
-                    console.log(error);
-                    deployInfo = null;
-                }
-
-                if (
-                    deployInfo !== null &&
-                    (deployInfo.default || deployInfo) === 'string'
-                ) {
-                    let result = await fetch(deployInfo.default);
-                    result = await result.text();
-                    Config.deployInfo = JSON.parse(result);
-
-                    if (
-                        Config.settings.useDeployInfoProject === true &&
-                        Config.settings.useLocalProjectURI !== true
-                    ) {
-                        Config.settings.localProject =
-                            Config.deployInfo.defaultProject;
-                    }
-
-                    if (
-                        chainId == null &&
-                        Config.deployInfo.chainId !== undefined
-                    ) {
-                        Config.requiredChainId =
-                            Config.deployInfo[
-                                Config.deployInfo.defaultProject
-                            ].chainId;
-                    }
-                } else deployInfo = deployInfo.default || deployInfo;
-
-                Config.deployInfo = deployInfo;
-            }
+            if (Config.settings.production)
+                Config.deployInfo = deployInfoProduction;
+            else Config.deployInfo = deployInfo;
 
             console.log('[📙] Requiring token methods');
-            //await Config.loadTokenMethodScripts();
+            //await loadTokenMethods(tokenMethodManifest);
             console.log('[📙] Requiring resource strings');
-            //await Config.loadResourceStrings();
+            await loadResourceStrings(Config.resources);
             console.log('[📙] Requiring pages');
-            //await Config.loadPages();
+            await loadPages(pages);
             console.log('[📙] Requiring gems');
-            //await Config.loadMods();
+            await loadGems(modManifest);
             console.log('[📙] Requiring Static Manifest Assets');
-            //await Config.loadStaticManifest();
+            //await loadStaticManifest(staticManifest);
         } catch (error) {
             console.log(error);
         }

@@ -46,7 +46,7 @@ export const send = async (
 };
 
 /**
- * Will call a method on a contract and return the result
+ * Will call a method on a contraƒact and return the result
  * @param {*} contractName
  * @param {*} method
  * @param {*} args
@@ -783,7 +783,7 @@ export const loadPath = async (projectURI, pathId) => {
 };
 
 // In order to save a png as a propper base64 image we can render later, we need to put it into a canvas and save that canvas's output.
-const imageToOutput = (src, outputFormat) =>
+export const imageToOutput = (src, outputFormat) =>
     new Promise((resolve, reject) => {
         const img = new Image();
         img.crossOrigin = 'Anonymous';
